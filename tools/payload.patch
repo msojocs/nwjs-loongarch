@@ -1,0 +1,58 @@
+diff --git a/tools/payload.cc b/tools/payload.cc
+index ac43df84..e3c69bfe 100644
+--- a/tools/payload.cc
++++ b/tools/payload.cc
+@@ -83,7 +83,7 @@ class MyComputedHashes {
+    private:
+     // Each element of this list contains the path and block hashes for one
+     // file.
+-    std::unique_ptr<base::ListValue> file_list_;
++    std::unique_ptr<base::Value::List> file_list_;
+   };
+ 
+   // Computes the SHA256 hash of each |block_size| chunk in |contents|, placing
+@@ -93,7 +93,7 @@ class MyComputedHashes {
+                                       std::vector<std::string>* hashes);
+ };
+ 
+-MyComputedHashes::Writer::Writer() : file_list_(new base::ListValue) {
++MyComputedHashes::Writer::Writer() : file_list_(new base::Value::List) {
+ }
+ 
+ MyComputedHashes::Writer::~Writer() {
+@@ -102,26 +102,26 @@ MyComputedHashes::Writer::~Writer() {
+ void MyComputedHashes::Writer::AddHash(const base::FilePath& relative_path,
+                                        int block_size,
+                                        const std::string& root) {
+-  base::DictionaryValue dict;
+-  dict.SetString(kPathKey,
++  base::Value::Dict dict;
++  dict.Set(kPathKey,
+                  relative_path.NormalizePathSeparatorsTo('/').AsUTF8Unsafe());
+-  //dict.SetInteger(kBlockSizeKey, block_size);
++  //dict.Set(kBlockSizeKey, block_size);
+   std::string encoded;
+   base::Base64Encode(root, &encoded);
+   base::ReplaceChars(encoded, "=", "", &encoded);
+   base::ReplaceChars(encoded, "/", "_", &encoded);
+   base::ReplaceChars(encoded, "+", "-", &encoded);
+-  dict.SetString(kBlockHashesKey, encoded);
++  dict.Set(kBlockHashesKey, encoded);
+   file_list_->Append(std::move(dict));
+ }
+ 
+ bool MyComputedHashes::Writer::WriteToFile(const base::FilePath& path) {
+   std::string json;
+-  base::DictionaryValue top_dictionary;
+-  top_dictionary.SetInteger("block_size", 4096);
+-  top_dictionary.SetInteger("hash_block_size", 4096);
+-  top_dictionary.SetString("format", "treehash");
+-  top_dictionary.Set(kFileHashesKey, std::move(file_list_));
++  base::Value::Dict top_dictionary;
++  top_dictionary.Set("block_size", 4096);
++  top_dictionary.Set("hash_block_size", 4096);
++  top_dictionary.Set("format", "treehash");
++  top_dictionary.Set(kFileHashesKey, std::move(*file_list_));
+ 
+   if (!base::JSONWriter::Write(top_dictionary, &json))
+     return false;

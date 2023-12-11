@@ -1,0 +1,8 @@
+binutils-gdb
+cmake-*
+depot_tools
+llvm-project
+nwjs
+sysroot
+temp
+clfs*
