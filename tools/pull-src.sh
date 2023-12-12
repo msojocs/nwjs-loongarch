@@ -2,9 +2,19 @@
 set -e
 
 root_dir=$(cd `dirname $0`/.. && pwd -P)
-export https_proxy=http://172.27.176.1:7890
+
+success() {
+    echo -e "\033[42;37m 成功 \033[0m $1"
+}
+notice() {
+    echo -e "\033[36m $1 \033[0m "
+}
+fail() {
+    echo -e "\033[41;37m 失败 \033[0m $1"
+}
 export PATH=$PATH:/opt/loongarch64/toolchain/bin:$root_dir/cmake-3.20.5-linux-x86_64/bin:$root_dir/depot_tools
 
+# 拉取源代码
 cd $root_dir
 mkdir -p nwjs
 cd nwjs

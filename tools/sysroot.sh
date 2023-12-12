@@ -14,10 +14,10 @@ fail() {
 
 sysroot_name="clfs-loongarch64-system-8.1-sysroot.squashfs"
 # 下载
-if [ ! -f "$root_dir/$sysroot_name" ];then
-  wget https://github.com/loongson/build-tools/releases/download/2023.08.08/clfs-loongarch64-system-8.1-sysroot.squashfs
+if [ ! -f "$root_dir/cache/$sysroot_name" ];then
+  wget -O$root_dir/cache/$sysroot_name https://github.com/loongson/build-tools/releases/download/2023.08.08/clfs-loongarch64-system-8.1-sysroot.squashfs
 fi
 # 解压
 if [ -z "$(ls -A $root_dir/sysroot)" ];then
-  unsquashfs -d sysroot -no-xattrs clfs-loongarch64-system-8.1-sysroot.squashfs usr/include usr/lib usr/lib64 usr/share lib lib64
+  unsquashfs -d $root_dir/sysroot -no-xattrs $root_dir/cache/$sysroot_name usr/include usr/lib usr/lib64 usr/share lib lib64
 fi
