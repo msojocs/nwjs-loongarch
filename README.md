@@ -1,22 +1,45 @@
+## 构建环境
+
+操作系统：Windows 11
+
+编译环境：WSL2 + [debian11](https://learn.microsoft.com/en-us/windows/wsl/install-manual#downloading-distributions)
+
+### 构建额外信息
+
+占用空间100G左右，建议磁盘拥有200G的空间。
+
 ## CMake
+
 https://github.com/Kitware/CMake/releases?page=9
 
 ## binutil-gdb
+```shell
+apt install -y libmpc-dev texinfo bison flex
 ```
-apt install libmpc-dev
-sudo apt-get install texinfo
-apt install bison flex
-```
+
 ## llvm-project
-apt install ninja-build
-apt install python3
+```shell
+apt install -y ninja-build python3
+```
+
+## boto配置
+```shell
+export NO_AUTH_BOTO_CONFIG="/home/msojocs/.boto"
+```
+.boto内容
+```
+[Boto]
+debug = 0
+num_retries = 10
+
+proxy = 127.0.0.1
+proxy_port = 7890
+```
 
 ## nwjs
-```
+```shell
 ./build/install-build-deps.sh
-sudo apt install xz-utils python curl
-sudo apt install libcups2-dev
-sudo apt install libglib2.0-dev \
+sudo apt install xz-utils python curl libcups2-dev libglib2.0-dev \
 libnss3-dev \
 libxkbcommon-dev \
 libdrm-dev \
@@ -38,10 +61,6 @@ config("libffi") {
 
 ## ninja -C out/Release node
 
-```
+```shell
 sudo apt-get install gcc-multilib g++-multilib
-# cstring string 头文件缺失
-export CPLUS_INCLUDE_PATH=/usr/include/x86_64-linux-gnu/c++/9/32:/usr/include/c++/9:$CPLUS_INCLUDE_PATH
-
-export LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/9:$LIBRARY_PATH
 ```
