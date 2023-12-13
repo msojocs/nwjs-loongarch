@@ -22,6 +22,7 @@ catchError() {
   fi
   exit $exit_code
 }
+export NO_AUTH_BOTO_CONFIG="$root_dir/config/.boto"
 output_dir="$root_dir/output"
 nwjs_dir="$root_dir/nwjs"
 src_dir="$nwjs_dir/src"
