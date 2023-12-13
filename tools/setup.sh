@@ -3,30 +3,59 @@ set -e
 
 root_dir=$(cd `dirname $0`/.. && pwd -P)
 tools_dir="$root_dir/tools"
+source "$tools_dir/common/step.sh"
 
 # cmake
-"$tools_dir/cmake.sh"
+if [ $CURRENT_STEP == $STEP_START ];then
+  "$tools_dir/cmake.sh"
+  step_switch $STEP_CMAKE_SUCCESS
+fi
 
 # binutils-gdb
-"$tools_dir/binutils-gdb.sh"
+if [ $CURRENT_STEP == $STEP_CMAKE_SUCCESS ];then
+  "$tools_dir/binutils-gdb.sh"
+  step_switch $STEP_GDB_SUCCESS
+fi
 
 # llvm build
-"$tools_dir/llvm.sh"
+if [ $CURRENT_STEP == $STEP_GDB_SUCCESS ];then
+  "$tools_dir/llvm.sh"
+  step_switch $STEP_LLVM_SUCCESS
+fi
 
 # depot_tools
-"$tools_dir/depot-tools.sh"
+if [ $CURRENT_STEP == $STEP_LLVM_SUCCESS ];then
+  "$tools_dir/depot-tools.sh"
+  step_switch $STEP_DEPOT_TOOLS_SUCCESS
+fi
 
 # pull src
-"$tools_dir/pull-src.sh"
+if [ $CURRENT_STEP == $STEP_DEPOT_TOOLS_SUCCESS ];then
+  "$tools_dir/pull-src.sh"
+  step_switch $STEP_PULL_SRC_SUCCESS
+fi
 
 # sysroot
-"$tools_dir/sysroot.sh"
+if [ $CURRENT_STEP == $STEP_PULL_SRC_SUCCESS ];then
+  "$tools_dir/sysroot.sh"
+  step_switch $STEP_SYSROOT_SUCCESS
+fi
 
 # build prepare
-"$tools_dir/build-prepare.sh"
+if [ $CURRENT_STEP == $STEP_SYSROOT_SUCCESS ];then
+  "$tools_dir/build-prepare.sh"
+  step_switch $STEP_BUILD_PREPARE_SUCCESS
+fi
 
 # build
-"$tools_dir/build-nwjs.sh"
+if [ $CURRENT_STEP == $STEP_BUILD_PREPARE_SUCCESS ];then
+  "$tools_dir/build-nwjs.sh"
+  step_switch $STEP_BUILD_SUCCESS
+fi
 
 # pack
-"$tools_dir/pack.sh"
+if [ $CURRENT_STEP == $STEP_BUILD_SUCCESS ];then
+  "$tools_dir/pack.sh"
+  step_switch $STEP_PACK_SUCCESS
+fi
+step_over
