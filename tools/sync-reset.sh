@@ -1,6 +1,16 @@
 #!/bin/bash
 set -e
 
+success() {
+    echo -e "\033[42;37m 成功 \033[0m $1"
+}
+notice() {
+    echo -e "\033[36m $1 \033[0m "
+}
+fail() {
+    echo -e "\033[41;37m 失败 \033[0m $1"
+}
+
 root_dir=$(cd `dirname $0`/.. && pwd -P)
 
 nwjs_dir="$root_dir/nwjs"
@@ -8,6 +18,6 @@ dirs=("src/third_party/boringssl/src" "src/third_party/devtools-frontend/src" "s
 for dir in ${dirs[@]};
 do
   target_dir="$nwjs_dir/$dir"
-  echo "clean: $target_dir"
+  notice "clean: $target_dir"
   cd $target_dir && git checkout . && git clean -xdf
 done
