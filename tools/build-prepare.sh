@@ -16,7 +16,6 @@ source_dir="$root_dir/source-code"
 src_dir="$source_dir/nwjs/src"
 output_dir="$root_dir/output"
 llvm_dir="$output_dir/llvm-18"
-cd "$src_dir"
 
 if [ ! -d "$src_dir/build/linux/debian_bullseye_loong64-sysroot" ];then
   cd "$src_dir/build/linux"
@@ -24,6 +23,7 @@ if [ ! -d "$src_dir/build/linux/debian_bullseye_loong64-sysroot" ];then
 fi
 
 notice "start to gen nw"
+cd "$src_dir"
 ./buildtools/linux64/gn gen out/nw --args='clang_use_chrome_plugins=false treat_warnings_as_errors=false dcheck_always_on=false use_gold=false use_lld=false clang_base_path="'$llvm_dir'" is_debug=false is_component_build=false is_component_ffmpeg=true target_cpu="loong64" use_sysroot=false'
 
 notice "start to prepare gyp"

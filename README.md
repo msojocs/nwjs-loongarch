@@ -8,6 +8,11 @@
 
 占用空间100G左右，建议磁盘拥有200G的空间。
 
+## 构建脚本的使用
+
+1. 执行 `tools/install-deps.sh`, 安装必要的依赖
+2. 执行 `tools/setup.sh`, 开始执行构建流程
+
 ## CMake
 
 https://github.com/Kitware/CMake/releases?page=9
@@ -51,7 +56,7 @@ libx11-xcb-dev \
 libkrb5-dev
 ```
 
-修改：`nwjs/src/build/config/linux/libffi/BUILD.gn`:
+修改：`nwjs/src/build/config/linux/libffi/BUILD.gn` [link](./source-code/nwjs/src/build/config/linux/libffi/BUILD.gn):
 ```
 config("libffi") {
   #libs = [ ":libffi_pic.a" ] # 注释掉

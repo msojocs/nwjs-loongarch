@@ -40,6 +40,7 @@ gclient config --name=src https://github.com/nwjs/chromium.src.git@origin/nw80
 
 notice "pull v8 with branch: $branch"
 if [ ! -d "$nwjs_dir/src/v8" ];then
+  cd "$nwjs_dir"
   git clone -b $branch https://github.com/nwjs/v8.git src/v8
 else
   cd "$nwjs_dir/src/v8" && git checkout $branch --force
@@ -47,6 +48,7 @@ fi
 
 notice "pull node-nw with branch: $branch"
 if [ ! -d "$nwjs_dir/src/third_party/node-nw" ];then
+  cd "$nwjs_dir"
   git clone -b $branch https://github.com/nwjs/node.git src/third_party/node-nw
 else
   cd "$nwjs_dir/src/third_party/node-nw" && git checkout $branch --force
@@ -54,6 +56,7 @@ fi
 
 notice "pull nw with branch: $branch"
 if [ ! -d "$nwjs_dir/src/content/nw" ];then
+  cd "$nwjs_dir"
   git clone -b $branch https://github.com/loongson/nw.js.git src/content/nw
 else
   cd "$nwjs_dir/src/content/nw" && git checkout $branch --force

@@ -42,7 +42,7 @@ if [ $CURRENT_STEP == $STEP_DEPOT_TOOLS_SUCCESS ];then
 fi
 
 # build prepare
-if [ $CURRENT_STEP == $STEP_SYSROOT_SUCCESS ];then
+if [ $CURRENT_STEP == $STEP_PULL_SRC_SUCCESS ];then
   "$tools_dir/build-prepare.sh"
   step_switch $STEP_BUILD_PREPARE_SUCCESS
 fi
