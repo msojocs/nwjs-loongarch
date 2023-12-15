@@ -11,17 +11,18 @@ project_dir="$root_dir/llvm-project"
 build_dir="$root_dir/llvm-project/build"
 output_dir="$root_dir/output"
 llvm_dir="$output_dir/llvm-18"
-export PATH=$PATH:$output_dir/toolchain/bin:$output_dir/cmake-3.20.5-linux-x86_64/bin
+export PATH=$output_dir/toolchain/bin:$output_dir/cmake-3.20.5-linux-x86_64/bin:$PATH
 
-notice "Start to clone llvm"
-if [ ! -d "$root_dir/llvm-project" ] || [ -z "$(ls $root_dir/llvm-project)" ]; then
+notice "检查llvm项目是否存在"
+if [ ! -d "$root_dir/llvm-project" ]; then
+  notice "请确保阁下的网络稳定快速"
   notice "llvm-project not cloned, start to clone......"
   git clone -b llvmorg-17.0.6 https://github.com/llvm/llvm-project.git
 fi
 
-
+notice "检查llvm项目是否拉取成功"
 if [ ! -f "$project_dir/README.md" ];then
-  fail "README文件不存在"
+  fail "README文件不存在，llvm源码拉取失败"
   exit 1
 fi
 mkdir -p $build_dir

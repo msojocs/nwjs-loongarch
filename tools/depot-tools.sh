@@ -14,7 +14,7 @@ error() {
 root_dir=$(cd `dirname $0`/.. && pwd -P)
 output_dir="$root_dir/output"
 
-export PATH=$PATH:$output_dir/depot_tools
+export PATH=$output_dir/depot_tools:$PATH
 if [ ! -d "$output_dir/depot_tools" ];then
   cd $output_dir
   git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
