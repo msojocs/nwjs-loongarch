@@ -17,8 +17,14 @@ if [ $CURRENT_STEP == $STEP_CMAKE_SUCCESS ];then
   step_switch $STEP_GDB_SUCCESS
 fi
 
-# llvm build
+# sysroot
 if [ $CURRENT_STEP == $STEP_GDB_SUCCESS ];then
+  "$tools_dir/sysroot.sh"
+  step_switch $STEP_SYSROOT_SUCCESS
+fi
+
+# llvm build
+if [ $CURRENT_STEP == $STEP_SYSROOT_SUCCESS ];then
   "$tools_dir/llvm.sh"
   step_switch $STEP_LLVM_SUCCESS
 fi
@@ -33,12 +39,6 @@ fi
 if [ $CURRENT_STEP == $STEP_DEPOT_TOOLS_SUCCESS ];then
   "$tools_dir/pull-src.sh"
   step_switch $STEP_PULL_SRC_SUCCESS
-fi
-
-# sysroot
-if [ $CURRENT_STEP == $STEP_PULL_SRC_SUCCESS ];then
-  "$tools_dir/sysroot.sh"
-  step_switch $STEP_SYSROOT_SUCCESS
 fi
 
 # build prepare
