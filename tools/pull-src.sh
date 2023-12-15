@@ -28,7 +28,8 @@ fi
 notice "target branch: $branch"
 export NO_AUTH_BOTO_CONFIG="$root_dir/config/.boto"
 output_dir="$root_dir/output"
-nwjs_dir="$root_dir/nwjs"
+source_dir="$root_dir/source-code"
+nwjs_dir="$source_dir/nwjs"
 src_dir="$nwjs_dir/src"
 export PATH=$output_dir/toolchain/bin:$output_dir/cmake-3.20.5-linux-x86_64/bin:$output_dir/depot_tools:$PATH
 

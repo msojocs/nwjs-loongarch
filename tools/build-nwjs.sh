@@ -12,13 +12,14 @@ fail() {
     echo -e "\033[41;37m 失败 \033[0m $1"
 }
 output_dir="$root_dir/output"
+source_dir="$root_dir/source-code"
 ###############################################################
 ######关键######################################################
 ###不加会报错：##################################################
 ###/usr/bin/ld: unrecognised emulation mode: elf64loongarch####
 ###############################################################
 export PATH="$output_dir/cmake-3.20.5-linux-x86_64/bin:$output_dir/llvm-18/bin:$output_dir/toolchain/bin:$output_dir/depot_tools:$PATH"
-src_dir="$root_dir/nwjs/src"
+src_dir="$source_dir/nwjs/src"
 
 cd $src_dir
 

@@ -1,8 +1,6 @@
-binutils-gdb
-cmake-*
-llvm-project
 nwjs
 sysroot
 tmp
 output
 cache
+source-code

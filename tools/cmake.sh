@@ -14,6 +14,7 @@ fail() {
 
 output_dir="$root_dir/output"
 cmake_ver="3.20.5"
+export PATH=$output_dir/cmake-3.20.5-linux-x86_64/bin:$PATH
 
 mkdir -p $root_dir/cache
 mkdir -p $output_dir

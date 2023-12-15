@@ -13,20 +13,25 @@ fail() {
 }
 max_thread=$(cat /proc/cpuinfo| grep "processor"| wc -l)
 export JOBS=$max_thread
+source_dir="$root_dir/source-code"
 output_dir="$root_dir/output"
 toolchain_dir="$output_dir/toolchain"
 
-if [ ! -d "$root_dir/binutils-gdb" ]; then
+if [ ! -d "$source_dir/binutils-gdb" ]; then
   notice "binutils-gdb not cloned, start to clone......"
+  mkdir -p "$source_dir"
+  cd "$source_dir"
   git clone https://sourceware.org/git/binutils-gdb.git
 fi
 
-project_dir="$root_dir/binutils-gdb"
+project_dir="$source_dir/binutils-gdb"
 build_dir="$project_dir/build"
 mkdir -p "$build_dir"
 mkdir -p "$toolchain_dir"
-cd binutils-gdb/build
+cd "$source_dir/binutils-gdb/build"
 
+cd "$project_dir"
+git checkout tags/gdb-14.1-release
 if [ ! -f "$toolchain_dir/bin/x86_64-linux-gnu-ld" ];then
   notice "configure binutils-gdb for x86_64"
   rm ./* -rf
