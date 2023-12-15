@@ -2,33 +2,32 @@
 set -e
 
 root_dir=$(cd `dirname $0`/.. && pwd -P)
-success() {
-    echo -e "\033[42;37m 成功 \033[0m $1"
-}
-notice() {
-    echo -e "\033[36m $1 \033[0m "
-}
-fail() {
-    echo -e "\033[41;37m 失败 \033[0m $1"
-}
+source "$root_dir/tools/common/log.sh"
+
 max_thread=$(cat /proc/cpuinfo| grep "processor"| wc -l)
 export JOBS=$max_thread
-
-export PATH=$PATH:$root_dir/toolchain/bin:$root_dir/cmake-3.20.5-linux-x86_64/bin
-
-if [ ! -d "$root_dir/llvm-project" ]; then
-  notice "llvm-project not cloned, start to clone......"
-  git clone https://github.com/llvm/llvm-project.git
-fi
 
 project_dir="$root_dir/llvm-project"
 build_dir="$root_dir/llvm-project/build"
 output_dir="$root_dir/output"
 llvm_dir="$output_dir/llvm-18"
+export PATH=$PATH:$output_dir/toolchain/bin:$output_dir/cmake-3.20.5-linux-x86_64/bin
 
+notice "Start to clone llvm"
+if [ ! -d "$root_dir/llvm-project" ] || [ -z "$(ls $root_dir/llvm-project)" ]; then
+  notice "llvm-project not cloned, start to clone......"
+  git clone -b llvmorg-17.0.6 https://github.com/llvm/llvm-project.git
+fi
+
+
+if [ ! -f "$project_dir/README.md" ];then
+  fail "README文件不存在"
+  exit 1
+fi
 mkdir -p $build_dir
 mkdir -p $project_dir/build-compiler-rt
 
+notice "Start to make llvm"
 if [ ! -f "$llvm_dir/lib/cmake/llvm/LLVMConfigExtensions.cmake" ];then
   cd $project_dir
   cmake -S llvm -B build -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS="clang" -DCMAKE_INSTALL_PREFIX=$llvm_dir -DLLVM_DEFAULT_TARGET_TRIPLE="x86_64-linux-gnu;loongarch64-linux-gnu"

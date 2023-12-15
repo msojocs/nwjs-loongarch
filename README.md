@@ -64,3 +64,11 @@ config("libffi") {
 ```shell
 sudo apt-get install gcc-multilib g++-multilib
 ```
+
+## ninja -C out/nw payload
+
+如果构建失败，参考 [payload.patch](./tools/payload.patch) 修改；
+
+就是把 `base::ListValue` 替换成 `base::Value::List`，把 `base::DictionaryValue` 替换成 `base::Value::Dict`；
+
+然后，还有把对应方法替换一下。
