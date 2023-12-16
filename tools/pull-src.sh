@@ -8,6 +8,9 @@ success() {
 notice() {
     echo -e "\033[36m $1 \033[0m "
 }
+warn() {
+    echo -e "\033[31m $1 \033[0m "
+}
 fail() {
     echo -e "\033[41;37m 失败 \033[0m $1"
 }
@@ -63,3 +66,12 @@ else
 fi
 
 gclient sync --with_branch_heads
+
+dep_script="$src_dir/build/install-build-deps.sh"
+
+if [ -f "$dep_script" ];then
+  notice "阁下已经拉取了源码，开始执行项目的依赖安装脚本....."
+  "$dep_script"
+else
+  warn "没有找到依赖安装脚本，构建可能会发生错误！！！"
+fi

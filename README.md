@@ -53,7 +53,10 @@ libpango1.0-dev \
 libdbus-1-dev \
 gperf \
 libx11-xcb-dev \
-libkrb5-dev
+libkrb5-dev \
+libpulse-dev \
+libpci-dev \
+libglx-dev
 ```
 
 修改：`nwjs/src/build/config/linux/libffi/BUILD.gn` [link](./source-code/nwjs/src/build/config/linux/libffi/BUILD.gn):
