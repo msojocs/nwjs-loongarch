@@ -60,7 +60,7 @@ const patchCfg = {
     ['"system_headers/x86_64_linux_syscalls.h",\n', '"system_headers/x86_64_linux_syscalls.h","system_headers/loong64_linux_syscalls.h",\n']
   ],
   'sandbox/linux/system_headers/linux_syscalls.h': [
-    ['#endif\n\n#endif', '#endif\n\n#if defined(__loong64__)\n#include "sandbox/linux/system_headers/loong64_linux_syscalls.h"\n#endif\n#endif']
+    ['#endif\n\n#endif', '#endif\n\n#if defined(__loongarch64)\n#include "sandbox/linux/system_headers/loong64_linux_syscalls.h"\n#endif\n#endif']
   ],
   'sandbox/linux/system_headers/linux_signal.h': [
     [`#if defined(__i386__) || defined(__x86_64__) || defined(__arm__) || \\
@@ -275,7 +275,23 @@ typedef unsigned long int greg_t;
   'sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.h': [
     ['file://./sigsys_handlers/1_0.h', 'file://./sigsys_handlers/1_1.h'],
     ['file://./sigsys_handlers/2_0.h', 'file://./sigsys_handlers/2_1.h'],
-
+  ],
+  'sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc': [
+    ['!defined(PTRACE_GET_THREAD_AREA)\n', '!defined(PTRACE_GET_THREAD_AREA) && !defined(__loongarch64)\n'],
+    ['file://./syscall_parameters_restrictions/0_0.h', 'file://./syscall_parameters_restrictions/0_1.h'],
+  ],
+  'sandbox/linux/seccomp-bpf/syscall.cc': [
+    ['defined(ARCH_CPU_MIPS_FAMILY)\n', 'defined(ARCH_CPU_MIPS_FAMILY) || defined(ARCH_CPU_LOONGARCH_FAMILY)\n'],
+    ['file://./syscall/0_0.h', 'file://./syscall/0_1.h'],
+    ['file://./syscall/1_0.h', 'file://./syscall/1_1.h'],
+  ],
+  'sandbox/linux/seccomp-bpf-helpers/syscall_sets.h': [
+    [/\(defined\(ARCH_CPU_MIPS_FAMILY\) && defined\(ARCH_CPU_64_BITS\)\)\n/g, '(defined(ARCH_CPU_MIPS_FAMILY) && defined(ARCH_CPU_64_BITS)) || defined(__loongarch64)\n'],
+    ['defined(__aarch64__)\n', 'defined(__aarch64__) || defined(__loongarch64)\n'],
+  ],
+  'sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc': [
+    // [/#if !defined\(__aarch64__\)\n/g, '#if !defined(__aarch64__) && !defined(__loongarch64)\n']
+    ['file://./syscall_sets_cc/0_0.h', 'file://./syscall_sets_cc/0_1.h'],
   ],
 }
 const patchConfig = () => {
