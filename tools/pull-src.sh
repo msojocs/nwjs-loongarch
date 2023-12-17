@@ -60,7 +60,7 @@ fi
 notice "pull nw with branch: $branch"
 if [ ! -d "$nwjs_dir/src/content/nw" ];then
   cd "$nwjs_dir"
-  git clone -b $branch https://github.com/loongson/nw.js.git src/content/nw
+  git clone -b $branch https://github.com/nwjs/nw.js.git src/content/nw
 else
   cd "$nwjs_dir/src/content/nw" && git checkout $branch --force
 fi

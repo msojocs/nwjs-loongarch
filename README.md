@@ -85,3 +85,24 @@ sudo apt-get install gcc-multilib g++-multilib
 就是把 `base::ListValue` 替换成 `base::Value::List`，把 `base::DictionaryValue` 替换成 `base::Value::Dict`；
 
 然后，还有把对应方法替换一下。
+
+# LoongArch
+
+| 项目 | 值 |
+|------|----|
+| ABI  | loongarch64-unknown-linux-gnu |
+| ARCH | loong64 |
+| libdir | lib64 |
+| sysroot | debian_bullseye_loong64-sysroot |
+
+## sysroot
+
+```json
+"bullseye_loong64": {
+    "Key": "20230611T210420Z-2",
+    "Sha1Sum": "1b857baabd7999ff0d6949a8973f896836ac45ac",
+    "SysrootDir": "debian_bullseye_loong64-sysroot",
+    "Tarball": "debian_bullseye_loong64_sysroot.tar.xz",
+    "URL": "https://commondatastorage.googleapis.com/chrome-linux-sysroot/toolchain"
+}
+```
