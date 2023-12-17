@@ -32,6 +32,9 @@ const patchCfg = {
   'build/config/compiler/BUILD.gn': {
     '\n\n  # Normally, this would be defined in': '\n  # loong64 rust compiler flags setup for cef\nif (is_linux && current_cpu == "loong64") {rustflags += [ "-Ccode-model=medium" ]}\n  # Normally, this would be defined in'
   },
+  'build/config/linux/libffi/BUILD.gn': {
+    'libs = [ ":libffi_pic.a" ]': 'libs = [ "ffi" ]'
+  },
   'build/config/linux/pkg_config.gni': {
     'system_libdir = "lib"\n}': 'system_libdir = "lib"\n  if (current_cpu == "loong64") {system_libdir = "lib64"}\n}',
   },
