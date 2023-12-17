@@ -22,6 +22,11 @@ if [ ! -d "$src_dir/build/linux/debian_bullseye_loong64-sysroot" ];then
   ln -s "../../../../sysroot" "debian_bullseye_loong64-sysroot"
 fi
 
+# patch
+notice "start to patch"
+patch_dir="$root_dir/patches/nw80"
+node "$patch_dir/patch.js" "$src_dir"
+
 notice "start to gen nw"
 cd "$src_dir"
 ./buildtools/linux64/gn gen out/nw --args='clang_use_chrome_plugins=false treat_warnings_as_errors=false dcheck_always_on=false use_gold=false use_lld=false clang_base_path="'$llvm_dir'" is_debug=false is_component_build=false is_component_ffmpeg=true target_cpu="loong64" use_sysroot=false'
