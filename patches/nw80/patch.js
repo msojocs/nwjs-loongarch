@@ -45,6 +45,15 @@ const patchCfg = {
   'build/config/sysroot.gni': [
     ['if (sysroot == "") {\n  if (current_os ', 'if (sysroot == "") {\n  if (target_sysroot == "" && current_cpu == "loong64") {    target_sysroot = "$target_sysroot_dir/debian_bullseye_loong64-sysroot"}\n  if (current_os ']
   ],
+  'sandbox/linux/BUILD.gn': [
+    ['"system_headers/x86_64_linux_syscalls.h",\n', '"system_headers/x86_64_linux_syscalls.h","system_headers/loong64_linux_syscalls.h",\n']
+  ],
+  'sandbox/linux/system_headers/linux_syscalls.h': [
+    ['#endif\n\n#endif', '#endif\n\n#if defined(__loongarch64)\n#include "sandbox/linux/system_headers/loong64_linux_syscalls.h"\n#endif\n#endif']
+  ],
+  'sandbox/linux/system_headers/linux_signal.h': [
+    ['file://./linux_signal/1.h']
+  ],
   'skia/BUILD.gn': [
     ['# Conditional and empty body needed to avoid assert() below.\n  } else {', '# Conditional and empty body needed to avoid assert() below.\n  } else if (current_cpu == "loong64") {\n  } else {']
   ],
@@ -55,17 +64,6 @@ const patchCfg = {
     ['cpu_arch_full = "loongarch"', 'cpu_arch_full = "generic"'],
     ['sources = libvpx_srcs_loongarch\n', 'sources = libvpx_srcs_generic\n'],
     ['public_deps = [ ":libvpx_loongarch_headers" ]', 'public_deps = [ ":libvpx_generic_headers" ]']
-  ],
-  'sandbox/linux/BUILD.gn': [
-    ['"system_headers/x86_64_linux_syscalls.h",\n', '"system_headers/x86_64_linux_syscalls.h","system_headers/loong64_linux_syscalls.h",\n']
-  ],
-  'sandbox/linux/system_headers/linux_syscalls.h': [
-    ['#endif\n\n#endif', '#endif\n\n#if defined(__loongarch64)\n#include "sandbox/linux/system_headers/loong64_linux_syscalls.h"\n#endif\n#endif']
-  ],
-  'sandbox/linux/system_headers/linux_signal.h': [
-    [`#if defined(__i386__) || defined(__x86_64__) || defined(__arm__) || \\
-    defined(__aarch64__)
-`, `#if defined(__i386__) || defined(__x86_64__) || defined(__arm__) || \\\ndefined(__aarch64__) || defined(__loongarch64)\n`]
   ],
   'sandbox/linux/system_headers/linux_stat.h': [
     ['file://./linux_stat/1.h'],
@@ -79,20 +77,20 @@ const patchCfg = {
     ['file://./seccomp_macros/1.h'],
   ],
   'sandbox/linux/services/syscall_wrappers.cc': [
-    ['file://./syscall_wrappers/0_0.h', 'file://./syscall_wrappers/0_1.h'],
-    ['file://./syscall_wrappers/1_0.h', 'file://./syscall_wrappers/1_1.h'],
-    ['file://./syscall_wrappers/2_0.h', 'file://./syscall_wrappers/2_1.h'],
+    ['file://./syscall_wrappers/0_0.h'],
+    ['file://./syscall_wrappers/1_0.h'],
+    ['file://./syscall_wrappers/2_0.h'],
   ],
   'sandbox/linux/syscall_broker/broker_process.cc': [
     [/#if !defined\(__aarch64__\) && !BUILDFLAG\(IS_ANDROID\)\n/g, '#if !defined(__aarch64__) && !BUILDFLAG(IS_ANDROID) && !defined(__loongarch64)\n'],
-    ['file://./broker_process/0_0.h', 'file://./broker_process/0_1.h'],
+    ['file://./broker_process/0_0.h'],
   ],
   'sandbox/linux/system_headers/linux_seccomp.h': [
-    ['file://./linux_seccomp/0_0.h', 'file://./linux_seccomp/0_1.h'],
-    ['file://./linux_seccomp/1_0.h', 'file://./linux_seccomp/1_1.h'],
+    ['file://./linux_seccomp/0_0.h'],
+    ['file://./linux_seccomp/1_0.h'],
   ],
   'sandbox/linux/bpf_dsl/linux_syscall_ranges.h': [
-    ['file://./linux_syscall_ranges/0_0.h', 'file://./linux_syscall_ranges/0_1.h'],
+    ['file://./linux_syscall_ranges/0_0.h'],
   ],
   'sandbox/linux/seccomp-bpf-helpers/baseline_policy.cc': [
     ['#if !defined(__aarch64__)\n', '#if !defined(__aarch64__) && !defined(__loongarch__)\n'],
@@ -195,6 +193,10 @@ const patchCfg = {
   ],
   'sandbox/features.gni': [
     [' current_cpu == "mips64el")', ' current_cpu == "mips64el" || current_cpu == "loong64")']
+  ],
+  'third_party/blink/renderer/platform/BUILD.gn': [
+    ['"graphics/cpu/loongarch64/webgl_image_conversion_lsx.h",', ''],
+    ['file://./renderer_platform/BUILD.h'],
   ],
 }
 const patchConfig = () => {
