@@ -300,6 +300,22 @@ typedef unsigned long int greg_t;
     ['file://./thread_info/3_0.h', 'file://./thread_info/3_1.h'],
     ['file://./thread_info/4_0.h', 'file://./thread_info/4_1.h'],
   ],
+  'third_party/crashpad/crashpad/snapshot/linux/signal_context.h': [
+    ['#ifdef ARCH_CPU_MIPS_FAMILY\n', '#if defined(ARCH_CPU_MIPS_FAMILY) || defined(ARCH_CPU_LOONGARCH_FAMILY)\n'],
+    ['file://./signal_context/0_0.h', 'file://./signal_context/0_1.h'],
+  ],
+  'third_party/crashpad/crashpad/snapshot/linux/thread_snapshot_linux.cc': [
+    ['file://./thread_snapshot_linux/0_0.h', 'file://./thread_snapshot_linux/0_1.h'],
+    
+  ],
+  'third_party/crashpad/crashpad/snapshot/linux/thread_snapshot_linux.h': [
+    ['file://./thread_snapshot_linux/h_0.h', 'file://./thread_snapshot_linux/h_1.h'],
+    
+  ],
+  'third_party/crashpad/crashpad/minidump/minidump_misc_info_writer.cc': [
+    ['file://./minidump_misc_info_writer/0_0.h', 'file://./minidump_misc_info_writer/0_1.h'],
+    
+  ],
 }
 const patchConfig = () => {
   for (const file in patchCfg) {
