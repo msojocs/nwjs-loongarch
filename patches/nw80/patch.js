@@ -306,15 +306,39 @@ typedef unsigned long int greg_t;
   ],
   'third_party/crashpad/crashpad/snapshot/linux/thread_snapshot_linux.cc': [
     ['file://./thread_snapshot_linux/0_0.h', 'file://./thread_snapshot_linux/0_1.h'],
-    
   ],
   'third_party/crashpad/crashpad/snapshot/linux/thread_snapshot_linux.h': [
     ['file://./thread_snapshot_linux/h_0.h', 'file://./thread_snapshot_linux/h_1.h'],
-    
   ],
   'third_party/crashpad/crashpad/minidump/minidump_misc_info_writer.cc': [
     ['file://./minidump_misc_info_writer/0_0.h', 'file://./minidump_misc_info_writer/0_1.h'],
-    
+  ],
+  'third_party/crashpad/crashpad/snapshot/capture_memory.cc': [
+    ['file://./capture_memory/0_0.h', 'file://./capture_memory/0_1.h'],
+  ],
+  'third_party/crashpad/crashpad/snapshot/linux/cpu_context_linux.cc': [
+    ['file://./cpu_context_linux/0_0.h', 'file://./cpu_context_linux/0_1.h'],
+  ],
+  'third_party/crashpad/crashpad/snapshot/linux/cpu_context_linux.h': [
+    ['file://./cpu_context_linux/h_0.h', 'file://./cpu_context_linux/h_1.h'],
+  ],
+  'third_party/crashpad/crashpad/snapshot/cpu_context.cc': [
+    ['file://./cpu_context/c1_0.h', 'file://./cpu_context/c1_1.h'],
+    ['file://./cpu_context/c2_0.h', 'file://./cpu_context/c2_1.h'],
+    ['file://./cpu_context/c3_0.h', 'file://./cpu_context/c3_1.h'],
+  ],
+  'third_party/crashpad/crashpad/snapshot/cpu_context.h': [
+    ['file://./cpu_context/h1_0.h', 'file://./cpu_context/h1_1.h'],
+    ['file://./cpu_context/h2_0.h', 'file://./cpu_context/h2_1.h'],
+  ],
+  'third_party/crashpad/crashpad/snapshot/cpu_architecture.h': [
+    ['kCPUArchitectureRISCV64,\n}', 'kCPUArchitectureRISCV64,\n\n  //! \brief 64-bit LOONGARCH.\n  kCPUArchitectureLOONGARCH64,}']
+  ],
+  'third_party/crashpad/crashpad/snapshot/linux/system_snapshot_linux.cc': [
+    ['file://./system_snapshot_linux/1_0.h'],
+    ['file://./system_snapshot_linux/2.h'],
+    ['file://./system_snapshot_linux/3.h'],
+    ['file://./system_snapshot_linux/4.h'],
   ],
 }
 const patchConfig = () => {
@@ -329,8 +353,15 @@ const patchConfig = () => {
         if (from.startsWith('file://')) {
           from = fs.readFileSync(path.resolve(__dirname, from.substring(7))).toString()
         }
-        if (to.startsWith('file://')) {
-          to = fs.readFileSync(path.resolve(__dirname, to.substring(7))).toString()
+        if (d.length == 2){
+          if (to.startsWith('file://')) {
+            to = fs.readFileSync(path.resolve(__dirname, to.substring(7))).toString()
+          }
+        }
+        else if (d.length == 1) {
+          const t = from.split('\n//----replace\n')
+          from = t[0]
+          to = t[1]
         }
       } catch (error) {
         
