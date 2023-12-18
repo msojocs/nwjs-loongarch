@@ -68,188 +68,15 @@ const patchCfg = {
 `, `#if defined(__i386__) || defined(__x86_64__) || defined(__arm__) || \\\ndefined(__aarch64__) || defined(__loongarch64)\n`]
   ],
   'sandbox/linux/system_headers/linux_stat.h': [
-    [`#define __NR_fstatat_default __NR_newfstatat
-#define __NR_fstat_default __NR_fstat
-
-#else
-#error "one of fstatat64 and newfstatat must be defined"`, `#define __NR_fstatat_default __NR_newfstatat
-#define __NR_fstat_default __NR_fstat
-
-#elif defined(__loongarch64)
-
-namespace sandbox {
-using default_stat_struct = struct kernel_stat;
-} // namespace sandbox
-
-#define __NR_fstatat_default __NR_statx
-#define __NR_fstat_default __NR_statx
-// loong64
-#else
-#error "one of fstatat64 and newfstatat must be defined"`],
-[
-`#endif
-
-#if !defined(AT_EMPTY_PATH)`,
-`#endif
-
-#if defined(__loongarch64)
-#define AT_STATX_SYNC_AS_STAT 0x0000
-#define STATX_ALL 0x00000fffU
-#endif
-// loong64
-#if !defined(AT_EMPTY_PATH)`
-],
-[
-`#elif defined(__aarch64__)
-struct kernel_stat {
-  unsigned long st_dev;
-  unsigned long st_ino;
-  unsigned int st_mode;
-  unsigned int st_nlink;
-  unsigned int st_uid;
-  unsigned int st_gid;
-  unsigned long st_rdev;
-  unsigned long __pad1;
-  long st_size;
-  int st_blksize;
-  int __pad2;
-  long st_blocks;
-  long st_atime_;
-  unsigned long st_atime_nsec_;
-  long st_mtime_;
-  unsigned long st_mtime_nsec_;
-  long st_ctime_;
-  unsigned long st_ctime_nsec_;
-  unsigned int __unused4;
-  unsigned int __unused5;
-};
-#endif`,
-`#elif defined(__aarch64__) 
-struct kernel_stat {
-  unsigned long st_dev;
-  unsigned long st_ino;
-  unsigned int st_mode;
-  unsigned int st_nlink;
-  unsigned int st_uid;
-  unsigned int st_gid;
-  unsigned long st_rdev;
-  unsigned long __pad1;
-  long st_size;
-  int st_blksize;
-  int __pad2;
-  long st_blocks;
-  long st_atime_;
-  unsigned long st_atime_nsec_;
-  long st_mtime_;
-  unsigned long st_mtime_nsec_;
-  long st_ctime_;
-  unsigned long st_ctime_nsec_;
-  unsigned int __unused4;
-  unsigned int __unused5;
-};
-#elif defined(__loongarch64)
-struct kernel_timestamp {
-  long         tv_sec;
-  unsigned int tv_nsec;
-  signed int   reserved;
-};
-
-struct kernel_stat {
-  unsigned int st_mask;
-  unsigned int st_blksize;
-  unsigned long        st_attributes;
-  unsigned int st_nlink;
-  unsigned int st_uid;
-  unsigned int st_gid;
-  unsigned char st_mode;
-  unsigned char __spare0[1];
-  unsigned long        st_ino;
-  unsigned long st_size;
-  unsigned long st_blocks;
-  unsigned long st_attributes_mask;
-  struct kernel_timestamp st_atime_;
-  struct kernel_timestamp st_btime_;
-  struct kernel_timestamp st_ctime_;
-  struct kernel_timestamp st_mtime_;
-  unsigned int st_rdev_major;
-  unsigned int st_rdev_minor;
-  unsigned int st_dev_major;
-  unsigned int st_dev_minor;
-  unsigned long        st_mnt_id;
-  unsigned long        __spare2;
-  unsigned long        __spare3[12];
-};
-#endif`
-]
+    ['file://./linux_stat/1.h'],
+    ['file://./linux_stat/2.h'],
+    ['file://./linux_stat/3.h'],
   ],
   'sandbox/linux/services/credentials.cc': [
-[
-`#if defined(ARCH_CPU_X86_FAMILY) || defined(ARCH_CPU_ARM_FAMILY) || \\
-    defined(ARCH_CPU_MIPS_FAMILY)
-  // The stack grows downward.`,
-`#if defined(ARCH_CPU_X86_FAMILY) || defined(ARCH_CPU_ARM_FAMILY) || \\
-    defined(ARCH_CPU_MIPS_FAMILY) || defined(ARCH_CPU_LOONGARCH_FAMILY)
-  // The stack grows downward.`
-]
+    ['file://./credentials/1.h'],
   ],
   'sandbox/linux/bpf_dsl/seccomp_macros.h': [
-[
-`#define SECCOMP_PT_PARM5(_regs) (_regs).regs[4]
-#define SECCOMP_PT_PARM6(_regs) (_regs).regs[5]
-#else
-#error Unsupported target platform`,
-`#define SECCOMP_PT_PARM5(_regs) (_regs).regs[4]
-#define SECCOMP_PT_PARM6(_regs) (_regs).regs[5]
-
-#elif defined(__loongarch64)
-struct regs_struct {
-  uint64_t regs[32];
-  uint64_t orig_a0;
-  uint64_t csr_era;
-  uint64_t csr_badv;
-  uint64_t reserved[10];
-};
-
-typedef unsigned long int greg_t;
-
-#define SECCOMP_ARCH AUDIT_ARCH_LOONGARCH64
-
-#define SECCOMP_REG(_ctx, _reg) ((_ctx)->uc_mcontext.__gregs[_reg])
-
-#define SECCOMP_RESULT(_ctx) SECCOMP_REG(_ctx, 4)
-#define SECCOMP_SYSCALL(_ctx) SECCOMP_REG(_ctx, 11)
-#define SECCOMP_IP(_ctx) (_ctx)->uc_mcontext.__pc
-#define SECCOMP_PARM1(_ctx) SECCOMP_REG(_ctx, 4)
-#define SECCOMP_PARM2(_ctx) SECCOMP_REG(_ctx, 5)
-#define SECCOMP_PARM3(_ctx) SECCOMP_REG(_ctx, 6)
-#define SECCOMP_PARM4(_ctx) SECCOMP_REG(_ctx, 7)
-#define SECCOMP_PARM5(_ctx) SECCOMP_REG(_ctx, 8)
-#define SECCOMP_PARM6(_ctx) SECCOMP_REG(_ctx, 9)
-
-#define SECCOMP_NR_IDX (offsetof(struct arch_seccomp_data, nr))
-#define SECCOMP_ARCH_IDX (offsetof(struct arch_seccomp_data, arch))
-#define SECCOMP_IP_MSB_IDX \\
-	(offsetof(struct arch_seccomp_data, instruction_pointer) + 4)
-#define SECCOMP_IP_LSB_IDX \\
-	(offsetof(struct arch_seccomp_data, instruction_pointer) + 0)
-#define SECCOMP_ARG_MSB_IDX(nr) \\
-	(offsetof(struct arch_seccomp_data, args) + 8 * (nr) + 4)
-#define SECCOMP_ARG_LSB_IDX(nr) \\
-	(offsetof(struct arch_seccomp_data, args) + 8 * (nr) + 0)
-
-#define SECCOMP_PT_RESULT(_regs) (_regs).regs[4]
-#define SECCOMP_PT_SYSCALL(_regs) (_regs).regs[11]
-#define SECCOMP_PT_IP(_regs) (_regs).csr_era
-#define SECCOMP_PT_PARM1(_regs) (_regs).regs[4]
-#define SECCOMP_PT_PARM2(_regs) (_regs).regs[5]
-#define SECCOMP_PT_PARM3(_regs) (_regs).regs[6]
-#define SECCOMP_PT_PARM4(_regs) (_regs).regs[7]
-#define SECCOMP_PT_PARM5(_regs) (_regs).regs[8]
-#define SECCOMP_PT_PARM6(_regs) (_regs).regs[9]
-
-#else
-#error Unsupported target platform`
-]
+    ['file://./seccomp_macros/1.h'],
   ],
   'sandbox/linux/services/syscall_wrappers.cc': [
     ['file://./syscall_wrappers/0_0.h', 'file://./syscall_wrappers/0_1.h'],
@@ -339,6 +166,23 @@ typedef unsigned long int greg_t;
     ['file://./system_snapshot_linux/2.h'],
     ['file://./system_snapshot_linux/3.h'],
     ['file://./system_snapshot_linux/4.h'],
+  ],
+  'third_party/crashpad/crashpad/util/net/http_transport_libcurl.cc': [
+    ['file://./http_transport_libcurl/1.h']
+  ],
+  'third_party/crashpad/crashpad/snapshot/linux/exception_snapshot_linux.cc': [
+    ['file://./exception_snapshot_linux/c1.h'],
+    ['file://./exception_snapshot_linux/c2.h'],
+    ['file://./exception_snapshot_linux/c3.h'],
+  ],
+  'third_party/crashpad/crashpad/snapshot/linux/exception_snapshot_linux.h': [
+    ['file://./exception_snapshot_linux/h1.h'],
+  ],
+  'third_party/crashpad/crashpad/snapshot/linux/process_reader_linux.cc': [
+    ['file://./process_reader_linux/1.h'],
+  ],
+  'third_party/crashpad/crashpad/util/linux/ptracer.cc': [
+    ['file://./ptracer/1.h'],
   ],
 }
 const patchConfig = () => {
