@@ -198,6 +198,15 @@ const patchCfg = {
     ['"graphics/cpu/loongarch64/webgl_image_conversion_lsx.h",', ''],
     ['file://./renderer_platform/BUILD.h'],
   ],
+  'third_party/blink/renderer/platform/graphics/gpu/webgl_image_conversion.cc': [
+    ['#include "third_party/blink/renderer/platform/graphics/cpu/loongarch64/webgl_image_conversion_lsx.h"', ''],
+    ['file://./webgl_image_conversion/1.h'],
+    ['file://./webgl_image_conversion/2.h'],
+    ['file://./webgl_image_conversion/3.h'],
+    ['file://./webgl_image_conversion/4.h'],
+    ['file://./webgl_image_conversion/5.h'],
+    ['file://./webgl_image_conversion/6.h'],
+  ],
 }
 const patchConfig = () => {
   for (const file in patchCfg) {
