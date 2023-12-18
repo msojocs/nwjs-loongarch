@@ -293,6 +293,13 @@ typedef unsigned long int greg_t;
     // [/#if !defined\(__aarch64__\)\n/g, '#if !defined(__aarch64__) && !defined(__loongarch64)\n']
     ['file://./syscall_sets_cc/0_0.h', 'file://./syscall_sets_cc/0_1.h'],
   ],
+  'third_party/crashpad/crashpad/util/linux/thread_info.h': [
+    ['file://./thread_info/0_0.h', 'file://./thread_info/0_1.h'],
+    ['file://./thread_info/1_0.h', 'file://./thread_info/1_1.h'],
+    ['file://./thread_info/2_0.h', 'file://./thread_info/2_1.h'],
+    ['file://./thread_info/3_0.h', 'file://./thread_info/3_1.h'],
+    ['file://./thread_info/4_0.h', 'file://./thread_info/4_1.h'],
+  ],
 }
 const patchConfig = () => {
   for (const file in patchCfg) {
@@ -312,7 +319,12 @@ const patchConfig = () => {
       } catch (error) {
         
       }
-      content = content.replace(from, to)
+      if (typeof from === 'string') {
+        content = content.replaceAll(from, to)
+      }
+      else {
+        content = content.replace(from, to)
+      }
     }
     fs.writeFileSync(targetFile, content)
   }
