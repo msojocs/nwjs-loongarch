@@ -184,6 +184,18 @@ const patchCfg = {
   'third_party/crashpad/crashpad/util/linux/ptracer.cc': [
     ['file://./ptracer/1.h'],
   ],
+  'sandbox/policy/linux/bpf_network_policy_linux.cc': [
+    ['#if !defined(__aarch64__)\n', '#if !defined(__aarch64__) && !defined(__loongarch64)\n']
+  ],
+  'sandbox/policy/linux/bpf_gpu_policy_linux.cc': [
+    ['#if !defined(__aarch64__)\n', '#if !defined(__aarch64__) && !defined(__loongarch64)\n']
+  ],
+  'sandbox/policy/linux/bpf_cros_amd_gpu_policy_linux.cc': [
+    ['#if !defined(__aarch64__)\n', '#if !defined(__aarch64__) && !defined(__loongarch64)\n']
+  ],
+  'sandbox/features.gni': [
+    [' current_cpu == "mips64el")', ' current_cpu == "mips64el" || current_cpu == "loong64")']
+  ],
 }
 const patchConfig = () => {
   for (const file in patchCfg) {
@@ -198,11 +210,13 @@ const patchConfig = () => {
           from = fs.readFileSync(path.resolve(__dirname, from.substring(7))).toString()
         }
         if (d.length == 2){
+          // 两个文件，一个修改前，一个修改后
           if (to.startsWith('file://')) {
             to = fs.readFileSync(path.resolve(__dirname, to.substring(7))).toString()
           }
         }
         else if (d.length == 1) {
+          // 一个文件，包含了修改前与修改后的数据，使用 \n//----replace\n 分割
           const t = from.split('\n//----replace\n')
           from = t[0]
           to = t[1]
