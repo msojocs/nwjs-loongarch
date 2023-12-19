@@ -207,6 +207,10 @@ const patchCfg = {
     ['file://./webgl_image_conversion/5.h'],
     ['file://./webgl_image_conversion/6.h'],
   ],
+  'build/toolchain/gcc_toolchain.gni': [
+    ['file://./gcc_toolchain/1.h'],
+    ['file://./gcc_toolchain/2.h'],
+  ],
 }
 const patchConfig = () => {
   for (const file in patchCfg) {
