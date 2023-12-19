@@ -218,6 +218,12 @@ const patchCfg = {
   'chrome/BUILD.gn': [
     ['file://./chrome_build/1.h'],
   ],
+  'content/nw/tools/payload.cc': [
+    [/base::DictionaryValue/g, 'base::Value::Dict'],
+    [/base::ListValue/g, 'base::Value::List'],
+    [/.Set[a-zA-Z]+\(/g, '.Set('],
+    ['std::move(file_list_)', 'std::move(*file_list_)']
+  ],
 }
 const patchConfig = () => {
   for (const file in patchCfg) {
