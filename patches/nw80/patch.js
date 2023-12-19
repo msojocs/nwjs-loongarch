@@ -27,12 +27,15 @@ const patchSysroot = async () => {
 }
 const patchCfg = {
   'build/config/clang/BUILD.gn': [
+    // 字符串替换
     ['_dir = "aarch64-unknown-linux-gnu"\n        } else {\n', '_dir = "aarch64-unknown-linux-gnu"\n  } else if (current_cpu == "loong64") {\n    _dir = "loongarch64-unknown-linux-gnu"\n  } else {\n'],
   ],
   'build/config/compiler/BUILD.gn': [
+    // 字符串替换
     ['\n\n  # Normally, this would be defined in', '\n  # loong64 rust compiler flags setup for cef\nif (is_linux && current_cpu == "loong64") {rustflags += [ "-Ccode-model=medium" ]}\n  # Normally, this would be defined in']
   ],
   'build/config/linux/libffi/BUILD.gn': [
+    // 字符串替换
     ['libs = [ ":libffi_pic.a" ]', 'libs = [ "ffi" ]']
   ],
   'build/config/linux/pkg_config.gni': [
@@ -52,6 +55,7 @@ const patchCfg = {
     ['#endif\n\n#endif', '#endif\n\n#if defined(__loongarch64)\n#include "sandbox/linux/system_headers/loong64_linux_syscalls.h"\n#endif\n#endif']
   ],
   'sandbox/linux/system_headers/linux_signal.h': [
+    // 文件规则替换
     ['file://./linux_signal/1.h']
   ],
   'skia/BUILD.gn': [
@@ -219,21 +223,36 @@ const patchCfg = {
     ['file://./chrome_build/1.h'],
   ],
   'content/nw/tools/payload.cc': [
+    // 全局替换
     [/base::DictionaryValue/g, 'base::Value::Dict'],
     [/base::ListValue/g, 'base::Value::List'],
     [/.Set[a-zA-Z]+\(/g, '.Set('],
     ['std::move(file_list_)', 'std::move(*file_list_)']
   ],
+  'sandbox/linux/system_headers/loong64_linux_syscalls.h': [
+    // 文件复制
+    ['copy://./../loong64_linux_syscalls.h'],
+  ],
 }
 const patchConfig = () => {
   for (const file in patchCfg) {
     const targetFile = path.resolve(srcDir, file)
-    let content = fs.readFileSync(targetFile).toString()
+    let content = ''
+    if (fs.existsSync(targetFile)) 
+      content = fs.readFileSync(targetFile).toString()
     const cfg = patchCfg[file]
     for (const d of cfg) {
       let from = d[0]
       let to = d[1]
       try {
+        // 复制文件
+        if (from.startsWith('copy://')) {
+          from = fs.readFileSync(path.resolve(__dirname, from.substring(7))).toString()
+          content = from
+          continue;
+        }
+
+        // 文件替换
         if (from.startsWith('file://')) {
           from = fs.readFileSync(path.resolve(__dirname, from.substring(7))).toString()
         }
