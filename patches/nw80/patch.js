@@ -93,8 +93,8 @@ const patchCfg = {
     ['file://./linux_syscall_ranges/0_0.h'],
   ],
   'sandbox/linux/seccomp-bpf-helpers/baseline_policy.cc': [
-    ['#if !defined(__aarch64__)\n', '#if !defined(__aarch64__) && !defined(__loongarch__)\n'],
-    ['    defined(__aarch64__)\n', '    defined(__aarch64__) || defined(__loongarch64)\n'],
+    [/#if !defined\(__aarch64__\)\n/g, '#if !defined(__aarch64__) && !defined(__loongarch__)\n'],
+    [/    defined\(__aarch64__\)\n/g, '    defined(__aarch64__) || defined(__loongarch64)\n'],
     ['file://./baseline_policy/0_0.h', 'file://./baseline_policy/0_1.h'],
   ],
   'sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.h': [
@@ -210,6 +210,9 @@ const patchCfg = {
   'build/toolchain/gcc_toolchain.gni': [
     ['file://./gcc_toolchain/1.h'],
     ['file://./gcc_toolchain/2.h'],
+  ],
+  'sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.cc': [
+    ['file://./sigsys_handlers/cc1.h'],
   ],
 }
 const patchConfig = () => {
