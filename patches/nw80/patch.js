@@ -213,6 +213,10 @@ const patchCfg = {
   ],
   'sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.cc': [
     ['file://./sigsys_handlers/cc1.h'],
+    ['file://./sigsys_handlers/cc2.h'],
+  ],
+  'chrome/BUILD.gn': [
+    ['file://./chrome_build/1.h'],
   ],
 }
 const patchConfig = () => {
