@@ -4,7 +4,7 @@
 
 操作系统：Windows 11
 
-编译环境：WSL2 + [debian11](https://learn.microsoft.com/en-us/windows/wsl/install-manual#downloading-distributions)
+编译环境：WSL2 + [debian11](https://learn.microsoft.com/en-us/windows/wsl/install-manual#downloading-distributions)/[Ubuntu20.04](https://learn.microsoft.com/en-us/windows/wsl/install-manual#downloading-distributions)
 
 ### 构建额外信息
 
