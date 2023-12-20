@@ -235,6 +235,8 @@ const patchCfg = {
   ],
 }
 const patchConfig = () => {
+  let total = 0
+  let replace = 0
   for (const file in patchCfg) {
     const targetFile = path.resolve(srcDir, file)
     let content = ''
@@ -242,13 +244,18 @@ const patchConfig = () => {
       content = fs.readFileSync(targetFile).toString()
     const cfg = patchCfg[file]
     for (const d of cfg) {
+      total++
+
       let from = d[0]
       let to = d[1]
       try {
         // 复制文件
         if (from.startsWith('copy://')) {
           from = fs.readFileSync(path.resolve(__dirname, from.substring(7))).toString()
-          content = from
+          if (content != from) {
+            replace++
+            content = from
+          }
           continue;
         }
 
@@ -272,14 +279,23 @@ const patchConfig = () => {
         
       }
       if (typeof from === 'string') {
-        content = content.replaceAll(from, to)
+        if (content.includes(from)) {
+          replace++
+          content = content.replaceAll(from, to)
+        }
       }
       else {
+        // 有正则表达式，不能直接includes判断
+        const old = content
         content = content.replace(from, to)
+        if (content != old) {
+          replace++
+        }
       }
     }
     fs.writeFileSync(targetFile, content)
   }
+  console.log(`Total patches: ${total}, Apply: ${replace}`)
 }
 
   ; (async () => {
