@@ -3,7 +3,8 @@ set -e
 root_dir=$(cd `dirname $0`/.. && pwd -P)
 source "$root_dir/tools/common/log.sh"
 
-src_dir="$root_dir/nwjs/src"
+src_dir="$root_dir/source-code"
+src_dir="$src_dir/nwjs/src"
 output_dir="$root_dir/output"
 
 cd "$src_dir"
