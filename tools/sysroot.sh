@@ -17,7 +17,8 @@ cache_dir="$root_dir/cache"
 sysroot_name="clfs-loongarch64-system-8.1-sysroot.squashfs"
 # 下载
 if [ ! -f "$cache_dir/$sysroot_name" ];then
-  wget -O$cache_dir/$sysroot_name https://github.com/loongson/build-tools/releases/download/2023.08.08/clfs-loongarch64-system-8.1-sysroot.squashfs
+  wget -c -O"$cache_dir/$sysroot_name.tmp" https://github.com/loongson/build-tools/releases/download/2023.08.08/clfs-loongarch64-system-8.1-sysroot.squashfs
+  mv $cache_dir/$sysroot_name.tmp $cache_dir/$sysroot_name
 fi
 # 解压
 if [ -z "$(ls -A $source_dir/sysroot)" ];then

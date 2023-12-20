@@ -22,7 +22,8 @@ mkdir -p $output_dir
 # 下载
 notice "Start to download cmake..."
 if [ ! -f "$root_dir/cache/cmake-$cmake_ver-linux-x86_64.tar.gz" ];then
-  wget -O$root_dir/cache/cmake-$cmake_ver-linux-x86_64.tar.gz https://github.com/Kitware/CMake/releases/download/v$cmake_ver/cmake-$cmake_ver-linux-x86_64.tar.gz
+  wget -c -O$root_dir/cache/cmake-$cmake_ver-linux-x86_64.tar.gz.tmp https://github.com/Kitware/CMake/releases/download/v$cmake_ver/cmake-$cmake_ver-linux-x86_64.tar.gz
+  mv $root_dir/cache/cmake-$cmake_ver-linux-x86_64.tar.gz.tmp $root_dir/cache/cmake-$cmake_ver-linux-x86_64.tar.gz
 fi
 
 # 解压
