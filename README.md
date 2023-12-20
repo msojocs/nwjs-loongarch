@@ -15,6 +15,9 @@
 1. 执行 `tools/install-deps.sh`, 安装必要的依赖
 2. 执行 `tools/setup.sh`, 开始执行构建流程
 
+# 模拟验证
+
+使用loongarch硬件或者qemu，qemu请参考: [run-qemu](./docs/run-qemu.md)
 
 # 构建记录
 
