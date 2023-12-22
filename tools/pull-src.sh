@@ -24,10 +24,8 @@ catchError() {
   fi
   exit $exit_code
 }
-branch=$1
-if [ -z "$branch" ];then
-  branch="nw80"
-fi
+source "$root_dir/config/nw-version.sh"
+branch=$nw_version
 notice "target branch: $branch"
 export NO_AUTH_BOTO_CONFIG="$root_dir/config/.boto"
 output_dir="$root_dir/output"
@@ -39,7 +37,7 @@ export PATH=$output_dir/toolchain/bin:$output_dir/cmake-3.20.5-linux-x86_64/bin:
 # 拉取源代码
 mkdir -p "$nwjs_dir"
 cd $nwjs_dir
-gclient config --name=src https://github.com/nwjs/chromium.src.git@origin/nw80
+gclient config --name=src https://github.com/nwjs/chromium.src.git@origin/$branch
 
 notice "pull v8 with branch: $branch"
 if [ ! -d "$nwjs_dir/src/v8" ];then
@@ -65,13 +63,5 @@ else
   cd "$nwjs_dir/src/content/nw" && git checkout $branch --force
 fi
 
+notice "Start to sync..."
 gclient sync --with_branch_heads
-
-dep_script="$src_dir/build/install-build-deps.sh"
-
-if [ -f "$dep_script" ];then
-  notice "阁下已经拉取了源码，开始执行项目的依赖安装脚本....."
-  "$dep_script"
-else
-  warn "没有找到依赖安装脚本，构建可能会发生错误！！！"
-fi

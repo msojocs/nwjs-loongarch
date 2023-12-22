@@ -41,8 +41,14 @@ if [ $CURRENT_STEP == $STEP_DEPOT_TOOLS_SUCCESS ];then
   step_switch $STEP_PULL_SRC_SUCCESS
 fi
 
-# build prepare
+# install deps
 if [ $CURRENT_STEP == $STEP_PULL_SRC_SUCCESS ];then
+  "$tools_dir/install-deps.sh"
+  step_switch $STEP_DEPS_SUCCESS
+fi
+
+# build prepare
+if [ $CURRENT_STEP == $STEP_DEPS_SUCCESS ];then
   "$tools_dir/build-prepare.sh"
   step_switch $STEP_BUILD_PREPARE_SUCCESS
 fi

@@ -17,6 +17,7 @@ src_dir="$source_dir/nwjs/src"
 output_dir="$root_dir/output"
 llvm_dir="$output_dir/llvm-18"
 
+source "$root_dir/config/nw-version.sh"
 if [ ! -d "$src_dir/build/linux/debian_bullseye_loong64-sysroot" ];then
   cd "$src_dir/build/linux"
   ln -s "../../../../sysroot" "debian_bullseye_loong64-sysroot"
@@ -24,7 +25,7 @@ fi
 
 # patch
 notice "start to patch"
-patch_dir="$root_dir/patches/nw80"
+patch_dir="$root_dir/patches/$nw_version"
 node "$patch_dir/patch.js" "$src_dir"
 
 notice "start to gen nw"

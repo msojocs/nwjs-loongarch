@@ -12,6 +12,10 @@
 
 # 构建脚本的使用
 
+构建脚本编写依据：https://github.com/loongson/nw.js
+
+目前仅支持nw80
+
 1. 执行 `tools/install-deps.sh`, 安装必要的依赖
 2. 执行 `tools/setup.sh`, 开始执行构建流程
 
