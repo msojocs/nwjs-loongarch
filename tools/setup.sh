@@ -3,6 +3,15 @@ set -e
 
 root_dir=$(cd `dirname $0`/.. && pwd -P)
 tools_dir="$root_dir/tools"
+for arg in $@;
+do
+  case "$arg" in
+    "force_start")
+      rm -rf "$root_dir/tmp/.step"
+      ;;
+  esac
+done
+
 source "$tools_dir/common/step.sh"
 
 # cmake

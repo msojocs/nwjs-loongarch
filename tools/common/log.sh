@@ -9,6 +9,9 @@ notice() {
 fail() {
     echo -e "\033[41;37m 失败 \033[0m $1"
 }
+warn() {
+    echo -e "\033[31m $1 \033[0m "
+}
 git_clone() {
     num=1
     while [ $num -le 2000 ]; do

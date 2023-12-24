@@ -18,6 +18,8 @@ trap 'catchError $LINENO "$BASH_COMMAND"' ERR # 捕获错误情况
 catchError() {
   exit_code=$?
   fail "重置变更"
+  # "$root_dir/tools/sync-reset.sh"
+  # gclient sync -D
   "$root_dir/tools/sync-reset.sh"
   if [ $exit_code -ne 0 ]; then
       fail "\033[31mcommand: $2\n  at $0:$1\n  at $STEP\033[0m"
@@ -56,12 +58,32 @@ else
 fi
 
 notice "pull nw with branch: $branch"
+# nw_repo="https://github.com/loongson/nw.js.git"
+nw_repo="https://github.com/nwjs/nw.js.git"
 if [ ! -d "$nwjs_dir/src/content/nw" ];then
   cd "$nwjs_dir"
-  git clone -b $branch https://github.com/nwjs/nw.js.git src/content/nw
+  # git clone -b $branch https://github.com/nwjs/nw.js.git src/content/nw
+  git clone -b $branch "$nw_repo" src/third_party/node-nw
 else
-  cd "$nwjs_dir/src/content/nw" && git checkout $branch --force
+  cd "$nwjs_dir/src/content/nw"
+  git remote set-url origin "$nw_repo"
+  git reset --hard HEAD~2
+  git checkout -B $branch origin/$branch --force
+  git pull
+fi
+
+if [ -f "$nwjs_dir/src/README.md" ];then
+  cd "$nwjs_dir/src" && git checkout $branch --force
 fi
 
 notice "Start to sync..."
+if read -t 60 -p "execute 'gclient sync -D'? (Y/N):" name    # -t，设置输入超时时间（本语句设置超时时间为5秒），默认单位是秒；-p，指定输入提示
+then                                              # 如果不超过5秒
+  if [ "y" = "$name" ] || [ "Y" = "$name" ];then
+    "$root_dir/tools/sync-reset.sh"
+    gclient sync -D
+  fi
+else                                              # 超过5秒
+    echo "Timeout"
+fi
 gclient sync --with_branch_heads

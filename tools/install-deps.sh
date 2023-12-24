@@ -18,7 +18,7 @@ dep_script="$src_dir/build/install-build-deps.sh"
 
 if [ -f "$dep_script" ];then
   notice "阁下已经拉取了源码，开始执行项目的依赖安装脚本....."
-  "$dep_script"
+  "$dep_script" --no-chromeos-fonts
 fi
 
 sudo apt update
