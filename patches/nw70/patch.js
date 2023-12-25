@@ -36,14 +36,8 @@ const patchSysroot = async () => {
 //   console.log('d:', d)
 // }
 // process.exit(1)
-const patchCfg = {
-  'sandbox/linux/system_headers/loong64_linux_syscalls.h': [
-    // 文件复制
-    ['copy://./../loong64_linux_syscalls.h'],
-  ],
-  'skia/BUILD.gn': [
-    ['file://./skia/build.h']
-  ],
+const patchCfg = require('./config')
+const extCfg = {
   'content/nw/BUILD.gn': [
     ['file://./nw/build.h'],
     ['file://./nw/build2.h']
@@ -51,22 +45,11 @@ const patchCfg = {
   'content/nw/tools/package_binaries.py': [
     ['file://./nw/package_binaries.h'],
   ],
-  "third_party/node-nw/common.gypi": [
-    ['file://./node-common/1.h'],
-    ['file://./node-common/2.h'],
-    ['file://./node-common/3.h'],
-    ['file://./node-common/4.h'],
-    ['file://./node-common/5.h'],
-    ['file://./node-common/6.h'],
-  ],
-  'third_party/node-nw/config.gypi': [
-    ['file://./node-common/cfg1.h'],
-    ['file://./node-common/cfg2.h'],
-  ],
-  'third_party/node-nw/deps/base64/base64/lib/env.h': [
-    ['file://./node-common/env.h'],
-  ],
 }
+for (const k in extCfg) {
+  patchCfg[k] = extCfg[k]
+}
+
 const patchConfig = () => {
   let total = 0
   let replace = 0
@@ -84,10 +67,19 @@ const patchConfig = () => {
       try {
         // 复制文件
         if (from.startsWith('copy://')) {
-          from = fs.readFileSync(path.resolve(__dirname, from.substring(7))).toString()
+          const p = path.resolve(__dirname, from.substring(7))
+          const d = path.dirname(targetFile)
+          if (!fs.existsSync(d)) {
+            try{
+              console.log('mkdir:', d)
+              fs.mkdirSync(d, {recursive: true})
+            }catch(e){}
+          }
+          from = fs.readFileSync(p).toString()
           if (content != from) {
             replace++
             content = from
+            // console.log(`[copy]success: ${file} - `, d[0], ' applied.')
           }
           continue;
         }
@@ -115,9 +107,10 @@ const patchConfig = () => {
         if (content.includes(from)) {
           replace++
           content = content.replaceAll(from, to)
+          // console.log(`[file]success: ${file} - `, d[0], ' applied.')
         }
         else {
-          console.log(`warn: ${file} - `, d[0], ' not applied.')
+          console.log(`warn: ${file} - `, d[0], ' not applied. not include.')
         }
       }
       else {
@@ -126,9 +119,10 @@ const patchConfig = () => {
         content = content.replace(from, to)
         if (content != old) {
           replace++
+          // console.log(`[file]success: ${file} - `, d[0], ' applied.')
         }
         else {
-          console.log(`warn: ${file} - `, d[0], ' not applied.')
+          console.log(`warn: ${file} - `, d[0], ' not applied. replace not work.')
         }
       }
     }

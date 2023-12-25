@@ -1,0 +1,54 @@
+  jr $ra
+
+  .set at
+#endif  // __i386__
+
+//----replace
+  jr $ra
+
+  .set at
+#elif defined(__loongarch64)
+
+#define MCONTEXT_GREG_SIZE 8
+#define MCONTEXT_PC_OFFSET 176
+#define MCONTEXT_GREGS_OFFSET 184
+
+#define STORE_GPR(X) st.d $r##X, $a0, MCONTEXT_GREGS_OFFSET + X * MCONTEXT_GREG_SIZE
+#define STORE_PC st.d $ra, $a0, MCONTEXT_PC_OFFSET
+
+  STORE_PC
+  STORE_GPR(0)
+  STORE_GPR(1)
+  STORE_GPR(2)
+  STORE_GPR(3)
+  STORE_GPR(4)
+  STORE_GPR(5)
+  STORE_GPR(6)
+  STORE_GPR(7)
+  STORE_GPR(8)
+  STORE_GPR(9)
+  STORE_GPR(10)
+  STORE_GPR(11)
+  STORE_GPR(12)
+  STORE_GPR(13)
+  STORE_GPR(14)
+  STORE_GPR(15)
+  STORE_GPR(16)
+  STORE_GPR(17)
+  STORE_GPR(18)
+  STORE_GPR(19)
+  STORE_GPR(20)
+  STORE_GPR(21)
+  STORE_GPR(22)
+  STORE_GPR(23)
+  STORE_GPR(24)
+  STORE_GPR(25)
+  STORE_GPR(26)
+  STORE_GPR(27)
+  STORE_GPR(28)
+  STORE_GPR(29)
+  STORE_GPR(30)
+  STORE_GPR(31)
+
+  jirl $zero, $ra, 0
+#endif  // __i386__

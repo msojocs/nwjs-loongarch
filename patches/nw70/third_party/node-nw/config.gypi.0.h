@@ -1,0 +1,16 @@
+                       'libraries': []},
+  'variables': { 'clang': 1,
+                 'gcc_version': 49,
+                 'host_arch': 'x64',
+                 'icu_small': 'false',
+                 'node_install_npm': 'true',
+                 'node_prefix': '',
+
+//----replace
+                       'libraries': []},
+  'variables': { 'clang': 1,
+                 'gcc_version': 49,
+                 'host_arch': 'loong64',
+                 'icu_small': 'false',
+                 'node_install_npm': 'true',
+                 'node_prefix': '',

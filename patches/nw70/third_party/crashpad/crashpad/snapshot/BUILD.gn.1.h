@@ -1,0 +1,17 @@
+}
+
+if ((crashpad_is_linux || crashpad_is_android || crashpad_is_fuchsia) &&
+    target_cpu != "mipsel" && target_cpu != "mips64el") {
+  crashpad_loadable_module("crashpad_snapshot_test_both_dt_hash_styles") {
+    testonly = true
+    sources = [ "hash_types_test.cc" ]
+
+//----replace
+}
+
+if ((crashpad_is_linux || crashpad_is_android || crashpad_is_fuchsia) &&
+    target_cpu != "mipsel" && target_cpu != "mips64el" &&
+      target_cpu != "loongarch64") {
+  crashpad_loadable_module("crashpad_snapshot_test_both_dt_hash_styles") {
+    testonly = true
+    sources = [ "hash_types_test.cc" ]
