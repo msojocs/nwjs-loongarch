@@ -45,6 +45,10 @@ const extCfg = {
   'content/nw/tools/package_binaries.py': [
     ['file://./nw/package_binaries.h'],
   ],
+  'third_party/wayland/src/src/wayland-client-core.h': [
+    
+    ['file://./wayland-client-core/1.h'],
+  ]
 }
 for (const k in extCfg) {
   patchCfg[k] = extCfg[k]
