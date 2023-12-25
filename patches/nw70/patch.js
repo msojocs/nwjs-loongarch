@@ -48,7 +48,11 @@ const extCfg = {
   'third_party/wayland/src/src/wayland-client-core.h': [
     
     ['file://./wayland-client-core/1.h'],
-  ]
+  ],
+  'build/config/linux/libffi/BUILD.gn': [
+    // 字符串替换
+    ['libs = [ ":libffi_pic.a" ]', 'libs = [ "ffi" ]']
+  ],
 }
 for (const k in extCfg) {
   patchCfg[k] = extCfg[k]
@@ -108,7 +112,7 @@ const patchConfig = () => {
         
       }
       if (typeof from === 'string') {
-        if (content.includes(from)) {
+        if (content.includes(from) && !content.includes(to)) {
           replace++
           content = content.replaceAll(from, to)
           // console.log(`[file]success: ${file} - `, d[0], ' applied.')
@@ -120,7 +124,9 @@ const patchConfig = () => {
       else {
         // 有正则表达式，不能直接includes判断
         const old = content
-        content = content.replace(from, to)
+        if (!content.includes(to)) {
+          content = content.replace(from, to)
+        }
         if (content != old) {
           replace++
           // console.log(`[file]success: ${file} - `, d[0], ' applied.')

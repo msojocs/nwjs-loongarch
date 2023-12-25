@@ -45,5 +45,5 @@ size_t MinidumpContextLOONGARCH64Writer::ContextSize() const {
   DCHECK_GE(state(), kStateFrozen);
   return sizeof(context_);
 }
-
+// loongarch64 end
 }  // namespace crashpad

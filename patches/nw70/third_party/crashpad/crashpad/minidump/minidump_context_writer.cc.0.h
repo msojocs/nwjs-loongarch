@@ -15,6 +15,7 @@
           ->InitializeFromSnapshot(context_snapshot->loongarch64);
       break;
     }
+    // loongarch64 end
 
     default: {
       LOG(ERROR) << "unknown context architecture "
