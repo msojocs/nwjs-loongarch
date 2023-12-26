@@ -1,6 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 
+const suffix2comment = {
+  h: '// loongarch64',
+  cc: '// loongarch64',
+  gn: '# loongarch64'
+}
 function splitPatchFile(patchFilePath, target) {
   const content = fs.readFileSync(patchFilePath).toString()
   const lines = content.split('\n');
@@ -8,6 +13,7 @@ function splitPatchFile(patchFilePath, target) {
   const data = {
     mode: 'file',
     name: '',
+    comment: '',
     list: []
   }
   let current = {
@@ -23,6 +29,10 @@ function splitPatchFile(patchFilePath, target) {
     if (line.startsWith('diff')) {
       const cmds = line.split(' ')
       data.name = cmds[2]
+      const suffix = data.name.split('.').reverse()[0]
+      if (suffix2comment[suffix]) {
+        data.comment = suffix2comment[suffix]
+      }
       // data.name = cmds[3]
       continue
     } else if (line.startsWith('index') || line.startsWith('new file mode ')){
@@ -46,10 +56,10 @@ function splitPatchFile(patchFilePath, target) {
     } else if (line.startsWith('-')) {
       current.before += line.slice(1) + '\n';
     } else if (line.startsWith('+')) {
-      current.after += line.slice(1) + '\n';
+      current.after += line.slice(1) + `${data.comment}\n`;
     } else if (line.startsWith(' ')) {
       current.before += line.slice(1) + '\n';
-      current.after += line.slice(1) + '\n';
+      current.after += line.slice(1) + `${data.comment}\n`;
     }
     if (i + 1 === lines.length || lines[i + 1].startsWith('diff')) {
       data.path = path.resolve(base, data.name)

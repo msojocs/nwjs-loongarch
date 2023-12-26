@@ -13,7 +13,7 @@
       info->cpu = "loongarch64";
       break;
     }
-
+    // loongarch64
     default: {
       // Assign the numeric architecture ID into the CPU string.
       char cpu_string[7];

@@ -61,7 +61,7 @@
 
         break;
       }
-
+      // loongarch64
       default: {
         // Unknown context type - Don't log as an error yet. Let the
         // caller work that out.

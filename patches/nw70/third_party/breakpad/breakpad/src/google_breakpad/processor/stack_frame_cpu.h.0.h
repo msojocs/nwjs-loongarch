@@ -70,7 +70,7 @@ struct StackFrameLOONGARCH64 : public StackFrame {
   // silently convert from ints to enums.
   int context_validity;
 };
-
+// loongarch64
 }  // namespace google_breakpad
 
 #endif  // GOOGLE_BREAKPAD_PROCESSOR_STACK_FRAME_CPU_H__

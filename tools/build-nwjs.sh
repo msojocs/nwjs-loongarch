@@ -34,5 +34,7 @@ notice "Start to build components"
 ninja -C out/nw credits.html
 ninja -C out/nw nwjc
 ninja -C out/nw chromedriver
+ninja -C out/nw minidump_stackwalk
+
 notice "开始构建payload，可能会失败"
 ninja -C out/nw payload
