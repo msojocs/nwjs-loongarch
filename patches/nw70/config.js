@@ -874,7 +874,7 @@ const config = {
       "file://./third_party/breakpad/breakpad/src/tools/linux/md2core/minidump-2-core.cc.5.h"
     ]
   ],
-  "third_party/boringssl/src/include/openssl/base.h": [
+  "third_party/boringssl/include/openssl/base.h": [
     [
       "file://./third_party/boringssl/include/openssl/base.h.0.h"
     ]

@@ -10,7 +10,7 @@
   timespec timeout;
   timeout.tv_sec = 5;
   timeout.tv_nsec = 0;
-  if (HANDLE_EINTR(sigtimedwait(&dump_done_sigset, &siginfo, &timeout)) <
+  if (HANDLE_EINTR(sigtimedwait(&dump_done_sigset, &siginfo, &timeout)) <// loongarch64
       0) {
     return errno;
   }

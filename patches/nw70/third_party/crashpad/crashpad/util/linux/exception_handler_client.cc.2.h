@@ -12,9 +12,9 @@ int ExceptionHandlerClient::SignalCrashDump(
 int ExceptionHandlerClient::SignalCrashDump(
     const ExceptionHandlerProtocol::ClientInformation& info,
     VMAddress stack_pointer) {
-  sigset_t dump_done_sigset;
-  sigemptyset(&dump_done_sigset);
-  sigaddset(&dump_done_sigset, ExceptionHandlerProtocol::kDumpDoneSignal);
+  sigset_t dump_done_sigset;// loongarch64
+  sigemptyset(&dump_done_sigset);// loongarch64
+  sigaddset(&dump_done_sigset, ExceptionHandlerProtocol::kDumpDoneSignal);// loongarch64
   ScopedSigprocmaskRestore scoped_block(dump_done_sigset);
 
   int status = SendCrashDumpRequest(info, stack_pointer);

@@ -10,8 +10,8 @@ void Multiprocess::SetExpectedChildTerminationBuiltinTrap() {
 }
 
 void Multiprocess::SetExpectedChildTerminationBuiltinTrap() {
-#if defined(ARCH_CPU_ARM64) || defined(ARCH_CPU_MIPS_FAMILY) ||\
-    defined (ARCH_CPU_LOONG64)
+#if defined(ARCH_CPU_ARM64) || defined(ARCH_CPU_MIPS_FAMILY) ||\// loongarch64
+    defined (ARCH_CPU_LOONG64)// loongarch64
   SetExpectedChildTermination(kTerminationSignal, SIGTRAP);
 #else
   SetExpectedChildTermination(kTerminationSignal, SIGILL);

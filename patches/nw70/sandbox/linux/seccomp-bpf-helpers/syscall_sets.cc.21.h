@@ -10,9 +10,9 @@
     case __NR_getrusage:
     case __NR_personality:  // Can change its personality as well.
     case __NR_prlimit64:    // Like setrlimit / getrlimit.
-#if !defined(__loongarch64)
+#if !defined(__loongarch64)// loongarch64
     case __NR_setrlimit:
-#endif
+#endif// loongarch64
     case __NR_times:
       return true;
     default:

@@ -13,10 +13,10 @@
 
 #elif defined(__loongarch__)
 #define DAWN_PLATFORM_IS_LOONGARCH 1
-#if __loongarch_grlen == 64
+#if __loongarch_grlen == 64// loongarch64
 #define DAWN_PLATFORM_IS_LOONGARCH64 1
-#else
-#define DAWN_PLATFORM_IS_LOONGARCH32 1
+#else// loongarch64
+#define DAWN_PLATFORM_IS_LOONGARCH32 1// loongarch64
 #endif
 
 #elif defined(__riscv)

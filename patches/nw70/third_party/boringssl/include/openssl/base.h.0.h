@@ -9,9 +9,9 @@
 #define OPENSSL_32_BIT
 #elif defined(__myriad2__)
 #define OPENSSL_32_BIT
-#elif defined(__loongarch64)
-#define OPENSSL_64_BIT
-#define OPENSSL_LOONG64
+#elif defined(__loongarch64)// loongarch64
+#define OPENSSL_64_BIT// loongarch64
+#define OPENSSL_LOONG64// loongarch64
 #else
 // Note BoringSSL only supports standard 32-bit and 64-bit two's-complement,
 // little-endian architectures. Functions will not produce the correct answer

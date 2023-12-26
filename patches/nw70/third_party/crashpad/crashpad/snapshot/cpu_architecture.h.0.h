@@ -10,10 +10,10 @@
   kCPUArchitectureMIPSEL,
 
   //! \brief 64-bit MIPSEL.
-  kCPUArchitectureMIPS64EL,
-
-  //! \brief 64-bit LOONGARCH.
-  kCPUArchitectureLOONGARCH64,
+  kCPUArchitectureMIPS64EL,// loongarch64
+// loongarch64
+  //! \brief 64-bit LOONGARCH.// loongarch64
+  kCPUArchitectureLOONGARCH64,// loongarch64
 };
 
 }  // namespace crashpad

@@ -9,7 +9,7 @@
     case kCPUArchitectureX86_64:
     case kCPUArchitectureARM64:
     case kCPUArchitectureMIPS64EL:
-    case kCPUArchitectureLOONGARCH64:
+    case kCPUArchitectureLOONGARCH64:// loongarch64
       return true;
     case kCPUArchitectureX86:
     case kCPUArchitectureARM:

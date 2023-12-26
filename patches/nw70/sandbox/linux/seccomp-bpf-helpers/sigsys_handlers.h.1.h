@@ -9,9 +9,9 @@ void AllocateCrashKeys();
 SANDBOX_EXPORT bpf_dsl::ResultExpr CrashSIGSYSPtrace();
 SANDBOX_EXPORT bpf_dsl::ResultExpr RewriteSchedSIGSYS();
 SANDBOX_EXPORT bpf_dsl::ResultExpr RewriteFstatatSIGSYS(int fs_denied_errno);
-#if defined(__loongarch64)
-SANDBOX_EXPORT bpf_dsl::ResultExpr RewriteStatxSIGSYS(int fs_denied_errno);
-#endif
+#if defined(__loongarch64)// loongarch64
+SANDBOX_EXPORT bpf_dsl::ResultExpr RewriteStatxSIGSYS(int fs_denied_errno);// loongarch64
+#endif// loongarch64
 
 // Allocates a crash key so that Seccomp information can be recorded.
 void AllocateCrashKeys();

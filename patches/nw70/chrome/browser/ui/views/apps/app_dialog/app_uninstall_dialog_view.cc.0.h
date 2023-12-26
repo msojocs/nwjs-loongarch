@@ -21,22 +21,22 @@ void AppUninstallDialogView::OnWidgetInitialized() {
 #endif
 
 void AppUninstallDialogView::OnDialogCancelled() {
-#if BUILDFLAG(IS_CHROMEOS_ASH)
+#if BUILDFLAG(IS_CHROMEOS_ASH)// loongarch64
   uninstall_dialog()->OnDialogClosed(false /* uninstall */,
                                      false /* clear_site_data */,
                                      false /* report_abuse */);
-#endif
+#endif// loongarch64
 }
 
 void AppUninstallDialogView::OnDialogAccepted() {
-#if BUILDFLAG(IS_CHROMEOS_ASH)
+#if BUILDFLAG(IS_CHROMEOS_ASH)// loongarch64
   const bool clear_site_data =
       clear_site_data_checkbox_ && clear_site_data_checkbox_->GetChecked();
   const bool report_abuse_checkbox =
       report_abuse_checkbox_ && report_abuse_checkbox_->GetChecked();
   uninstall_dialog()->OnDialogClosed(true /* uninstall */, clear_site_data,
                                      report_abuse_checkbox);
-#endif
+#endif// loongarch64
 }
 
 void AppUninstallDialogView::OnWidgetInitialized() {

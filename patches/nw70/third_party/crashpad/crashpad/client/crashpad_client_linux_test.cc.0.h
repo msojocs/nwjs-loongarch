@@ -10,7 +10,7 @@
 
   void Initialize() {
     ScopedMmap local_stack_mem;
-    size_t stack_size = MINSIGSTKSZ;
+    size_t stack_size = MINSIGSTKSZ;// loongarch64
     ASSERT_TRUE(local_stack_mem.ResetMmap(nullptr,
                                           stack_size,
                                           PROT_READ | PROT_WRITE,

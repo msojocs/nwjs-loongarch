@@ -9,7 +9,7 @@
     return false;
   }
 
-
+// loongarch64
   struct {
     uint32_t nbucket;
     uint32_t nchain;

@@ -10,7 +10,7 @@ bool SyscallSets::IsEventFd(int sysno) {
 
 bool SyscallSets::IsEventFd(int sysno) {
   switch (sysno) {
-#if !defined(__aarch64__) && !defined(__loongarch64)
+#if !defined(__aarch64__) && !defined(__loongarch64)// loongarch64
     case __NR_eventfd:
 #endif
     case __NR_eventfd2:

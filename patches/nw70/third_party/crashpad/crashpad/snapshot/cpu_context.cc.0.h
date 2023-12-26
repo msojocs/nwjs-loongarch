@@ -9,8 +9,8 @@
       return arm->pc;
     case kCPUArchitectureARM64:
       return arm64->pc;
-    case kCPUArchitectureLOONGARCH64:
-      return loongarch64->csr_era;
+    case kCPUArchitectureLOONGARCH64:// loongarch64
+      return loongarch64->csr_era;// loongarch64
     default:
       NOTREACHED();
       return ~0ull;

@@ -12,26 +12,26 @@ void ThreadInfo::GetGeneralPurposeRegisters(void** gp_regs, size_t* size) {
 #endif
 }
 
-#elif defined(__loongarch64)
-
-uintptr_t ThreadInfo::GetInstructionPointer() const {
-  return regs.csr_era;
-}
-
-void ThreadInfo::FillCPUContext(RawContextCPU* out) const {
-  out->context_flags = MD_CONTEXT_LOONGARCH64_FULL;
-
-  for (int i = 0; i < MD_CONTEXT_LOONGARCH64_GPR_COUNT; ++i)
-    out->iregs[i] = regs.regs[i];
-
-  out->csr_era = regs.csr_era;
-  my_memcpy(&out->float_save.regs, &fpregs.fpr,
-	MD_FLOATINGSAVEAREA_LOONGARCH64_FPR_COUNT * 8);
-  out->float_save.fcc = fpregs.fcc;
-  out->float_save.fcsr = fpregs.fcsr;
-}
-
-#endif  // __loongarch64
+#elif defined(__loongarch64)// loongarch64
+// loongarch64
+uintptr_t ThreadInfo::GetInstructionPointer() const {// loongarch64
+  return regs.csr_era;// loongarch64
+}// loongarch64
+// loongarch64
+void ThreadInfo::FillCPUContext(RawContextCPU* out) const {// loongarch64
+  out->context_flags = MD_CONTEXT_LOONGARCH64_FULL;// loongarch64
+// loongarch64
+  for (int i = 0; i < MD_CONTEXT_LOONGARCH64_GPR_COUNT; ++i)// loongarch64
+    out->iregs[i] = regs.regs[i];// loongarch64
+// loongarch64
+  out->csr_era = regs.csr_era;// loongarch64
+  my_memcpy(&out->float_save.regs, &fpregs.fpr,// loongarch64
+	MD_FLOATINGSAVEAREA_LOONGARCH64_FPR_COUNT * 8);// loongarch64
+  out->float_save.fcc = fpregs.fcc;// loongarch64
+  out->float_save.fcsr = fpregs.fcsr;// loongarch64
+}// loongarch64
+// loongarch64
+#endif  // __loongarch64// loongarch64
 void ThreadInfo::GetGeneralPurposeRegisters(void** gp_regs, size_t* size) {
   assert(gp_regs || size);
 #if defined(__mips__)

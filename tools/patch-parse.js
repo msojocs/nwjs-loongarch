@@ -59,7 +59,7 @@ function splitPatchFile(patchFilePath, target) {
       current.after += line.slice(1) + `${data.comment}\n`;
     } else if (line.startsWith(' ')) {
       current.before += line.slice(1) + '\n';
-      current.after += line.slice(1) + `${data.comment}\n`;
+      current.after += line.slice(1) + `\n`;
     }
     if (i + 1 === lines.length || lines[i + 1].startsWith('diff')) {
       data.path = path.resolve(base, data.name)

@@ -9,8 +9,8 @@
 #endif
 #elif defined(__i386__)
         MD_CPU_ARCHITECTURE_X86;
-#elif defined(__loongarch64)
-	MD_CPU_ARCHITECTURE_LOONGARCH64;
+#elif defined(__loongarch64)// loongarch64
+	MD_CPU_ARCHITECTURE_LOONGARCH64;// loongarch64
 #else
         MD_CPU_ARCHITECTURE_AMD64;
 #endif
