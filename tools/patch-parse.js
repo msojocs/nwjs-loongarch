@@ -2,9 +2,11 @@ const fs = require('fs');
 const path = require('path');
 
 const suffix2comment = {
-  h: '// loongarch64',
-  cc: '// loongarch64',
-  gn: '# loongarch64'
+  h: ' // loongarch64',
+  cc: ' // loongarch64',
+  gn: ' # loongarch64',
+  gni: ' # loongarch64',
+  S: ' /* loongarch64 */'
 }
 function splitPatchFile(patchFilePath, target) {
   const content = fs.readFileSync(patchFilePath).toString()
@@ -21,7 +23,7 @@ function splitPatchFile(patchFilePath, target) {
     after: '',
   }
 
-  const base = path.resolve(__dirname, `../patches/nw70/${target}`)
+  const base = path.resolve(__dirname, `../patches/nw65/${target}`)
   console.log('base:', base)
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
@@ -56,7 +58,10 @@ function splitPatchFile(patchFilePath, target) {
     } else if (line.startsWith('-')) {
       current.before += line.slice(1) + '\n';
     } else if (line.startsWith('+')) {
-      current.after += line.slice(1) + `${data.comment}\n`;
+      let l = line.slice(1)
+      if (!l.endsWith('\\') && data.mode != 'copy')
+        l += data.comment
+      current.after += `${l}\n`;
     } else if (line.startsWith(' ')) {
       current.before += line.slice(1) + '\n';
       current.after += line.slice(1) + `\n`;
@@ -88,6 +93,7 @@ function splitPatchFile(patchFilePath, target) {
       data.name = ''
       data.mode = 'file'
       data.path = ''
+      data.comment = ''
       data.list = []
     }
   }
@@ -108,7 +114,7 @@ const cfg = [
   {
       // # Add loongarch64 support in boringssl for nwjs build
       'name': 'loongarch64_support_boringssl_for_nwjs',
-      'path': 'third_party/boringssl/',
+      'path': 'third_party/boringssl/src/',
   },
   {
       // # Add loongarch64 support in dawn for nwjs build
@@ -132,8 +138,8 @@ const cfg = [
   },
   {
       // # Add loongarch64 support in v8 for nwjs build
-      'name': 'loongarch64_support_v8_for_nwjs',
-      'path': 'v8/',
+      'name': 'loongarch64_support_webrtc_for_nwjs',
+      'path': 'third_party/webrtc/',
   }
 ]
 const config = {}
@@ -148,5 +154,5 @@ const fixPath = {
   'third_party/boringssl/include/openssl/base.h': 'third_party/boringssl/src/include/openssl/base.h'
 }
 
-const configFile = path.resolve(__dirname, `../patches/nw70/config.js`)
+const configFile = path.resolve(__dirname, `../patches/nw65/config.js`)
 fs.writeFileSync(configFile, `const config = ${JSON.stringify(config, null, 2)}\n\nmodule.exports = config`)

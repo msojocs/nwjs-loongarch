@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const { execSync } = require('child_process')
 const fs = require('fs')
 const path = require('path')
 const args = process.argv.slice(2)
@@ -25,15 +26,38 @@ const patchSysroot = async () => {
   content = content.replace("'mips64': 'mips64el',\r\n", "'mips64': 'mips64el','loong64': 'loong64',\r\n")
   fs.writeFileSync(pyFile, content)
 }
-const patchCfg = {
-  'sandbox/linux/system_headers/loong64_linux_syscalls.h': [
-    // 文件复制
-    ['copy://./../loong64_linux_syscalls.h'],
+// let cfgList = execSync(`find ${__dirname} -type f -name "config.js"`)
+// cfgList = cfgList.toString().split('\n').filter(e => e.length)
+// console.log(cfgList)
+// console.log('current dir:', __dirname)
+// for (const cfg of cfgList) {
+//   console.log(path.dirname(cfg))
+//   const d = require(cfg)
+//   console.log('d:', d)
+// }
+// process.exit(1)
+const patchCfg = require('./config')
+const extCfg = {
+  'content/nw/BUILD.gn': [
+    ['file://./nw/build.h'],
+    ['file://./nw/build2.h']
   ],
-  'skia/BUILD.gn': [
-    ['file://./skia/build.h']
+  'content/nw/tools/package_binaries.py': [
+    ['file://./nw/package_binaries.h'],
+  ],
+  // 'third_party/wayland/src/src/wayland-client-core.h': [
+    
+  //   ['file://./wayland-client-core/1.h'],
+  // ],
+  'build/config/linux/libffi/BUILD.gn': [
+    // 字符串替换
+    ['libs = [ ":libffi_pic.a" ]', 'libs = [ "ffi" ]']
   ],
 }
+for (const k in extCfg) {
+  patchCfg[k] = extCfg[k]
+}
+
 const patchConfig = () => {
   let total = 0
   let replace = 0
@@ -51,10 +75,19 @@ const patchConfig = () => {
       try {
         // 复制文件
         if (from.startsWith('copy://')) {
-          from = fs.readFileSync(path.resolve(__dirname, from.substring(7))).toString()
+          const p = path.resolve(__dirname, from.substring(7))
+          const d = path.dirname(targetFile)
+          if (!fs.existsSync(d)) {
+            try{
+              console.log('mkdir:', d)
+              fs.mkdirSync(d, {recursive: true})
+            }catch(e){}
+          }
+          from = fs.readFileSync(p).toString()
           if (content != from) {
             replace++
             content = from
+            // console.log(`[copy]success: ${file} - `, d[0], ' applied.')
           }
           continue;
         }
@@ -76,26 +109,35 @@ const patchConfig = () => {
           to = t[1]
         }
       } catch (error) {
-        
+        console.error('exception:', error)
       }
       if (typeof from === 'string') {
-        if (content.includes(from)) {
+        console.log('file:', file)
+        if (to.includes(from)) {
+          console.error(`error: ${file} - ${d[0]} The string used for search is contained in the string used for replacement.`)
+          process.exit(1);
+        }
+        if (content.includes(from) && !content.includes(to)) {
           replace++
           content = content.replaceAll(from, to)
+          // console.log(`[file]success: ${file} - `, d[0], ' applied.')
         }
         else {
-          console.log(`warn: ${file} - `, d[0], ' not applied.')
+          console.log(`warn: ${file} - `, d[0], ' not applied. not include.')
         }
       }
       else {
         // 有正则表达式，不能直接includes判断
         const old = content
-        content = content.replace(from, to)
+        if (!content.includes(to)) {
+          content = content.replace(from, to)
+        }
         if (content != old) {
           replace++
+          // console.log(`[file]success: ${file} - `, d[0], ' applied.')
         }
         else {
-          console.log(`warn: ${file} - `, d[0], ' not applied.')
+          console.log(`warn: ${file} - `, d[0], ' not applied. replace not work.')
         }
       }
     }

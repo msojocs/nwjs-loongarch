@@ -109,12 +109,13 @@ const patchConfig = () => {
           to = t[1]
         }
       } catch (error) {
-        
+        console.error('exception:', error)
       }
       if (typeof from === 'string') {
+        console.log('file:', file)
         if (to.includes(from)) {
           console.error(`error: ${file} - ${d[0]} The string used for search is contained in the string used for replacement.`)
-          return;
+          process.exit(1);
         }
         if (content.includes(from) && !content.includes(to)) {
           replace++
