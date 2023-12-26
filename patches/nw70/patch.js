@@ -112,6 +112,10 @@ const patchConfig = () => {
         
       }
       if (typeof from === 'string') {
+        if (to.includes(from)) {
+          console.error(`error: ${file} - ${d[0]} The string used for search is contained in the string used for replacement.`)
+          return;
+        }
         if (content.includes(from) && !content.includes(to)) {
           replace++
           content = content.replaceAll(from, to)
