@@ -45,10 +45,9 @@ const extCfg = {
   'content/nw/tools/package_binaries.py': [
     ['file://./nw/package_binaries.h'],
   ],
-  // 'third_party/wayland/src/src/wayland-client-core.h': [
-    
-  //   ['file://./wayland-client-core/1.h'],
-  // ],
+  'v8/BUILD.gn': [
+    ['file://./v8/build.h'],
+  ],
   'build/config/linux/libffi/BUILD.gn': [
     // 字符串替换
     ['libs = [ ":libffi_pic.a" ]', 'libs = [ "ffi" ]']
