@@ -3,6 +3,14 @@ set -e
 root_dir=$(cd `dirname $0`/.. && pwd -P)
 source "$root_dir/tools/common/log.sh"
 
+trap 'catchError $LINENO "$BASH_COMMAND"' ERR # 捕获错误情况
+catchError() {
+  exit_code=$?
+  if [ $exit_code -ne 0 ]; then
+      fail "\033[31mcommand: $2\n  at $0:$1\n  at $STEP\033[0m"
+  fi
+  exit $exit_code
+}
 src_dir="$root_dir/source-code"
 src_dir="$src_dir/nwjs/src"
 output_dir="$root_dir/output"

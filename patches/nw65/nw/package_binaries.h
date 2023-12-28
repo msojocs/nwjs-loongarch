@@ -6,6 +6,7 @@
                            ]
         if flavor == 'sdk':
             target['input'].append('nwjc')
+            target['input'].append('payload')
             target['input'].append('chromedriver')
             target['input'].append('minidump_stackwalk')
         if flavor in ['nacl','sdk'] :
@@ -26,6 +27,7 @@
                            ]
         if flavor == 'sdk':
             target['input'].append('nwjc')
+            target['input'].append('payload')
             target['input'].append('chromedriver')
             target['input'].append('minidump_stackwalk')
             

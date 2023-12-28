@@ -44,6 +44,7 @@ const extCfg = {
   ],
   'content/nw/tools/package_binaries.py': [
     ['file://./nw/package_binaries.h'],
+    ['file://./nw/package_binaries2.h'],
   ],
   'v8/BUILD.gn': [
     ['file://./v8/build.h'],
