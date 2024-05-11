@@ -30,7 +30,7 @@ mkdir -p "$build_dir"
 mkdir -p "$toolchain_dir"
 cd "$source_dir/binutils-gdb/build"
 
-cd "$project_dir"
+cd "$build_dir"
 git checkout tags/gdb-14.1-release
 if [ ! -f "$toolchain_dir/bin/x86_64-linux-gnu-ld" ];then
   notice "configure binutils-gdb for x86_64"
