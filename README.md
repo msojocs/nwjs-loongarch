@@ -10,6 +10,8 @@
 
 占用空间100G左右，建议磁盘拥有200G的空间。
 
+WSL可能会突然内存/磁盘读取爆炸，限制线程数即可。
+
 # 构建脚本的使用
 
 构建脚本编写依据：https://github.com/loongson/nw.js
@@ -35,6 +37,7 @@ apt install -y libmpc-dev texinfo bison flex
 ```
 
 ## llvm-project
+有时候会出现多线程导致的编译失败，重新跑就行。
 ```shell
 apt install -y ninja-build python3
 ```
@@ -54,6 +57,9 @@ proxy_port = 7890
 ```
 
 ## nwjs
+
+确保 `python` 指向 `python2`
+
 ```shell
 ./build/install-build-deps.sh
 sudo apt install xz-utils python curl libcups2-dev libglib2.0-dev \

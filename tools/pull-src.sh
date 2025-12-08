@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 root_dir=$(cd `dirname $0`/.. && pwd -P)
 success() {
@@ -34,17 +34,28 @@ output_dir="$root_dir/output"
 source_dir="$root_dir/source-code"
 nwjs_dir="$source_dir/nwjs"
 src_dir="$nwjs_dir/src"
-export PATH=$output_dir/toolchain/bin:$output_dir/cmake-3.20.5-linux-x86_64/bin:$output_dir/depot_tools:$PATH
+export PATH=$output_dir/toolchain/bin:$output_dir/cmake-linux-x86_64/bin:$output_dir/depot_tools:$PATH
+
+# git 地址
+chromium_repo="https://github.com/nwjs/chromium.src.git"
+v8_repo="https://github.com/nwjs/v8.git"
+node_repo="https://github.com/nwjs/node.git"
+nw_repo="https://github.com/loongson/nw.js.git"
+
+chromium_repo="http://127.0.0.1:3000/msojocs/chromium.src.git"
+v8_repo="http://127.0.0.1:3000/msojocs/v8.git"
+node_repo="http://127.0.0.1:3000/msojocs/node.git"
+nw_repo="http://127.0.0.1:3000/msojocs/nw.js.git"
 
 # 拉取源代码
 mkdir -p "$nwjs_dir"
 cd $nwjs_dir
-gclient config --name=src https://github.com/nwjs/chromium.src.git@origin/$branch
+gclient config --name=src $chromium_repo@origin/$branch
 
 notice "pull v8 with branch: $branch"
-if [ ! -d "$nwjs_dir/src/v8" ];then
+if [ ! -f "$nwjs_dir/src/v8/README.md" ];then
   cd "$nwjs_dir"
-  git clone -b $branch https://github.com/nwjs/v8.git src/v8
+  git clone -b $branch $v8_repo src/v8
 else
   cd "$nwjs_dir/src/v8" && git checkout $branch --force
 fi
@@ -52,18 +63,16 @@ fi
 notice "pull node-nw with branch: $branch"
 if [ ! -d "$nwjs_dir/src/third_party/node-nw" ];then
   cd "$nwjs_dir"
-  git clone -b $branch https://github.com/nwjs/node.git src/third_party/node-nw
+  git clone -b $branch $node_repo src/third_party/node-nw
 else
   cd "$nwjs_dir/src/third_party/node-nw" && git checkout $branch --force
 fi
 
 notice "pull nw with branch: $branch"
-# nw_repo="https://github.com/loongson/nw.js.git"
-nw_repo="https://github.com/nwjs/nw.js.git"
 if [ ! -d "$nwjs_dir/src/content/nw" ];then
   cd "$nwjs_dir"
   # git clone -b $branch https://github.com/nwjs/nw.js.git src/content/nw
-  git clone -b $branch "$nw_repo" src/third_party/node-nw
+  git clone -b $branch "$nw_repo" src/content/nw
 else
   cd "$nwjs_dir/src/content/nw"
   git remote set-url origin "$nw_repo"

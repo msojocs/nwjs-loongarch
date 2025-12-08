@@ -1,0 +1,16 @@
+diff --git a/third_party/libpng/BUILD.gn b/third_party/libpng/BUILD.gn
+index 81648e3b2a81..99d6a1b57909 100644
+--- a/third_party/libpng/BUILD.gn
++++ b/third_party/libpng/BUILD.gn
+@@ -91,6 +91,11 @@ source_set("libpng_sources") {
+       "mips/filter_msa_intrinsics.c",
+       "mips/mips_init.c",
+     ]
++  } else if (current_cpu == "loong64" || current_cpu == "loongarch64") {
++    sources += [
++      "loongarch/loongarch_lsx_init.c",
++      "loongarch/filter_lsx_intrinsics.c",
++    ]
+   }
+ 
+   configs -= [ "//build/config/compiler:chromium_code" ]

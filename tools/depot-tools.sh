@@ -13,12 +13,14 @@ error() {
 
 root_dir=$(cd `dirname $0`/.. && pwd -P)
 output_dir="$root_dir/output"
-
+notice "depot tool"
 export PATH=$output_dir/depot_tools:$PATH
+export NO_AUTH_BOTO_CONFIG="$root_dir/config/.boto"
 if [ ! -d "$output_dir/depot_tools" ];then
   cd $output_dir
   git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
 fi
+notice "depot tool update"
 if [ -d "$output_dir/depot_tools" ];then
   cd $output_dir/depot_tools
   ./update_depot_tools

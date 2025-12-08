@@ -14,7 +14,7 @@ fail() {
 
 output_dir="$root_dir/output"
 cmake_ver="3.20.5"
-export PATH=$output_dir/cmake-3.20.5-linux-x86_64/bin:$PATH
+export PATH=$output_dir/cmake-linux-x86_64/bin:$PATH
 
 mkdir -p $root_dir/cache
 mkdir -p $output_dir
@@ -28,6 +28,8 @@ fi
 
 # 解压
 notice "Start to extract cmake..."
-if [ ! -d "$output_dir/cmake-$cmake_ver-linux-x86_64" ];then
+if [ ! -d "$output_dir/cmake-linux-x86_64" ];then
+  # TODO: 检查版本是否一致
   tar -zxf $root_dir/cache/cmake-$cmake_ver-linux-x86_64.tar.gz -C $output_dir
+  mv $output_dir/cmake* $output_dir/cmake-linux-x86_64
 fi

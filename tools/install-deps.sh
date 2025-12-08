@@ -30,10 +30,11 @@ notice "Install packages for llvm-project"
 sudo apt install -y ninja-build python3
 
 notice "Install packages for nwjs"
-sudo apt install -y python \
+sudo apt install -y \
 libpango1.0-dev \
 libdbus-1-dev \
-libx11-xcb-dev
+libx11-xcb-dev \
+# python
 # xz-utils \
 # curl \
 # libcups2-dev \
