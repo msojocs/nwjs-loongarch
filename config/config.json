@@ -1,0 +1,33 @@
+{
+    "buildTarget": "nw80",
+    "useMirror": true,
+    "buildConfig": {
+        "nw80": {
+            "llvm": {
+                "tag": "llvmorg-18.1.0",
+                "repo": "https://github.com/llvm/llvm-project.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+            },
+            "binutils": {
+                "repo": "https://sourceware.org/git/binutils-gdb.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/binutils-gdb.git"
+            },
+            "chromium": {
+                "repo": "https://github.com/nwjs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git"
+            },
+            "v8": {
+                "repo": "https://github.com/nwjs/v8.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/v8.git"
+            },
+            "node": {
+                "repo": "https://github.com/nwjs/node.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/node.git"
+            },
+            "nw": {
+                "repo": "https://github.com/loongson/nw.js.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/nw.js.git"
+            }
+        }
+    }
+}

@@ -26,7 +26,9 @@ catchError() {
   fi
   exit $exit_code
 }
-source "$root_dir/config/nw-version.sh"
+
+nw_version=$(node $root_dir/tools/parse-config.js --get-nw-version $@)
+
 branch=$nw_version
 notice "target branch: $branch"
 export NO_AUTH_BOTO_CONFIG="$root_dir/config/.boto"
@@ -37,15 +39,10 @@ src_dir="$nwjs_dir/src"
 export PATH=$output_dir/toolchain/bin:$output_dir/cmake-linux-x86_64/bin:$output_dir/depot_tools:$PATH
 
 # git 地址
-chromium_repo="https://github.com/nwjs/chromium.src.git"
-v8_repo="https://github.com/nwjs/v8.git"
-node_repo="https://github.com/nwjs/node.git"
-nw_repo="https://github.com/loongson/nw.js.git"
-
-chromium_repo="http://127.0.0.1:3000/msojocs/chromium.src.git"
-v8_repo="http://127.0.0.1:3000/msojocs/v8.git"
-node_repo="http://127.0.0.1:3000/msojocs/node.git"
-nw_repo="http://127.0.0.1:3000/msojocs/nw.js.git"
+chromium_repo=$(node $root_dir/tools/parse-config.js --get-chromium-repo $@)
+v8_repo=$(node $root_dir/tools/parse-config.js --get-v8-repo $@)
+node_repo=$(node $root_dir/tools/parse-config.js --get-node-repo $@)
+nw_repo=$(node $root_dir/tools/parse-config.js --get-nw-repo $@)
 
 # 拉取源代码
 mkdir -p "$nwjs_dir"
@@ -86,13 +83,13 @@ if [ -f "$nwjs_dir/src/README.md" ];then
 fi
 
 notice "Start to sync..."
-if read -t 60 -p "execute 'gclient sync -D'? (Y/N):" name    # -t，设置输入超时时间（本语句设置超时时间为5秒），默认单位是秒；-p，指定输入提示
-then                                              # 如果不超过5秒
-  if [ "y" = "$name" ] || [ "Y" = "$name" ];then
-    "$root_dir/tools/sync-reset.sh"
-    gclient sync -D
-  fi
-else                                              # 超过5秒
-    echo "Timeout"
-fi
+# if read -t 60 -p "execute 'gclient sync -D'? (Y/N):" name    # -t，设置输入超时时间（本语句设置超时时间为5秒），默认单位是秒；-p，指定输入提示
+# then                                              # 如果不超过5秒
+#   if [ "y" = "$name" ] || [ "Y" = "$name" ];then
+#     gclient sync -D
+#   fi
+# else                                              # 超过5秒
+#     echo "Timeout"
+# fi
+"$root_dir/tools/sync-reset.sh"
 gclient sync --with_branch_heads
