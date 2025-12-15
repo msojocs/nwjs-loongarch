@@ -21,10 +21,7 @@ source_dir="$root_dir/source-code"
 llvm_version=$(node $root_dir/tools/parse-config.js --get-llvm-version $@)
 export PATH="$output_dir/cmake-linux-x86_64/bin:$output_dir/llvm-$llvm_version/bin:$output_dir/toolchain/bin:$output_dir/depot_tools:$PATH"
 src_dir="$source_dir/nwjs/src"
-max_thread=$(($(cat /proc/cpuinfo| grep "processor"| wc -l) - 4))
-
-export CXXFLAGS_host="$CXXFLAGS -Wno-c++11-narrowing-const-reference -Wno-error=c++11-narrowing-const-reference -Wno-c++11-narrowing -Wno-error=c++11-narrowing"
-export CFLAGS_host="$CFLAGS -Wno-c++11-narrowing-const-reference -Wno-error=c++11-narrowing-const-reference -Wno-c++11-narrowing -Wno-error=c++11-narrowing"
+max_thread=$(($(cat /proc/cpuinfo| grep "processor"| wc -l) - 8))
 
 cd $src_dir
 

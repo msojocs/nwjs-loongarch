@@ -21,6 +21,12 @@ const options = {
     '--get-llvm-repo': {
         type: 'boolean',
     },
+    '--get-llvm-build-arg': {
+        type: 'boolean',
+    },
+    '--get-llvm-rt-build-arg': {
+        type: 'boolean',
+    },
     '--use-mirror': {
         type: 'boolean',
     },
@@ -34,6 +40,9 @@ const options = {
         type: 'boolean',
     },
     '--get-nw-repo': {
+        type: 'boolean',
+    },
+    '--get-nw-gen-arg': {
         type: 'boolean',
     },
     '--get-binutils-repo': {
@@ -91,6 +100,16 @@ if (configArg['get-llvm-repo']) {
     exit(0);
 }
 
+if (configArg['get-llvm-build-arg']) {
+    console.log(targetConfig.llvm.buildArg || "");
+    exit(0);
+}
+
+if (configArg['get-llvm-rt-build-arg']) {
+    console.log(targetConfig.llvm.rtBuildArg || "");
+    exit(0);
+}
+
 if (configArg['get-chromium-repo']) {
     console.log(targetConfig.chromium[useMirror ? 'mirror' : 'repo']);
     exit(0);
@@ -108,6 +127,11 @@ if (configArg['get-node-repo']) {
 
 if (configArg['get-nw-repo']) {
     console.log(targetConfig.nw[useMirror ? 'mirror' : 'repo']);
+    exit(0);
+}
+
+if (configArg['get-nw-gen-arg']) {
+    console.log(targetConfig.nw.genArg || "");
     exit(0);
 }
 
