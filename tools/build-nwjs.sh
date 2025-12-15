@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 root_dir=$(cd `dirname $0`/.. && pwd -P)
 success() {
@@ -18,13 +18,15 @@ source_dir="$root_dir/source-code"
 ###不加会报错：##################################################
 ###/usr/bin/ld: unrecognised emulation mode: elf64loongarch####
 ###############################################################
-export PATH="$output_dir/cmake-3.20.5-linux-x86_64/bin:$output_dir/llvm-18/bin:$output_dir/toolchain/bin:$output_dir/depot_tools:$PATH"
+llvm_version=$(node $root_dir/tools/parse-config.js --get-llvm-version $@)
+export PATH="$output_dir/cmake-linux-x86_64/bin:$output_dir/llvm-$llvm_version/bin:$output_dir/toolchain/bin:$output_dir/depot_tools:$PATH"
 src_dir="$source_dir/nwjs/src"
+max_thread=$(($(cat /proc/cpuinfo| grep "processor"| wc -l) - 8))
 
 cd $src_dir
 
 notice "Start to build nwjs"
-ninja -C out/nw nwjs
+ninja -C out/nw nwjs -j$max_thread
 
 notice "Start to build node"
 ninja -C out/Release node
@@ -34,5 +36,7 @@ notice "Start to build components"
 ninja -C out/nw credits.html
 ninja -C out/nw nwjc
 ninja -C out/nw chromedriver
-notice "开始构建payload，可能会失败"
-ninja -C out/nw payload
+ninja -C out/nw minidump_stackwalk
+# nw90不构建
+# notice "开始构建payload，可能会失败"
+# ninja -C out/nw payload

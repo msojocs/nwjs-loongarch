@@ -1,0 +1,13 @@
+diff --git a/build/config/linux/libffi/BUILD.gn b/build/config/linux/libffi/BUILD.gn
+index 6e45f4c22615..528a65156b60 100644
+--- a/build/config/linux/libffi/BUILD.gn
++++ b/build/config/linux/libffi/BUILD.gn
+@@ -19,6 +19,7 @@ if (use_system_libffi) {
+   }
+ } else {
+   config("libffi") {
+-    libs = [ "ffi_pic" ]
++    # libs = [ "ffi_pic" ]
++    libs = [ "ffi" ]
+   }
+ }

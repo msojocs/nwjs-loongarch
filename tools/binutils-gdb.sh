@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 root_dir=$(cd `dirname $0`/.. && pwd -P)
 
 success() {
@@ -11,27 +11,28 @@ notice() {
 fail() {
     echo -e "\033[41;37m 失败 \033[0m $1"
 }
-max_thread=$(cat /proc/cpuinfo| grep "processor"| wc -l)
+max_thread=$(($(cat /proc/cpuinfo| grep "processor"| wc -l) - 4))
 export JOBS=$max_thread
 source_dir="$root_dir/source-code"
 output_dir="$root_dir/output"
 toolchain_dir="$output_dir/toolchain"
 
+binutils_repo=$(node $root_dir/tools/parse-config.js --get-binutils-repo $@)
+# binutils_tag=$(node $root_dir/tools/parse-config.js --get-binutils-tag $@)
 if [ ! -d "$source_dir/binutils-gdb" ]; then
   notice "binutils-gdb not cloned, start to clone......"
   mkdir -p "$source_dir"
   cd "$source_dir"
-  git clone https://sourceware.org/git/binutils-gdb.git
+  git clone $binutils_repo
 fi
 
 project_dir="$source_dir/binutils-gdb"
 build_dir="$project_dir/build"
 mkdir -p "$build_dir"
 mkdir -p "$toolchain_dir"
-cd "$source_dir/binutils-gdb/build"
+cd "$source_dir/binutils-gdb"
 
-cd "$project_dir"
-git checkout tags/gdb-14.1-release
+cd "$build_dir"
 if [ ! -f "$toolchain_dir/bin/x86_64-linux-gnu-ld" ];then
   notice "configure binutils-gdb for x86_64"
   rm ./* -rf
