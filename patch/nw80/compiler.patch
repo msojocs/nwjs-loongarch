@@ -1,7 +1,7 @@
-diff --git a/build/config/compiler/BUILD.gn b/build/config/compiler/BUILD.gn
+diff --git build/config/compiler/BUILD.gn build/config/compiler/BUILD.gn
 index 7c74d724c707..e26bc0885436 100644
---- a/build/config/compiler/BUILD.gn
-+++ b/build/config/compiler/BUILD.gn
+--- build/config/compiler/BUILD.gn
++++ build/config/compiler/BUILD.gn
 @@ -1753,6 +1758,7 @@ config("default_warnings") {
        # this as well. http://crbug.com/316352
        "-Wno-unneeded-internal-declaration",

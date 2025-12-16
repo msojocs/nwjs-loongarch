@@ -1,7 +1,7 @@
-diff --git a/build/config/linux/libffi/BUILD.gn b/build/config/linux/libffi/BUILD.gn
+diff --git build/config/linux/libffi/BUILD.gn build/config/linux/libffi/BUILD.gn
 index 771170c3e870..37bc80a89c3d 100644
---- a/build/config/linux/libffi/BUILD.gn
-+++ b/build/config/linux/libffi/BUILD.gn
+--- build/config/linux/libffi/BUILD.gn
++++ build/config/linux/libffi/BUILD.gn
 @@ -19,6 +19,6 @@ if (use_system_libffi) {
    }
  } else {
