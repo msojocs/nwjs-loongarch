@@ -26,6 +26,18 @@ index cfb8c854bde2..5395199610e0 100644
  }
  
  config("libcxx_hardening") {
+diff --git build/config/linux/libffi/BUILD.gn build/config/linux/libffi/BUILD.gn
+index 6e45f4c22615..37bc80a89c3d 100644
+--- build/config/linux/libffi/BUILD.gn
++++ build/config/linux/libffi/BUILD.gn
+@@ -19,6 +19,6 @@ if (use_system_libffi) {
+   }
+ } else {
+   config("libffi") {
+-    libs = [ "ffi_pic" ]
++    libs = [ "ffi" ]
+   }
+ }
 diff --git build/config/linux/pkg_config.gni build/config/linux/pkg_config.gni
 index 591afd7d1dcb..68a444ebd9fb 100644
 --- build/config/linux/pkg_config.gni
