@@ -1190,6 +1190,32 @@ index 6a64ed38043e..98cbff569e78 100644
          .Else(handle_via_broker);
    } else {
      return handle_via_broker;
+diff --git services/tracing/public/cpp/perfetto/shared_memory.cc services/tracing/public/cpp/perfetto/shared_memory.cc
+index 81258946d320..b85064adfa38 100644
+--- services/tracing/public/cpp/perfetto/shared_memory.cc
++++ services/tracing/public/cpp/perfetto/shared_memory.cc
+@@ -39,7 +39,7 @@ base::UnsafeSharedMemoryRegion ChromeBaseSharedMemory::CloneRegion() {
+   return region_.Duplicate();
+ }
+ 
+-void* ChromeBaseSharedMemory::start() const {
++const void* ChromeBaseSharedMemory::start() const {
+   return mapping_.memory();
+ }
+ 
+diff --git services/tracing/public/cpp/perfetto/shared_memory.h services/tracing/public/cpp/perfetto/shared_memory.h
+index 34397639c059..feba3a3d2754 100644
+--- services/tracing/public/cpp/perfetto/shared_memory.h
++++ services/tracing/public/cpp/perfetto/shared_memory.h
+@@ -40,7 +40,7 @@ class COMPONENT_EXPORT(TRACING_CPP) ChromeBaseSharedMemory
+ 
+   // perfetto::SharedMemory implementation. Called internally by Perfetto
+   // classes.
+-  void* start() const override;
++    const void* start() const override;
+   size_t size() const override;
+ 
+  private:
 diff --git third_party/crashpad/crashpad/client/crashpad_client_linux.cc third_party/crashpad/crashpad/client/crashpad_client_linux.cc
 index 1d79be7a08c4..a38d0afa2ac8 100644
 --- third_party/crashpad/crashpad/client/crashpad_client_linux.cc
