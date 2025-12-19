@@ -1,3 +1,16 @@
+diff --git base/process/launch.h base/process/launch.h
+index edd2bd6fadf4..b80df6b150c5 100644
+--- base/process/launch.h
++++ base/process/launch.h
+@@ -51,7 +51,7 @@ namespace base {
+ // defined as a constant.
+ 
+ // These constants are borrowed from glibc’s (arch)/bits/pthread_stack_min.h.
+-#if defined(ARCH_CPU_ARM64)
++#if defined(ARCH_CPU_ARM64) || defined(ARCH_CPU_LOONGARCH64)
+ #define PTHREAD_STACK_MIN_CONST \
+   (__builtin_constant_p(PTHREAD_STACK_MIN) ? PTHREAD_STACK_MIN : 131072)
+ #else
 diff --git build/config/clang/BUILD.gn build/config/clang/BUILD.gn
 index 9b8719a64ba7..f8e7540fcd57 100644
 --- build/config/clang/BUILD.gn
@@ -291,13 +304,6 @@ index 3b4360bce8af..df1a3f51759b 100644
          ]
        },
        {
-diff --git native_client native_client
-index 6944e6b79dbd..f9cb132c419b 160000
---- native_client
-+++ native_client
-@@ -1 +1 @@
--Subproject commit 6944e6b79dbd1b9776681c025bd4f4c281bb4791
-+Subproject commit f9cb132c419b9e019853103e88c518026b9f5083
 diff --git sandbox/features.gni sandbox/features.gni
 index 8434144118b4..e1c0af43cebd 100644
 --- sandbox/features.gni

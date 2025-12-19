@@ -34,9 +34,9 @@ ninja -C out/nw copy_node
 
 notice "Start to build components"
 ninja -C out/nw credits.html
-ninja -C out/nw nwjc
-ninja -C out/nw chromedriver
-ninja -C out/nw minidump_stackwalk
+ninja -C out/nw nwjc -j$max_thread
+ninja -C out/nw chromedriver -j$max_thread
+ninja -C out/nw minidump_stackwalk -j$max_thread
 # nw90不构建
 # notice "开始构建payload，可能会失败"
 # ninja -C out/nw payload

@@ -29,15 +29,15 @@ cd "$src_dir"
 # TODO: nw93 此处生成命令改变了
 notice "start to prepare gyp"
 # 参考 http://buildbot-master.nwjs.io:8010/builders/nw83_linux64/builds/0/steps/node_gyp/logs/stdio
+export GYP_CHROMIUM_NO_ACTION=0
+export GYP_CROSSCOMPILE=1
 if [ "$nw_version" == "nw93" ];then
-  export GYP_DEFINES=target_arch=x64 building_nw=1 clang=1 icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 buildtype=Official
+  export GYP_DEFINES=target_arch=loong64 building_nw=1 clang=1 icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0
   export GYP_GENERATORS=ninja
-  export GYP_CHROMIUM_NO_ACTION=0
   export GYP_GENERATOR_FLAGS=output_dir=out
-  export GYP_CROSSCOMPILE=1
   python3 third_party/node-nw/tools/gyp/gyp_main.py -I third_party/node-nw/common.gypi -D msvs_version=2021 -D build_type=Release_x64 -D building_nw=1 -D clang=1 -D target_arch=loong64 -D clang_base_dir=$llvm_dir third_party/node-nw/node.gyp
 else
-  PYTHONPATH=${PWD}/third_party/node-nw/tools/v8_gypfiles GYP_CHROMIUM_NO_ACTION=0 GYP_CROSSCOMPILE=1 ./build/gyp_chromium -I third_party/node-nw/common.gypi -D building_nw=1 -D clang=1 -D target_arch=loong64 -D clang_base_dir=$llvm_dir third_party/node-nw/node.gyp --no-duplicate-basename-check
+  PYTHONPATH=${PWD}/third_party/node-nw/tools/v8_gypfiles ./build/gyp_chromium -I third_party/node-nw/common.gypi -D building_nw=1 -D clang=1 -D target_arch=loong64 -D clang_base_dir=$llvm_dir third_party/node-nw/node.gyp --no-duplicate-basename-check
 fi
 
 notice "Check gen result"
