@@ -55,6 +55,19 @@ index 591afd7d1dcb..68a444ebd9fb 100644
  }
  
  pkg_config_script = "//build/config/linux/pkg-config.py"
+diff --git build/config/loongarch64.gni build/config/loongarch64.gni
+index 9a95ec915137..a9dc9d28dbeb 100644
+--- build/config/loongarch64.gni
++++ build/config/loongarch64.gni
+@@ -7,7 +7,7 @@ import("//build/config/v8_target_cpu.gni")
+ if (current_cpu == "loong64") {
+   declare_args() {
+     # LOONGARCH64 SIMD Arch compilation flag.
+-    loongarch64_use_lsx = false
++    loongarch64_use_lsx = true
+     loongarch64_use_lasx = false
+   }
+ }
 diff --git build/config/rust.gni build/config/rust.gni
 index b7e3c8881b58..8ae7d9c0ef52 100644
 --- build/config/rust.gni
