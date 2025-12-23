@@ -30,6 +30,7 @@ dirs=("src"
 "src/third_party/dawn"
 "src/third_party/webrtc"
 "src/third_party/catapult"
+"src/third_party/xnnpack/src"
 #nw65
 "src/third_party/wayland/src")
 for dir in ${dirs[@]};

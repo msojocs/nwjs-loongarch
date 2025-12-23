@@ -36,6 +36,8 @@ for (const patchItem of patchConfig) {
     console.log(`Successfully applied patch: ${patchItem.name}`);
   } catch (error) {
     console.error(`Failed to apply patch: ${patchItem.name}`);
+    console.error(`git apply -p0 --reject ${patchPath}`);
+    console.error(`git diff --cached --no-prefix > ${patchPath}`);
     process.exit(1);
   }
 }

@@ -29,8 +29,6 @@ catchError() {
 
 nw_version=$(node $root_dir/tools/parse-config.js --get-nw-version $@)
 
-branch=$nw_version
-notice "target branch: $branch"
 export NO_AUTH_BOTO_CONFIG="$root_dir/config/.boto"
 output_dir="$root_dir/output"
 source_dir="$root_dir/source-code"
@@ -40,56 +38,63 @@ export PATH=$output_dir/toolchain/bin:$output_dir/cmake-linux-x86_64/bin:$output
 
 # git 地址
 chromium_repo=$(node $root_dir/tools/parse-config.js --get-chromium-repo $@)
+chromium_checkout_target=$(node $root_dir/tools/parse-config.js --get-chromium-checkout-target $@)
 v8_repo=$(node $root_dir/tools/parse-config.js --get-v8-repo $@)
+v8_checkout_target=$(node $root_dir/tools/parse-config.js --get-v8-checkout-target $@)
 node_repo=$(node $root_dir/tools/parse-config.js --get-node-repo $@)
+node_checkout_target=$(node $root_dir/tools/parse-config.js --get-node-checkout-target $@)
 nw_repo=$(node $root_dir/tools/parse-config.js --get-nw-repo $@)
+nw_checkout_target=$(node $root_dir/tools/parse-config.js --get-nw-checkout-target $@)
 
 # 拉取源代码
 mkdir -p "$nwjs_dir"
 cd $nwjs_dir
-gclient config --name=src $chromium_repo@origin/$branch
+gclient config --name=src $chromium_repo@$chromium_checkout_target
 
-notice "pull v8 with branch: $branch"
+node $root_dir/tools/modify-gclient-config.js
+
+notice "pull v8 with target: $v8_checkout_target"
 if [ ! -f "$nwjs_dir/src/v8/README.md" ];then
   cd "$nwjs_dir"
-  git clone -b $branch $v8_repo src/v8
+  git clone $v8_checkout_target $v8_repo src/v8
 else
-  cd "$nwjs_dir/src/v8" && git checkout $branch --force
+  cd "$nwjs_dir/src/v8" && git checkout $v8_checkout_target --force
 fi
 
-notice "pull node-nw with branch: $branch"
+notice "pull node-nw with target: $node_checkout_target"
 if [ ! -d "$nwjs_dir/src/third_party/node-nw" ];then
   cd "$nwjs_dir"
-  git clone -b $branch $node_repo src/third_party/node-nw
+  git clone $node_checkout_target $node_repo src/third_party/node-nw
 else
-  cd "$nwjs_dir/src/third_party/node-nw" && git checkout $branch --force
+  cd "$nwjs_dir/src/third_party/node-nw" && git checkout $node_checkout_target --force
 fi
 
-notice "pull nw with branch: $branch"
+notice "pull nw with target: $nw_checkout_target"
 if [ ! -d "$nwjs_dir/src/content/nw" ];then
   cd "$nwjs_dir"
-  # git clone -b $branch https://github.com/nwjs/nw.js.git src/content/nw
-  git clone -b $branch "$nw_repo" src/content/nw
+  git clone $nw_checkout_target "$nw_repo" src/content/nw
 else
   cd "$nwjs_dir/src/content/nw"
   git remote set-url origin "$nw_repo"
   git reset --hard HEAD~2
-  git checkout -B $branch origin/$branch --force
-  git pull
+  git pull origin $nw_checkout_target
+  git checkout $nw_checkout_target --force
 fi
 
 if [ -f "$nwjs_dir/src/README.md" ];then
-  cd "$nwjs_dir/src" && git checkout $branch --force
+  cd "$nwjs_dir/src"
+  git fetch origin $chromium_checkout_target
+  git checkout $chromium_checkout_target --force
 fi
 
-notice "Start to sync..."
-# if read -t 60 -p "execute 'gclient sync -D'? (Y/N):" name    # -t，设置输入超时时间（本语句设置超时时间为5秒），默认单位是秒；-p，指定输入提示
-# then                                              # 如果不超过5秒
-#   if [ "y" = "$name" ] || [ "Y" = "$name" ];then
-#     gclient sync -D
-#   fi
-# else                                              # 超过5秒
-#     echo "Timeout"
-# fi
 "$root_dir/tools/sync-reset.sh"
+notice "Start to sync..."
+if read -t 60 -p "execute 'gclient sync -D'? (Y/N):" name    # -t，设置输入超时时间（本语句设置超时时间为5秒），默认单位是秒；-p，指定输入提示
+then                                              # 如果不超过5秒
+  if [ "y" = "$name" ] || [ "Y" = "$name" ];then
+    gclient sync -D
+  fi
+else                                              # 超过5秒
+    echo "Timeout"
+fi
 gclient sync --with_branch_heads

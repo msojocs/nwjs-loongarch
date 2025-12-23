@@ -1,0 +1,823 @@
+diff --git build/config/clang/BUILD.gn build/config/clang/BUILD.gn
+index 9b8719a64ba7..f8e7540fcd57 100644
+--- build/config/clang/BUILD.gn
++++ build/config/clang/BUILD.gn
+@@ -197,6 +197,8 @@ template("clang_lib") {
+           _dir = "armv7-unknown-linux-gnueabihf"
+         } else if (current_cpu == "arm64") {
+           _dir = "aarch64-unknown-linux-gnu"
++        } else if (current_cpu == "loong64") {
++          _dir = "loongarch64-unknown-linux-gnu"
+         } else {
+           assert(false)  # Unhandled cpu type
+         }
+diff --git build/config/compiler/BUILD.gn build/config/compiler/BUILD.gn
+index cfb8c854bde2..5395199610e0 100644
+--- build/config/compiler/BUILD.gn
++++ build/config/compiler/BUILD.gn
+@@ -1087,6 +1087,10 @@ config("compiler") {
+   if (current_cpu == "arm64") {
+     defines += [ "__ARM_NEON__=1" ]
+   }
++  # loong64 rust compiler flags setup for cef
++  if (is_linux && current_cpu == "loong64") {
++    rustflags += [ "-Ccode-model=medium" ]
++  }
+ }
+ 
+ config("libcxx_hardening") {
+diff --git build/config/linux/pkg_config.gni build/config/linux/pkg_config.gni
+index 591afd7d1dcb..68a444ebd9fb 100644
+--- build/config/linux/pkg_config.gni
++++ build/config/linux/pkg_config.gni
+@@ -44,7 +44,11 @@ declare_args() {
+   # chrome build scheme. This variable permits controlling this for GN builds
+   # in similar fashion by setting the `system_libdir` variable in the build's
+   # args.gn file to 'lib' or 'lib64' as appropriate for the target architecture.
+-  system_libdir = "lib"
++  if (current_cpu == "loong64") {
++    system_libdir = "lib64"
++  } else {
++    system_libdir = "lib"
++  }
+ }
+ 
+ pkg_config_script = "//build/config/linux/pkg-config.py"
+diff --git build/config/rust.gni build/config/rust.gni
+index b7e3c8881b58..8ae7d9c0ef52 100644
+--- build/config/rust.gni
++++ build/config/rust.gni
+@@ -211,6 +211,8 @@ if (is_linux || is_chromeos) {
+     }
+   } else if (current_cpu == "riscv64") {
+     rust_abi_target = "riscv64gc-unknown-linux-gnu"
++  } else if (current_cpu == "loong64") {
++    rust_abi_target = "loongarch64-unknown-linux-gnu"
+   } else {
+     # Best guess for other future platforms.
+     rust_abi_target = current_cpu + "-unknown-linux-gnu"
+@@ -299,6 +301,8 @@ if (current_cpu == "x86") {
+   rust_target_arch = "powerpc64"
+ } else if (current_cpu == "riscv64") {
+   rust_target_arch = "riscv64"
++} else if (current_cpu == "loong64") {
++  rust_target_arch = "loong64"
+ }
+ 
+ assert(!toolchain_has_rust || rust_target_arch != "")
+diff --git build/config/sysroot.gni build/config/sysroot.gni
+index 47fe4cbc840d..d89b9b443135 100644
+--- build/config/sysroot.gni
++++ build/config/sysroot.gni
+@@ -26,6 +26,9 @@ declare_args() {
+ }
+ 
+ if (sysroot == "") {
++  if (target_sysroot == "" && current_cpu == "loong64") {
++    target_sysroot = "$target_sysroot_dir/debian_bullseye_loong64-sysroot"
++  }
+   if (current_os == target_os && current_cpu == target_cpu &&
+       target_sysroot != "") {
+     sysroot = target_sysroot
+diff --git build/gn_helpers.py build/gn_helpers.py
+index 4e98200541ce..d7d89ae5fb72 100644
+--- build/gn_helpers.py
++++ build/gn_helpers.py
+@@ -552,16 +552,16 @@ def CreateBuildCommand(output_directory):
+   suffix = '.bat' if sys.platform.startswith('win32') else ''
+   # Prefer the version on PATH, but fallback to known version if PATH doesn't
+   # have one (e.g. on bots).
+-  if not shutil.which(f'autoninja{suffix}'):
++  if not shutil.which(f+'autoninja{suffix}'):
+     third_party_prefix = os.path.join(_CHROMIUM_ROOT, 'third_party')
+     ninja_prefix = os.path.join(third_party_prefix, 'ninja', '')
+     siso_prefix = os.path.join(third_party_prefix, 'siso', 'cipd', '')
+     # Also - bots configure reclient manually, and so do not use the "auto"
+     # wrappers.
+-    ninja_cmd = [f'{ninja_prefix}ninja{suffix}']
+-    siso_cmd = [f'{siso_prefix}siso{suffix}', 'ninja']
++    ninja_cmd = [f+'{ninja_prefix}ninja{suffix}']
++    siso_cmd = [f+'{siso_prefix}siso{suffix}', 'ninja']
+   else:
+-    ninja_cmd = [f'autoninja{suffix}']
++    ninja_cmd = [f+'autoninja{suffix}']
+     siso_cmd = list(ninja_cmd)
+ 
+   if output_directory and os.path.abspath(output_directory) != os.path.abspath(
+@@ -572,7 +572,7 @@ def CreateBuildCommand(output_directory):
+   ninja_deps = os.path.exists(os.path.join(output_directory, '.ninja_deps'))
+   if siso_deps and ninja_deps:
+     raise Exception('Found both .siso_deps and .ninja_deps in '
+-                    f'{output_directory}. Not sure which build tool to use. '
++                    +f+'{output_directory}. Not sure which build tool to use. '
+                     'Please delete one, or better, run "gn clean".')
+   if siso_deps:
+     return siso_cmd
+diff --git build/gyp_chromium build/gyp_chromium
+index 4fc62bad9ba1..0dcee00615e7 100755
+--- build/gyp_chromium
++++ build/gyp_chromium
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python2
+ # Copyright (c) 2012 The Chromium Authors. All rights reserved.
+ # Use of this source code is governed by a BSD-style license that can be
+ # found in the LICENSE file.
+diff --git build/linux/sysroot_scripts/install-sysroot.py build/linux/sysroot_scripts/install-sysroot.py
+index abd58136efc8..19fc396007f9 100755
+--- build/linux/sysroot_scripts/install-sysroot.py
++++ build/linux/sysroot_scripts/install-sysroot.py
+@@ -36,7 +36,7 @@ from urllib.request import urlopen
+ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+ SRC_DIR = os.path.dirname(os.path.dirname(os.path.dirname(SCRIPT_DIR)))
+ 
+-VALID_ARCHS = ("amd64", "i386", "armhf", "arm64", "mipsel", "mips64el")
++VALID_ARCHS = ("amd64", "i386", "armhf", "arm64", "mipsel", "mips64el", "loong64")
+ 
+ ARCH_TRANSLATIONS = {
+     "x64": "amd64",
+@@ -44,6 +44,7 @@ ARCH_TRANSLATIONS = {
+     "arm": "armhf",
+     "mips": "mipsel",
+     "mips64": "mips64el",
++    "loong64": "loong64",
+ }
+ 
+ DEFAULT_SYSROOTS_PATH = os.path.join(os.path.relpath(SCRIPT_DIR, SRC_DIR),
+diff --git build/linux/sysroot_scripts/sysroots.json build/linux/sysroot_scripts/sysroots.json
+index f146ea68bc72..3bfcec5b1e4c 100644
+--- build/linux/sysroot_scripts/sysroots.json
++++ build/linux/sysroot_scripts/sysroots.json
+@@ -34,5 +34,11 @@
+         "SysrootDir": "debian_bullseye_mipsel-sysroot",
+         "Tarball": "debian_bullseye_mipsel_sysroot.tar.xz",
+         "URL": "https://commondatastorage.googleapis.com/chrome-linux-sysroot"
++    },
++    "bullseye_loong64": {
++        "Sha256Sum": "783cb79f26736c69e8125788d95ffb65a28172349009d75188838a004280a92b",
++        "SysrootDir": "debian_bullseye_loong64-sysroot",
++        "Tarball": "debian_bullseye_loong64_sysroot.tar.xz",
++        "URL": "https://commondatastorage.googleapis.com/chrome-linux-sysroot"
+     }
+ }
+diff --git build/vs_toolchain.py build/vs_toolchain.py
+index f3a6fc7deec4..45623cbee3be 100755
+--- build/vs_toolchain.py
++++ build/vs_toolchain.py
+@@ -483,7 +483,7 @@ def Update(force=False, no_download=False):
+   will not be downloaded.
+   """
+   if force != False and force != '--force':
+-    print('Unknown parameter "%s"' % force, file=sys.stderr)
++    print('Unknown parameter "%s"' % force, sys.stderr)
+     return 1
+   if force == '--force' or os.path.exists(json_data_file):
+     force = True
+@@ -625,7 +625,7 @@ def main():
+       'copy_dlls': CopyDlls,
+   }
+   if len(sys.argv) < 2 or sys.argv[1] not in commands:
+-    print('Expected one of: %s' % ', '.join(commands), file=sys.stderr)
++    print('Expected one of: %s' % ', '.join(commands), sys.stderr)
+     return 1
+   return commands[sys.argv[1]](*sys.argv[2:])
+ 
+diff --git chrome/BUILD.gn chrome/BUILD.gn
+index c5e66deeb75d..2098f304f537 100644
+--- chrome/BUILD.gn
++++ chrome/BUILD.gn
+@@ -328,6 +328,7 @@ if (!is_android && !is_mac) {
+         } else {
+         deps += [
+           ":chrome_dll",
++          "//third_party/ffmpeg:ffmpeg",
+         ]
+         }
+ 
+diff --git chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc
+index 563d2383fcb2..3e5928c9ebdb 100644
+--- chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc
++++ chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc
+@@ -307,6 +307,8 @@ bool ChromeRuntimeAPIDelegate::GetPlatformInfo(PlatformInfo* info) {
+     info->arch = extensions::api::runtime::PlatformArch::kMips;
+   } else if (strcmp(arch, "mips64el") == 0) {
+     info->arch = extensions::api::runtime::PlatformArch::kMips64;
++  } else if (strcmp(arch, "loong64") == 0) {
++    info->arch = extensions::api::runtime::PlatformArch::kLoong64;
+   } else {
+     NOTREACHED_IN_MIGRATION();
+     return false;
+diff --git chrome/browser/ui/views/apps/app_dialog/app_uninstall_dialog_view.cc chrome/browser/ui/views/apps/app_dialog/app_uninstall_dialog_view.cc
+index 93cb83f79c89..f465b5d6a85e 100644
+--- chrome/browser/ui/views/apps/app_dialog/app_uninstall_dialog_view.cc
++++ chrome/browser/ui/views/apps/app_dialog/app_uninstall_dialog_view.cc
+@@ -579,18 +579,22 @@ void AppUninstallDialogView::InitializeViewForArcApp(
+ #endif
+ 
+ void AppUninstallDialogView::OnDialogCancelled() {
++  #if BUILDFLAG(IS_CHROMEOS_ASH)
+   uninstall_dialog()->OnDialogClosed(false /* uninstall */,
+                                      false /* clear_site_data */,
+                                      false /* report_abuse */);
++  #endif
+ }
+ 
+ void AppUninstallDialogView::OnDialogAccepted() {
++  #if BUILDFLAG(IS_CHROMEOS_ASH)
+   const bool clear_site_data =
+       clear_site_data_checkbox_ && clear_site_data_checkbox_->GetChecked();
+   const bool report_abuse_checkbox =
+       report_abuse_checkbox_ && report_abuse_checkbox_->GetChecked();
+   uninstall_dialog()->OnDialogClosed(true /* uninstall */, clear_site_data,
+                                      report_abuse_checkbox);
++  #endif
+ }
+ 
+ void AppUninstallDialogView::OnWidgetInitialized() {
+diff --git extensions/common/api/runtime.json extensions/common/api/runtime.json
+index 3b4360bce8af..f2b34d419a5d 100644
+--- extensions/common/api/runtime.json
++++ extensions/common/api/runtime.json
+@@ -98,6 +98,7 @@
+             {"name": "x86-32", "description": "Specifies the processer architecture as x86-32."},
+             {"name": "x86-64", "description": "Specifies the processer architecture as x86-64."},
+             {"name": "mips", "description": "Specifies the processer architecture as mips."},
++            {"name": "loong64", "description": "Specifies the processer architecture as loong64."},
+             {"name": "mips64", "description": "Specifies the processer architecture as mips64."}
+          ],
+         "description": "The machine's processor architecture."
+@@ -111,6 +112,7 @@
+           {"name": "x86-32", "description": "Specifies the native client architecture as x86-32."},
+           {"name": "x86-64", "description": "Specifies the native client architecture as x86-64."},
+           {"name": "mips", "description": "Specifies the native client architecture as mips."},
++          {"name": "loong64", "description": "Specifies the native client architecture as loong64."},
+           {"name": "mips64", "description": "Specifies the native client architecture as mips64."}
+         ]
+       },
+diff --git native_client native_client
+index 6944e6b79dbd..f9cb132c419b 160000
+--- native_client
++++ native_client
+@@ -1 +1 @@
+-Subproject commit 6944e6b79dbd1b9776681c025bd4f4c281bb4791
++Subproject commit f9cb132c419b9e019853103e88c518026b9f5083
+diff --git sandbox/features.gni sandbox/features.gni
+index 8434144118b4..8720bdddd003 100644
+--- sandbox/features.gni
++++ sandbox/features.gni
+@@ -9,6 +9,7 @@
+ use_seccomp_bpf = (is_linux || is_chromeos || is_android) &&
+                   (current_cpu == "x86" || current_cpu == "x64" ||
+                    current_cpu == "arm" || current_cpu == "arm64" ||
++                   current_cpu == "loong64" ||
+                    current_cpu == "mipsel" || current_cpu == "mips64el")
+ 
+ # SSBD (Speculative Store Bypass Disable) is a mitigation of Spectre Variant 4.
+diff --git sandbox/linux/BUILD.gn sandbox/linux/BUILD.gn
+index cc86e06114c6..b0d205e9ac28 100644
+--- sandbox/linux/BUILD.gn
++++ sandbox/linux/BUILD.gn
+@@ -401,6 +401,7 @@ source_set("sandbox_services_headers") {
+     "system_headers/mips_linux_syscalls.h",
+     "system_headers/x86_32_linux_syscalls.h",
+     "system_headers/x86_64_linux_syscalls.h",
++    "system_headers/loong64_linux_syscalls.h",
+   ]
+ }
+ 
+diff --git sandbox/linux/bpf_dsl/linux_syscall_ranges.h sandbox/linux/bpf_dsl/linux_syscall_ranges.h
+index 1d0590b7dd6c..e730b2f7ffef 100644
+--- sandbox/linux/bpf_dsl/linux_syscall_ranges.h
++++ sandbox/linux/bpf_dsl/linux_syscall_ranges.h
+@@ -56,6 +56,12 @@
+ #define MAX_PUBLIC_SYSCALL __NR_syscalls
+ #define MAX_SYSCALL MAX_PUBLIC_SYSCALL
+ 
++#elif defined(__loongarch64)
++#include <asm-generic/unistd.h>
++#define MIN_SYSCALL 0u
++#define MAX_PUBLIC_SYSCALL __NR_syscalls
++#define MAX_SYSCALL_MAX_PUBLIC_SYSCALL
++
+ #else
+ #error "Unsupported architecture"
+ #endif
+diff --git sandbox/linux/bpf_dsl/seccomp_macros.h sandbox/linux/bpf_dsl/seccomp_macros.h
+index 87d5825aa3dd..56910372f672 100644
+--- sandbox/linux/bpf_dsl/seccomp_macros.h
++++ sandbox/linux/bpf_dsl/seccomp_macros.h
+@@ -343,6 +343,53 @@ struct regs_struct {
+ #define SECCOMP_PT_PARM4(_regs) (_regs).regs[3]
+ #define SECCOMP_PT_PARM5(_regs) (_regs).regs[4]
+ #define SECCOMP_PT_PARM6(_regs) (_regs).regs[5]
++
++#elif defined(__loongarch64)
++struct regs_struct {
++  uint64_t regs[32];
++  uint64_t orig_a0;
++  uint64_t csr_era;
++  uint64_t csr_badv;
++  uint64_t reserved[10];
++};
++
++typedef unsigned long int greg_t;
++
++#define SECCOMP_ARCH AUDIT_ARCH_LOONGARCH64
++
++#define SECCOMP_REG(_ctx, _reg) ((_ctx)->uc_mcontext.__gregs[_reg])
++
++#define SECCOMP_RESULT(_ctx) SECCOMP_REG(_ctx, 4)
++#define SECCOMP_SYSCALL(_ctx) SECCOMP_REG(_ctx, 11)
++#define SECCOMP_IP(_ctx) (_ctx)->uc_mcontext.__pc
++#define SECCOMP_PARM1(_ctx) SECCOMP_REG(_ctx, 4)
++#define SECCOMP_PARM2(_ctx) SECCOMP_REG(_ctx, 5)
++#define SECCOMP_PARM3(_ctx) SECCOMP_REG(_ctx, 6)
++#define SECCOMP_PARM4(_ctx) SECCOMP_REG(_ctx, 7)
++#define SECCOMP_PARM5(_ctx) SECCOMP_REG(_ctx, 8)
++#define SECCOMP_PARM6(_ctx) SECCOMP_REG(_ctx, 9)
++
++#define SECCOMP_NR_IDX (offsetof(struct arch_seccomp_data, nr))
++#define SECCOMP_ARCH_IDX (offsetof(struct arch_seccomp_data, arch))
++#define SECCOMP_IP_MSB_IDX \
++	(offsetof(struct arch_seccomp_data, instruction_pointer) + 4)
++#define SECCOMP_IP_LSB_IDX \
++	(offsetof(struct arch_seccomp_data, instruction_pointer) + 0)
++#define SECCOMP_ARG_MSB_IDX(nr) \
++	(offsetof(struct arch_seccomp_data, args) + 8 * (nr) + 4)
++#define SECCOMP_ARG_LSB_IDX(nr) \
++	(offsetof(struct arch_seccomp_data, args) + 8 * (nr) + 0)
++
++#define SECCOMP_PT_RESULT(_regs) (_regs).regs[4]
++#define SECCOMP_PT_SYSCALL(_regs) (_regs).regs[11]
++#define SECCOMP_PT_IP(_regs) (_regs).csr_era
++#define SECCOMP_PT_PARM1(_regs) (_regs).regs[4]
++#define SECCOMP_PT_PARM2(_regs) (_regs).regs[5]
++#define SECCOMP_PT_PARM3(_regs) (_regs).regs[6]
++#define SECCOMP_PT_PARM4(_regs) (_regs).regs[7]
++#define SECCOMP_PT_PARM5(_regs) (_regs).regs[8]
++#define SECCOMP_PT_PARM6(_regs) (_regs).regs[9]
++
+ #else
+ #error Unsupported target platform
+ 
+diff --git sandbox/linux/seccomp-bpf-helpers/baseline_policy.cc sandbox/linux/seccomp-bpf-helpers/baseline_policy.cc
+index 7bde501115bd..a68041b94d50 100644
+--- sandbox/linux/seccomp-bpf-helpers/baseline_policy.cc
++++ sandbox/linux/seccomp-bpf-helpers/baseline_policy.cc
+@@ -193,7 +193,7 @@ ResultExpr EvaluateSyscallImpl(int fs_denied_errno,
+     return RestrictFcntlCommands();
+ #endif
+ 
+-#if !defined(__aarch64__)
++#if !defined(__aarch64__) && !defined(__loongarch__)
+   // fork() is never used as a system call (clone() is used instead), but we
+   // have seen it in fallback code on Android.
+   if (sysno == __NR_fork) {
+@@ -255,7 +255,7 @@ ResultExpr EvaluateSyscallImpl(int fs_denied_errno,
+   }
+ 
+ #if defined(__i386__) || defined(__x86_64__) || defined(__mips__) || \
+-    defined(__aarch64__)
++    defined(__aarch64__) || defined(__loongarch64)
+   if (sysno == __NR_mmap)
+     return RestrictMmapFlags();
+ #endif
+@@ -276,7 +276,7 @@ ResultExpr EvaluateSyscallImpl(int fs_denied_errno,
+     return RestrictPrctl();
+ 
+ #if defined(__x86_64__) || defined(__arm__) || defined(__mips__) || \
+-    defined(__aarch64__)
++    defined(__aarch64__) || defined(__loongarch64)
+   if (sysno == __NR_socketpair) {
+     // Only allow AF_UNIX, PF_UNIX. Crash if anything else is seen.
+     static_assert(AF_UNIX == PF_UNIX,
+@@ -306,7 +306,11 @@ ResultExpr EvaluateSyscallImpl(int fs_denied_errno,
+   // with fs_denied_errno. However some allowed fstat syscalls are rewritten by
+   // libc implementations to fstatat syscalls, and we need to rewrite them back.
+   if (sysno == __NR_fstatat_default) {
+-    return RewriteFstatatSIGSYS(fs_denied_errno);
++    #if defined(__loongarch64)
++      return RewriteStatxSIGSYS(fs_denied_errno);
++    #else
++      return RewriteFstatatSIGSYS(fs_denied_errno);
++    #endif
+   }
+ 
+   // The statx syscall is a filesystem syscall, which will be denied below with
+@@ -366,7 +370,7 @@ ResultExpr EvaluateSyscallImpl(int fs_denied_errno,
+   // Allow creating pipes, but don't allow weird flags to pipe2().
+   // O_NOTIFICATION_PIPE (== O_EXCL) can be used to create
+   // "notification pipes", which are rarely used.
+-#if !defined(__aarch64__)
++#if !defined(__aarch64__) && !defined(__loongarch64)
+   if (sysno == __NR_pipe) {
+     return Allow();
+   }
+diff --git sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.cc sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.cc
+index 420c9c80b7b0..26089ec4a257 100644
+--- sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.cc
++++ sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.cc
+@@ -375,6 +375,26 @@ intptr_t SIGSYSFstatatHandler(const struct arch_seccomp_data& args,
+   return -ENOSYS;
+ }
+ 
++#if defined(__loongarch64)
+++intptr_t SIGSYSStatxHandler(const struct arch_seccomp_data& args,
++                           void* fs_denied_errno) {
++  if (args.nr == __NR_fstatat_default) {
++    if (*reinterpret_cast<const char*>(args.args[1]) == '\0' &&
++       args.args[2] == static_cast<uint64_t>(AT_EMPTY_PATH)) {
++      return syscall(__NR_fstat_default, static_cast<int>(args.args[0]),
++                    NULL, AT_EMPTY_PATH, STATX_ALL, reinterpret_cast<default_stat_struct*>(args.args[4]));
++    }
++    return -reinterpret_cast<intptr_t>(fs_denied_errno);
++  }
++
++  CrashSIGSYS_Handler(args, fs_denied_errno);
++
++  // Shoule never be reached.
++  RAW_CHECK(false);
++  return -ENOSYS;
++}
++#endif
++
+ bpf_dsl::ResultExpr CrashSIGSYS() {
+   return bpf_dsl::Trap(CrashSIGSYS_Handler, nullptr);
+ }
+@@ -420,6 +440,13 @@ bpf_dsl::ResultExpr RewriteFstatatSIGSYS(int fs_denied_errno) {
+                        reinterpret_cast<void*>(fs_denied_errno));
+ }
+ 
++#if defined(__loongarch64)
++bpf_dsl::ResultExpr RewriteStatxSIGSYS(int fs_denied_errno) {
++  return bpf_dsl::Trap(SIGSYSStatxHandler,
++                      reinterpret_cast<void*>(fs_denied_errno));
++}
++#endif
++
+ #if defined(__NR_socketcall)
+ bool CanRewriteSocketcall() {
+   static bool can_rewrite_socketcall = []() {
+diff --git sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.h sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.h
+index 5fca3fdaf671..476db3186a14 100644
+--- sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.h
++++ sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.h
+@@ -89,6 +89,12 @@ SANDBOX_EXPORT intptr_t
+ SIGSYSFstatatHandler(const struct arch_seccomp_data& args,
+                      void* fs_denied_errno);
+ 
++#if defined(__loongarch64)
++SANDBOX_EXPORT intptr_t
++SIGSYSStatxHandler(const struct arch_seccomp_data& args,
++                   void* fs_denied_errno);
++#endif
++
+ // Variants of the above functions for use with bpf_dsl.
+ SANDBOX_EXPORT bpf_dsl::ResultExpr CrashSIGSYS();
+ SANDBOX_EXPORT bpf_dsl::ResultExpr CrashSIGSYSClone();
+@@ -101,6 +107,9 @@ SANDBOX_EXPORT bpf_dsl::ResultExpr CrashSIGSYSSocket();
+ SANDBOX_EXPORT bpf_dsl::ResultExpr CrashSIGSYSSockopt();
+ SANDBOX_EXPORT bpf_dsl::ResultExpr RewriteSchedSIGSYS();
+ SANDBOX_EXPORT bpf_dsl::ResultExpr RewriteFstatatSIGSYS(int fs_denied_errno);
++#if defined(__loongarch64)
++SANDBOX_EXPORT bpf_dsl::ResultExpr RewriteStatxSIGSYS(int fs_denied_errno);
++#endif
+ 
+ #if defined(__NR_socketcall)
+ // True if the kernel supports direct socket-API syscalls like socket(2) and
+diff --git sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
+index bb0e13f4d2d9..cdcafe015811 100644
+--- sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
++++ sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
+@@ -37,7 +37,7 @@
+ 
+ #if (BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS_LACROS)) && \
+     !defined(__arm__) && !defined(__aarch64__) &&             \
+-    !defined(PTRACE_GET_THREAD_AREA)
++    !defined(PTRACE_GET_THREAD_AREA) && !defined(__loongarch64)
+ // Also include asm/ptrace-abi.h since ptrace.h in older libc (for instance
+ // the one in Ubuntu 16.04 LTS) is missing PTRACE_GET_THREAD_AREA.
+ // asm/ptrace-abi.h doesn't exist on arm32 and PTRACE_GET_THREAD_AREA isn't
+@@ -464,8 +464,11 @@ ResultExpr RestrictPtrace() {
+   return Switch(request)
+       .Cases({
+ #if !defined(__aarch64__)
+-                 PTRACE_GETREGS, PTRACE_GETFPREGS, PTRACE_GET_THREAD_AREA,
++                 PTRACE_GETREGS, PTRACE_GETFPREGS,
+                  PTRACE_GETREGSET,
++#if !defined(__loongarch64)
++                 PTRACE_GET_THREAD_AREA,
++#endif
+ #endif
+ #if defined(__arm__)
+                  PTRACE_GETVFPREGS,
+diff --git sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc
+index 4f56b6e0d10d..4df85df4608e 100644
+--- sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc
++++ sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc
+@@ -103,7 +103,7 @@ bool SyscallSets::IsUmask(int sysno) {
+ // Both EPERM and ENOENT are valid errno unless otherwise noted in comment.
+ bool SyscallSets::IsFileSystem(int sysno) {
+   switch (sysno) {
+-#if !defined(__aarch64__)
++#if !defined(__aarch64__) && !defined(__loongarch64)
+     case __NR_access:  // EPERM not a valid errno.
+     case __NR_chmod:
+     case __NR_chown:
+@@ -161,7 +161,9 @@ bool SyscallSets::IsFileSystem(int sysno) {
+ #endif
+     case __NR_openat:
+     case __NR_readlinkat:
++#if !defined(__loongarch64)
+     case __NR_renameat:
++#endif
+     case __NR_renameat2:
+ #if defined(__i386__) || defined(__arm__) || \
+     (defined(ARCH_CPU_MIPS_FAMILY) && defined(ARCH_CPU_32_BITS))
+@@ -211,12 +213,17 @@ bool SyscallSets::IsTruncate(int sysno) {
+ 
+ bool SyscallSets::IsAllowedFileSystemAccessViaFd(int sysno) {
+   switch (sysno) {
++#if !defined(__loongarch64)
+     case __NR_fstat:
++#endif
+     case __NR_ftruncate:
+ #if defined(__i386__) || defined(__arm__) || \
+     (defined(ARCH_CPU_MIPS_FAMILY) && defined(ARCH_CPU_32_BITS))
+     case __NR_fstat64:
+     case __NR_ftruncate64:
++#endif
++#if defined(__loongarch64)
++    case __NR_statx:
+ #endif
+       return true;
+ // TODO(jln): these should be denied gracefully as well (moved below).
+@@ -241,7 +248,7 @@ bool SyscallSets::IsAllowedFileSystemAccessViaFd(int sysno) {
+     case __NR_oldfstat:
+ #endif
+ #if defined(__i386__) || defined(__x86_64__) || defined(__mips__) || \
+-    defined(__aarch64__)
++    defined(__aarch64__) || defined(__loongarch64)
+     case __NR_sync_file_range:  // EPERM not a valid errno.
+ #elif defined(__arm__)
+     case __NR_arm_sync_file_range:  // EPERM not a valid errno.
+@@ -260,7 +267,7 @@ bool SyscallSets::IsDeniedFileSystemAccessViaFd(int sysno) {
+ #if defined(__i386__) || defined(__arm__)
+     case __NR_fchown32:
+ #endif
+-#if !defined(__aarch64__)
++#if !defined(__aarch64__) && !defined(__loongarch64)
+     case __NR_getdents:    // EPERM not a valid errno.
+ #endif
+     case __NR_getdents64:  // EPERM not a valid errno.
+@@ -339,7 +346,7 @@ bool SyscallSets::IsProcessPrivilegeChange(int sysno) {
+ bool SyscallSets::IsProcessGroupOrSession(int sysno) {
+   switch (sysno) {
+     case __NR_setpgid:
+-#if !defined(__aarch64__)
++#if !defined(__aarch64__) && !defined(__loongarch64)
+     case __NR_getpgrp:
+ #endif
+     case __NR_setsid:
+@@ -373,7 +380,7 @@ bool SyscallSets::IsAllowedSignalHandling(int sysno) {
+     case __NR_rt_sigqueueinfo:
+     case __NR_rt_sigsuspend:
+     case __NR_rt_tgsigqueueinfo:
+-#if !defined(__aarch64__)
++#if !defined(__aarch64__) && !defined(__loongarch64)
+     case __NR_signalfd:
+ #endif
+     case __NR_signalfd4:
+@@ -397,12 +404,12 @@ bool SyscallSets::IsAllowedOperationOnFd(int sysno) {
+   switch (sysno) {
+     case __NR_close:
+     case __NR_dup:
+-#if !defined(__aarch64__)
++#if !defined(__aarch64__) && !defined(__loongarch64)
+     case __NR_dup2:
+ #endif
+     case __NR_dup3:
+ #if defined(__x86_64__) || defined(__arm__) || defined(__mips__) || \
+-    defined(__aarch64__)
++    defined(__aarch64__) || defined(__loongarch64)
+     case __NR_shutdown:
+ #endif
+       return true;
+@@ -441,7 +448,7 @@ bool SyscallSets::IsAllowedProcessStartOrDeath(int sysno) {
+       return true;
+     case __NR_clone:  // Should be parameter-restricted.
+     case __NR_setns:  // Privileged.
+-#if !defined(__aarch64__)
++#if !defined(__aarch64__) && !defined(__loongarch64)
+     case __NR_fork:
+ #endif
+ #if defined(__i386__) || defined(__x86_64__)
+@@ -452,7 +459,7 @@ bool SyscallSets::IsAllowedProcessStartOrDeath(int sysno) {
+ #endif
+     case __NR_set_tid_address:
+     case __NR_unshare:
+-#if !defined(__mips__) && !defined(__aarch64__)
++#if !defined(__mips__) && !defined(__aarch64__) && !defined(__loongarch64)
+     case __NR_vfork:
+ #endif
+     default:
+@@ -477,7 +484,7 @@ bool SyscallSets::IsAllowedFutex(int sysno) {
+ 
+ bool SyscallSets::IsAllowedEpoll(int sysno) {
+   switch (sysno) {
+-#if !defined(__aarch64__)
++#if !defined(__aarch64__) && !defined(__loongarch64)
+     case __NR_epoll_create:
+     case __NR_epoll_wait:
+ #endif
+@@ -499,7 +506,7 @@ bool SyscallSets::IsAllowedEpoll(int sysno) {
+ bool SyscallSets::IsDeniedGetOrModifySocket(int sysno) {
+   switch (sysno) {
+ #if defined(__x86_64__) || defined(__arm__) || defined(__mips__) || \
+-    defined(__aarch64__)
++    defined(__aarch64__) || defined(__loongarch64)
+     case __NR_accept:
+     case __NR_accept4:
+     case __NR_bind:
+@@ -554,7 +561,7 @@ bool SyscallSets::IsAllowedAddressSpaceAccess(int sysno) {
+     case __NR_mincore:
+     case __NR_mlockall:
+ #if defined(__i386__) || defined(__x86_64__) || defined(__mips__) || \
+-    defined(__aarch64__)
++    defined(__aarch64__) || defined(__loongarch64)
+     case __NR_mmap:
+ #endif
+ #if defined(__i386__) || defined(__arm__) || \
+@@ -587,7 +594,7 @@ bool SyscallSets::IsAllowedGeneralIo(int sysno) {
+     (defined(ARCH_CPU_MIPS_FAMILY) && defined(ARCH_CPU_32_BITS))
+     case __NR__llseek:
+ #endif
+-#if !defined(__aarch64__)
++#if !defined(__aarch64__) && !defined(__loongarch64)
+     case __NR_poll:
+ #endif
+     case __NR_ppoll:
+@@ -608,7 +615,7 @@ bool SyscallSets::IsAllowedGeneralIo(int sysno) {
+     case __NR_recv:
+ #endif
+ #if defined(__x86_64__) || defined(__arm__) || defined(__mips__) || \
+-    defined(__aarch64__)
++    defined(__aarch64__) || defined(__loongarch64)
+     case __NR_recvfrom:  // Could specify source.
+     case __NR_recvmsg:   // Could specify source.
+ #endif
+@@ -623,7 +630,7 @@ bool SyscallSets::IsAllowedGeneralIo(int sysno) {
+     case __NR_send:
+ #endif
+ #if defined(__x86_64__) || defined(__arm__) || defined(__mips__) || \
+-    defined(__aarch64__)
++    defined(__aarch64__) || defined(__loongarch64)
+     case __NR_sendmsg:  // Could specify destination.
+     case __NR_sendto:   // Could specify destination.
+ #endif
+@@ -672,7 +679,7 @@ bool SyscallSets::IsSeccomp(int sysno) {
+ bool SyscallSets::IsAllowedBasicScheduler(int sysno) {
+   switch (sysno) {
+     case __NR_sched_yield:
+-#if !defined(__aarch64__)
++#if !defined(__aarch64__) && !defined(__loongarch64)
+     case __NR_pause:
+ #endif
+     case __NR_nanosleep:
+@@ -756,7 +763,7 @@ bool SyscallSets::IsNuma(int sysno) {
+     case __NR_getcpu:
+     case __NR_mbind:
+ #if defined(__i386__) || defined(__x86_64__) || defined(__mips__) || \
+-    defined(__aarch64__)
++    defined(__aarch64__) || defined(__loongarch64)
+     case __NR_migrate_pages:
+ #endif
+     case __NR_move_pages:
+@@ -804,7 +811,9 @@ bool SyscallSets::IsGlobalProcessEnvironment(int sysno) {
+     case __NR_getrusage:
+     case __NR_personality:  // Can change its personality as well.
+     case __NR_prlimit64:    // Like setrlimit / getrlimit.
++#if !defined(__loongarch64)
+     case __NR_setrlimit:
++#endif
+     case __NR_times:
+       return true;
+     default:
+@@ -826,7 +835,7 @@ bool SyscallSets::IsDebug(int sysno) {
+ 
+ bool SyscallSets::IsGlobalSystemStatus(int sysno) {
+   switch (sysno) {
+-#if !defined(__aarch64__)
++#if !defined(__aarch64__) && !defined(__loongarch64)
+     case __NR__sysctl:
+     case __NR_sysfs:
+ #endif
+@@ -844,7 +853,7 @@ bool SyscallSets::IsGlobalSystemStatus(int sysno) {
+ 
+ bool SyscallSets::IsEventFd(int sysno) {
+   switch (sysno) {
+-#if !defined(__aarch64__)
++#if !defined(__aarch64__) && !defined(__loongarch64)
+     case __NR_eventfd:
+ #endif
+     case __NR_eventfd2:
+@@ -896,7 +905,7 @@ bool SyscallSets::IsKeyManagement(int sysno) {
+ }
+ 
+ #if defined(__x86_64__) || defined(__arm__) || defined(__aarch64__) || \
+-    (defined(ARCH_CPU_MIPS_FAMILY) && defined(ARCH_CPU_64_BITS))
++    (defined(ARCH_CPU_MIPS_FAMILY) && defined(ARCH_CPU_64_BITS)) || defined(__loongarch64)
+ bool SyscallSets::IsSystemVSemaphores(int sysno) {
+   switch (sysno) {
+     case __NR_semctl:
+@@ -915,7 +924,7 @@ bool SyscallSets::IsSystemVSemaphores(int sysno) {
+ #endif
+ 
+ #if defined(__i386__) || defined(__x86_64__) || defined(__arm__) || \
+-    defined(__aarch64__) ||                                         \
++    defined(__aarch64__) ||  defined(__loongarch64) ||              \
+     (defined(ARCH_CPU_MIPS_FAMILY) && defined(ARCH_CPU_64_BITS))
+ // These give a lot of ambient authority and bypass the setuid sandbox.
+ bool SyscallSets::IsSystemVSharedMemory(int sysno) {
+@@ -932,7 +941,8 @@ bool SyscallSets::IsSystemVSharedMemory(int sysno) {
+ #endif
+ 
+ #if defined(__x86_64__) || defined(__arm__) || defined(__aarch64__) || \
+-    (defined(ARCH_CPU_MIPS_FAMILY) && defined(ARCH_CPU_64_BITS))
++    (defined(ARCH_CPU_MIPS_FAMILY) && defined(ARCH_CPU_64_BITS)) || \
++    defined(__loongarch64)
+ bool SyscallSets::IsSystemVMessageQueue(int sysno) {
+   switch (sysno) {
+     case __NR_msgctl:
+@@ -963,7 +973,8 @@ bool SyscallSets::IsSystemVIpc(int sysno) {
+ 
+ bool SyscallSets::IsAnySystemV(int sysno) {
+ #if defined(__x86_64__) || defined(__arm__) || defined(__aarch64__) || \
+-    (defined(ARCH_CPU_MIPS_FAMILY) && defined(ARCH_CPU_64_BITS))
++    (defined(ARCH_CPU_MIPS_FAMILY) && defined(ARCH_CPU_64_BITS)) || \
++    defined(__loongarch64)
+   return IsSystemVMessageQueue(sysno) || IsSystemVSemaphores(sysno) ||
+          IsSystemVSharedMemory(sysno);
+ #elif defined(__i386__) || \
+@@ -1000,7 +1011,7 @@ bool SyscallSets::IsAdvancedScheduler(int sysno) {
+ bool SyscallSets::IsInotify(int sysno) {
+   switch (sysno) {
+     case __NR_inotify_add_watch:
+-#if !defined(__aarch64__)
++#if !defined(__aarch64__) && !defined(__loongarch64)
+     case __NR_inotify_init:
+ #endif
+     case __NR_inotify_init1:
+@@ -1135,7 +1146,7 @@ bool SyscallSets::IsMisc(int sysno) {
+ #if defined(__x86_64__)
+     case __NR_tuxcall:
+ #endif
+-#if !defined(__aarch64__)
++#if !defined(__aarch64__) && !defined(__loongarch64)
+     case __NR_vserver:
+ #endif
+       return true;
+diff --git sandbox/linux/seccomp-bpf-helpers/syscall_sets.h sandbox/linux/seccomp-bpf-helpers/syscall_sets.h
+index 9be7b03ec437..5dc05ea39cdc 100644
+--- sandbox/linux/seccomp-bpf-helpers/syscall_sets.h
++++ sandbox/linux/seccomp-bpf-helpers/syscall_sets.h
+@@ -52,7 +52,7 @@ class SANDBOX_EXPORT SyscallSets {
+ #endif
+ 
+ #if defined(__x86_64__) || defined(__arm__) || defined(__mips__) || \
+-    defined(__aarch64__)
++    defined(__aarch64__) || defined(__loongarch64)
+   static bool IsNetworkSocketInformation(int sysno);
+ #endif
+ 
+@@ -79,18 +79,20 @@ class SANDBOX_EXPORT SyscallSets {
+   static bool IsAsyncIo(int sysno);
+   static bool IsKeyManagement(int sysno);
+ #if defined(__x86_64__) || defined(__arm__) || defined(__aarch64__) || \
+-    (defined(ARCH_CPU_MIPS_FAMILY) && defined(ARCH_CPU_64_BITS))
++    (defined(ARCH_CPU_MIPS_FAMILY) && defined(ARCH_CPU_64_BITS)) || \
++    defined(__loongarch64)
+   static bool IsSystemVSemaphores(int sysno);
+ #endif
+ #if defined(__i386__) || defined(__x86_64__) || defined(__arm__) || \
+-    defined(__aarch64__) ||                                         \
++    defined(__aarch64__) || defined(__loongarch64) ||               \
+     (defined(ARCH_CPU_MIPS_FAMILY) && defined(ARCH_CPU_64_BITS))
+   // These give a lot of ambient authority and bypass the setuid sandbox.
+   static bool IsSystemVSharedMemory(int sysno);
+ #endif
+ 
+ #if defined(__x86_64__) || defined(__arm__) || defined(__aarch64__) || \
+-    (defined(ARCH_CPU_MIPS_FAMILY) && defined(ARCH_CPU_64_BITS))
++    (defined(ARCH_CPU_MIPS_FAMILY) && defined(ARCH_CPU_64_BITS)) || \
++    defined(__loongarch64)
+   static bool IsSystemVMessageQueue(int sysno);
+ #endif
+ 
+diff --git v8 v8
+index 4c685866b13f..6756ca0aa7aa 160000
+--- v8
++++ v8
+@@ -1 +1 @@
+-Subproject commit 4c685866b13f6ec453f327f0499379672e5b1751
++Subproject commit 6756ca0aa7aad91d52268dd029b01185bb6dfd45

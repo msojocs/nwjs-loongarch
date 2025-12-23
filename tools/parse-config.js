@@ -33,16 +33,37 @@ const options = {
     '--get-chromium-repo': {
         type: 'boolean',
     },
+    '--get-chromium-checkout-target': {
+        type: 'boolean',
+    },
     '--get-v8-repo': {
+        type: 'boolean',
+    },
+    '--get-v8-checkout-target': {
         type: 'boolean',
     },
     '--get-node-repo': {
         type: 'boolean',
     },
+    '--get-node-checkout-target': {
+        type: 'boolean',
+    },
     '--get-nw-repo': {
         type: 'boolean',
     },
+    '--get-nw-checkout-target': {
+        type: 'boolean',
+    },
     '--get-nw-gen-arg': {
+        type: 'boolean',
+    },
+    '--get-nw-gyp-arg': {
+        type: 'boolean',
+    },
+    '--get-nw-gyp-method': {
+        type: 'boolean',
+    },
+    '--get-pack-python-version': {
         type: 'boolean',
     },
     '--get-binutils-repo': {
@@ -79,67 +100,95 @@ for (let i = 0; i < args.length; i++) {
 }
 
 const targetConfig = config.buildConfig[config.buildTarget]
-if (configArg['get-nw-version']) {
-    console.log(configArg.target);
-    exit(0);
-}
+const useMirror = configArg['use-mirror'] || config.useMirror
 
+// llvm
 if (configArg['get-llvm-tag']) {
     console.log(targetConfig.llvm.tag);
     exit(0);
 }
-
 if (configArg['get-llvm-version']) {
     console.log(targetConfig.llvm.tag.match(/(\d+)\.\d+\.\d+/)[1]);
     exit(0);
 }
-
-const useMirror = configArg['use-mirror'] || config.useMirror
 if (configArg['get-llvm-repo']) {
     console.log(targetConfig.llvm[useMirror ? 'mirror' : 'repo']);
     exit(0);
 }
-
 if (configArg['get-llvm-build-arg']) {
     console.log(targetConfig.llvm.buildArg || "");
     exit(0);
 }
-
 if (configArg['get-llvm-rt-build-arg']) {
     console.log(targetConfig.llvm.rtBuildArg || "");
     exit(0);
 }
 
+// chromium
 if (configArg['get-chromium-repo']) {
     console.log(targetConfig.chromium[useMirror ? 'mirror' : 'repo']);
     exit(0);
 }
+if (configArg['get-chromium-checkout-target']) {
+    console.log(targetConfig.chromium.checkoutTarget || "");
+    exit(0);
+}
 
+// v8
 if (configArg['get-v8-repo']) {
     console.log(targetConfig.v8[useMirror ? 'mirror' : 'repo']);
     exit(0);
 }
+if (configArg['get-v8-checkout-target']) {
+    console.log(targetConfig.v8.checkoutTarget || "");
+    exit(0);
+}
 
+// node
 if (configArg['get-node-repo']) {
     console.log(targetConfig.node[useMirror ? 'mirror' : 'repo']);
     exit(0);
 }
+if (configArg['get-node-checkout-target']) {
+    console.log(targetConfig.node.checkoutTarget || "");
+    exit(0);
+}
 
+// nw
 if (configArg['get-nw-repo']) {
     console.log(targetConfig.nw[useMirror ? 'mirror' : 'repo']);
     exit(0);
 }
-
+if (configArg['get-nw-checkout-target']) {
+    console.log(targetConfig.nw.checkoutTarget || "");
+    exit(0);
+}
 if (configArg['get-nw-gen-arg']) {
     console.log(targetConfig.nw.genArg || "");
     exit(0);
 }
+if (configArg['get-nw-version']) {
+    console.log(configArg.target);
+    exit(0);
+}
+if (configArg['get-nw-gyp-arg']) {
+    console.log(targetConfig.nw.gypArg || "");
+    exit(0);
+}
+if (configArg['get-nw-gyp-method']) {
+    console.log(targetConfig.nw.gypMethod || "v1");
+    exit(0);
+}
+if (configArg['get-pack-python-version']) {
+    console.log(targetConfig.nw.packPythonVersion || "python2");
+    exit(0);
+}
 
+// binutils
 if (configArg['get-binutils-repo']) {
     console.log(targetConfig.binutils[useMirror ? 'mirror' : 'repo']);
     exit(0);
 }
-
 if (configArg['get-binutils-tag']) {
     console.log(targetConfig.binutils.tag);
     exit(0);

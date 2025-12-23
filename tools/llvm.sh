@@ -35,7 +35,13 @@ if [ ! -f "$project_dir/README.md" ];then
 fi
 
 cd "$source_dir/llvm-project"
-git checkout $llvm_tag
+# 检查是否merge状态
+if [ "$(git status --porcelain)" != "" ]; then
+  warn "llvm项目处于未提交状态，自动恢复到最新tag状态"
+  git reset --hard HEAD
+fi
+git fetch origin $llvm_tag
+git checkout $llvm_tag --force
 
 mkdir -p $build_dir
 mkdir -p $project_dir/build-compiler-rt
