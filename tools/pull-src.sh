@@ -93,6 +93,7 @@ if read -t 60 -p "execute 'gclient sync -D'? (Y/N):" name    # -t，设置输入
 then                                              # 如果不超过5秒
   if [ "y" = "$name" ] || [ "Y" = "$name" ];then
     gclient sync -D
+    "$root_dir/tools/sync-reset.sh"
   fi
 else                                              # 超过5秒
     echo "Timeout"

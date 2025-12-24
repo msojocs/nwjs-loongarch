@@ -1,27 +1,3 @@
-diff --git base/metrics/histogram_macros_internal.h base/metrics/histogram_macros_internal.h
-index 9cdddf1a107f..e36e16b44e45 100644
---- base/metrics/histogram_macros_internal.h
-+++ base/metrics/histogram_macros_internal.h
-@@ -28,16 +28,16 @@ namespace base::internal {
- template <typename Enum>
-   requires(std::is_enum_v<Enum>)
- struct EnumSizeTraits {
--  static constexpr Enum Count() {
-+  static constexpr uintmax_t Count() {
-     if constexpr (requires { Enum::kMaxValue; }) {
-       // Since the UMA histogram macros expect a value one larger than the max
-       // defined enumerator value, add one.
--      return static_cast<Enum>(base::to_underlying(Enum::kMaxValue) + 1);
-+      return static_cast<uintmax_t>(base::to_underlying(Enum::kMaxValue) + 1);
-     } else {
-       static_assert(
-           sizeof(Enum) == 0,
-           "enumerator must define kMaxValue enumerator to use this macro!");
--      return Enum();
-+      return 0;
-     }
-   }
- };
 diff --git base/process/launch.h base/process/launch.h
 index 009d75093c78..d570b93740cd 100644
 --- base/process/launch.h
@@ -49,10 +25,10 @@ index 745d42ed400f..981c00f5990f 100644
    return std::string();
  #endif
 diff --git build/config/clang/BUILD.gn build/config/clang/BUILD.gn
-index 44bd202d2b85..a026268c9ce9 100644
+index 890bf91c43e4..dc11066e142c 100644
 --- build/config/clang/BUILD.gn
 +++ build/config/clang/BUILD.gn
-@@ -174,6 +174,8 @@ template("clang_lib") {
+@@ -171,6 +171,8 @@ template("clang_lib") {
            _dir = "armv7-unknown-linux-gnueabihf"
          } else if (current_cpu == "arm64") {
            _dir = "aarch64-unknown-linux-gnu"
@@ -62,10 +38,10 @@ index 44bd202d2b85..a026268c9ce9 100644
            assert(false)  # Unhandled cpu type
          }
 diff --git build/config/compiler/BUILD.gn build/config/compiler/BUILD.gn
-index ecb321b1d346..3908bd535274 100644
+index 03cc6d3e570d..582eb8d944f5 100644
 --- build/config/compiler/BUILD.gn
 +++ build/config/compiler/BUILD.gn
-@@ -1105,6 +1105,10 @@ config("compiler") {
+@@ -1090,6 +1090,10 @@ config("compiler") {
    if (current_cpu == "arm64") {
      defines += [ "__ARM_NEON__=1" ]
    }
@@ -75,7 +51,7 @@ index ecb321b1d346..3908bd535274 100644
 +  }
  }
  
- # Don't allow unstable features to be enabled by `#![feature()]` without
+ config("libcxx_hardening") {
 diff --git build/config/linux/libffi/BUILD.gn build/config/linux/libffi/BUILD.gn
 index 6e45f4c22615..37bc80a89c3d 100644
 --- build/config/linux/libffi/BUILD.gn
@@ -119,10 +95,10 @@ index 9a95ec915137..a9dc9d28dbeb 100644
    }
  }
 diff --git build/config/rust.gni build/config/rust.gni
-index 60856e609d08..af0b9d9703c4 100644
+index 5b7807a1b84b..6c7ba2466299 100644
 --- build/config/rust.gni
 +++ build/config/rust.gni
-@@ -200,6 +200,9 @@ if (is_linux || is_chromeos) {
+@@ -223,6 +223,9 @@ if (is_linux || is_chromeos) {
    } else if (current_cpu == "riscv64") {
      rust_abi_target = "riscv64gc-unknown-linux-gnu"
      cargo_target_abi = ""
@@ -132,7 +108,7 @@ index 60856e609d08..af0b9d9703c4 100644
    } else {
      # Best guess for other future platforms.
      rust_abi_target = current_cpu + "-unknown-linux-gnu"
-@@ -320,6 +323,8 @@ if (current_cpu == "x86") {
+@@ -343,6 +346,8 @@ if (current_cpu == "x86") {
    rust_target_arch = "powerpc64"
  } else if (current_cpu == "riscv64") {
    rust_target_arch = "riscv64"
@@ -208,7 +184,7 @@ index 000000000000..5f189950904c
 +../../../../sysroot
 \ No newline at end of file
 diff --git build/linux/sysroot_scripts/install-sysroot.py build/linux/sysroot_scripts/install-sysroot.py
-index abd58136efc8..cf86e6c7e7e8 100755
+index abd58136efc8..19fc396007f9 100755
 --- build/linux/sysroot_scripts/install-sysroot.py
 +++ build/linux/sysroot_scripts/install-sysroot.py
 @@ -36,7 +36,7 @@ from urllib.request import urlopen
@@ -216,7 +192,7 @@ index abd58136efc8..cf86e6c7e7e8 100755
  SRC_DIR = os.path.dirname(os.path.dirname(os.path.dirname(SCRIPT_DIR)))
  
 -VALID_ARCHS = ("amd64", "i386", "armhf", "arm64", "mipsel", "mips64el")
-+VALID_ARCHS = ("amd64", "loong64", "i386", "armhf", "arm64", "mipsel", "mips64el")
++VALID_ARCHS = ("amd64", "i386", "armhf", "arm64", "mipsel", "mips64el", "loong64")
  
  ARCH_TRANSLATIONS = {
      "x64": "amd64",
@@ -224,7 +200,7 @@ index abd58136efc8..cf86e6c7e7e8 100755
      "arm": "armhf",
      "mips": "mipsel",
      "mips64": "mips64el",
-++    "loong64": "loong64",
++    "loong64": "loong64",
  }
  
  DEFAULT_SYSROOTS_PATH = os.path.join(os.path.relpath(SCRIPT_DIR, SRC_DIR),
@@ -245,10 +221,10 @@ index f146ea68bc72..3bfcec5b1e4c 100644
      }
  }
 diff --git build/vs_toolchain.py build/vs_toolchain.py
-index f0b8bacf5736..7a8c2add1d6a 100755
+index f3a6fc7deec4..45623cbee3be 100755
 --- build/vs_toolchain.py
 +++ build/vs_toolchain.py
-@@ -505,7 +505,7 @@ def Update(force=False, no_download=False):
+@@ -483,7 +483,7 @@ def Update(force=False, no_download=False):
    will not be downloaded.
    """
    if force != False and force != '--force':
@@ -257,7 +233,7 @@ index f0b8bacf5736..7a8c2add1d6a 100755
      return 1
    if force == '--force' or os.path.exists(json_data_file):
      force = True
-@@ -647,7 +647,7 @@ def main():
+@@ -625,7 +625,7 @@ def main():
        'copy_dlls': CopyDlls,
    }
    if len(sys.argv) < 2 or sys.argv[1] not in commands:
@@ -267,10 +243,10 @@ index f0b8bacf5736..7a8c2add1d6a 100755
    return commands[sys.argv[1]](*sys.argv[2:])
  
 diff --git chrome/BUILD.gn chrome/BUILD.gn
-index de46b536f45e..c997c6ef5b0d 100644
+index 673f106c1f42..f9464e50009e 100644
 --- chrome/BUILD.gn
 +++ chrome/BUILD.gn
-@@ -321,6 +321,7 @@ if (!is_android && !is_mac) {
+@@ -324,6 +324,7 @@ if (!is_android && !is_mac) {
          } else {
          deps += [
            ":chrome_dll",
@@ -279,23 +255,23 @@ index de46b536f45e..c997c6ef5b0d 100644
          }
  
 diff --git chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc
-index 6ad1ab7d4429..c7fe4b5c7cf2 100644
+index 563d2383fcb2..3e5928c9ebdb 100644
 --- chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc
 +++ chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc
-@@ -302,6 +302,8 @@ bool ChromeRuntimeAPIDelegate::GetPlatformInfo(PlatformInfo* info) {
-     info->arch = extensions::api::runtime::PlatformArch::kX86_32;
-   } else if (strcmp(arch, "x64") == 0) {
-     info->arch = extensions::api::runtime::PlatformArch::kX86_64;
-+  } else if (strcmp(arch, "loong64") == 0) {
-+    info->arch = extensions::api::runtime::PlatformArch::kLoong64;
-   } else if (strcmp(arch, "mipsel") == 0) {
+@@ -307,6 +307,8 @@ bool ChromeRuntimeAPIDelegate::GetPlatformInfo(PlatformInfo* info) {
      info->arch = extensions::api::runtime::PlatformArch::kMips;
    } else if (strcmp(arch, "mips64el") == 0) {
+     info->arch = extensions::api::runtime::PlatformArch::kMips64;
++  } else if (strcmp(arch, "loong64") == 0) {
++    info->arch = extensions::api::runtime::PlatformArch::kLoong64;
+   } else {
+     NOTREACHED_IN_MIGRATION();
+     return false;
 diff --git chrome/browser/ui/views/apps/app_dialog/app_uninstall_dialog_view.cc chrome/browser/ui/views/apps/app_dialog/app_uninstall_dialog_view.cc
-index e6e04a2c2fb3..3adb6ad8f26a 100644
+index 93cb83f79c89..1e13f09cd22d 100644
 --- chrome/browser/ui/views/apps/app_dialog/app_uninstall_dialog_view.cc
 +++ chrome/browser/ui/views/apps/app_dialog/app_uninstall_dialog_view.cc
-@@ -557,18 +557,22 @@ void AppUninstallDialogView::InitializeViewForArcApp(
+@@ -579,18 +579,22 @@ void AppUninstallDialogView::InitializeViewForArcApp(
  #endif
  
  void AppUninstallDialogView::OnDialogCancelled() {
@@ -333,19 +309,19 @@ index 7ef5eb238e1a..e4dfc5ebe5ed 100644
  
    // Enum to pass as optional bool.
 diff --git components/variations/service/variations_field_trial_creator_base.cc components/variations/service/variations_field_trial_creator_base.cc
-index 73ff906e1b51..da0aefab0728 100644
+index fbe60d2c4418..539f196686f8 100644
 --- components/variations/service/variations_field_trial_creator_base.cc
 +++ components/variations/service/variations_field_trial_creator_base.cc
-@@ -107,6 +107,9 @@ Study::CpuArchitecture GetCurrentCpuArchitecture() {
-   if (process_arch == "ARM") {
-     return Study::ARM32;
+@@ -121,6 +121,9 @@ Study::CpuArchitecture GetCurrentCpuArchitecture() {
+     }
+     return Study::X86_64;
    }
 +  if (process_arch == "LOONGARCH_64") {
 +    return Study::LOONGARCH64;
 +  }
-   if (process_arch == "x86") {
-     return Study::X86_32;
-   }
+   NOTREACHED_IN_MIGRATION();
+   return Study::X86_64;
+ }
 diff --git extensions/common/api/runtime.json extensions/common/api/runtime.json
 index 3b4360bce8af..df1a3f51759b 100644
 --- extensions/common/api/runtime.json
@@ -371,18 +347,19 @@ index 3b4360bce8af..df1a3f51759b 100644
        },
        {
 diff --git sandbox/features.gni sandbox/features.gni
-index 8434144118b4..4393464fc664 100644
+index 8434144118b4..e1c0af43cebd 100644
 --- sandbox/features.gni
 +++ sandbox/features.gni
-@@ -7,7 +7,7 @@
- # Do not disable seccomp_bpf anywhere without talking to
- # security@chromium.org!
+@@ -9,7 +9,8 @@
  use_seccomp_bpf = (is_linux || is_chromeos || is_android) &&
--                  (current_cpu == "x86" || current_cpu == "x64" ||
-+                  (current_cpu == "x86" || current_cpu == "x64" || current_cpu == "loong64" ||
+                   (current_cpu == "x86" || current_cpu == "x64" ||
                     current_cpu == "arm" || current_cpu == "arm64" ||
-                    current_cpu == "mipsel" || current_cpu == "mips64el")
+-                   current_cpu == "mipsel" || current_cpu == "mips64el")
++                   current_cpu == "mipsel" || current_cpu == "mips64el" ||
++                   current_cpu == "loong64")
  
+ # SSBD (Speculative Store Bypass Disable) is a mitigation of Spectre Variant 4.
+ # As Spectre Variant 4 can be mitigated by site isolation, opt-out SSBD on site
 diff --git sandbox/linux/BUILD.gn sandbox/linux/BUILD.gn
 index 97e3deed4f2b..2ba48689d88a 100644
 --- sandbox/linux/BUILD.gn
@@ -2515,6 +2492,32 @@ index ffc6bdc4ab70..d1c4f7be330f 100644
      "//services/network/public/cpp",
      "//services/network/public/mojom",
    ]
+diff --git services/tracing/public/cpp/perfetto/shared_memory.cc services/tracing/public/cpp/perfetto/shared_memory.cc
+index 81258946d320..b85064adfa38 100644
+--- services/tracing/public/cpp/perfetto/shared_memory.cc
++++ services/tracing/public/cpp/perfetto/shared_memory.cc
+@@ -39,7 +39,7 @@ base::UnsafeSharedMemoryRegion ChromeBaseSharedMemory::CloneRegion() {
+   return region_.Duplicate();
+ }
+ 
+-void* ChromeBaseSharedMemory::start() const {
++const void* ChromeBaseSharedMemory::start() const {
+   return mapping_.memory();
+ }
+ 
+diff --git services/tracing/public/cpp/perfetto/shared_memory.h services/tracing/public/cpp/perfetto/shared_memory.h
+index 34397639c059..feba3a3d2754 100644
+--- services/tracing/public/cpp/perfetto/shared_memory.h
++++ services/tracing/public/cpp/perfetto/shared_memory.h
+@@ -40,7 +40,7 @@ class COMPONENT_EXPORT(TRACING_CPP) ChromeBaseSharedMemory
+ 
+   // perfetto::SharedMemory implementation. Called internally by Perfetto
+   // classes.
+-  void* start() const override;
++    const void* start() const override;
+   size_t size() const override;
+ 
+  private:
 diff --git third_party/crashpad/crashpad/client/crashpad_client_linux.cc third_party/crashpad/crashpad/client/crashpad_client_linux.cc
 index 1d79be7a08c4..a38d0afa2ac8 100644
 --- third_party/crashpad/crashpad/client/crashpad_client_linux.cc
@@ -3636,21 +3639,21 @@ index df63a77296d0..a897f865c897 100644
  #error Port
  #endif
 diff --git ui/gl/features.gni ui/gl/features.gni
-index a548a4d97b61..66278c1b6519 100644
+index 245959e90801..b3f95471fd27 100644
 --- ui/gl/features.gni
 +++ ui/gl/features.gni
-@@ -25,6 +25,6 @@ declare_args() {
-   enable_swiftshader =
-       (is_win || is_linux || is_chromeos || is_mac || is_fuchsia) &&
+@@ -29,6 +29,6 @@ declare_args() {
+       (is_win || is_linux || is_chromeos || is_mac || is_chromeos_ash ||
+        is_fuchsia) &&
        (target_cpu == "x86" || target_cpu == "x64" || target_cpu == "arm" ||
 -       target_cpu == "arm64" || target_cpu == "mipsel" ||
 +       target_cpu == "arm64" || target_cpu == "mipsel" || target_cpu == "loong64" ||
         target_cpu == "mips64el" || target_cpu == "riscv64")
  }
 diff --git v8 v8
-index e51f1d7dbd11..89fc90354bd5 160000
+index e38771cb283b..dc5ca041bdf6 160000
 --- v8
 +++ v8
 @@ -1 +1 @@
--Subproject commit e51f1d7dbd113aa01ddfb30890c8a89b11fcd96c
-+Subproject commit 89fc90354bd59a7541754bf3055818245b19b493
+-Subproject commit e38771cb283b9689683c5ac0b5831dd89f8ec690
++Subproject commit dc5ca041bdf6dfbdedc33cf2e6091968fe1ad7ac
