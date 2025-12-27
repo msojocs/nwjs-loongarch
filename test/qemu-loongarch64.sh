@@ -2,7 +2,6 @@
 
 root_dir=$(cd `dirname $0`/.. && pwd -P)
 
-docker run --rm --privileged loongcr.lcpu.dev/multiarch/archlinux --reset -p yes
 # 检查docker 容器是否存在
 if [ "$(docker ps -a | grep loongarchlinux-test)" ]; then
     docker start loongarchlinux-test

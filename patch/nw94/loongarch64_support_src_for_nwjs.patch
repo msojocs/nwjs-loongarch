@@ -1,3 +1,15 @@
+diff --git .gitignore .gitignore
+index 3125d4ac3a34..387da62ee56e 100644
+--- .gitignore
++++ .gitignore
+@@ -89,6 +89,7 @@ vs-chromium-project.txt
+ /MODULE.bazel
+ /MODULE.bazel.lock
+ 
++/out
+ /_out
+ /android_emulator_sdk
+ /ash/ash_unittests_run.xml
 diff --git base/process/launch.h base/process/launch.h
 index 009d75093c78..d570b93740cd 100644
 --- base/process/launch.h

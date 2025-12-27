@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 root_dir=$(cd `dirname $0`/.. && pwd -P)
 source "$root_dir/tools/common/log.sh"
@@ -24,8 +24,13 @@ if [ ! -d "$src_dir/build/linux/debian_bullseye_loong64-sysroot" ];then
 fi
 
 notice "Start to gen nw"
+if [ ! -d "$output_dir/out" ];then
+  mkdir -p $output_dir/out
+fi
+sudo mount -t tmpfs -o size=20G tmpfs $output_dir/out
 cd "$src_dir"
-./buildtools/linux64/gn gen out/nw --args="clang_use_chrome_plugins=false treat_warnings_as_errors=false dcheck_always_on=false clang_base_path=\"$llvm_dir\" is_debug=false is_component_build=false is_component_ffmpeg=true target_cpu=\"loong64\" use_sysroot=false $nw_gen_arg"
+ln -s $output_dir/out out
+./buildtools/linux64/gn gen out/nw --args="clang_use_chrome_plugins=false treat_warnings_as_errors=false dcheck_always_on=false clang_base_path=\"$llvm_dir\" is_debug=true is_component_build=false symbol_level=1 is_component_ffmpeg=true target_cpu=\"loong64\" use_sysroot=false $nw_gen_arg"
 
 # https://nwjs.readthedocs.io/en/latest/For%20Developers/Building%20NW.js/
 notice "start to prepare gyp"
@@ -33,8 +38,8 @@ notice "start to prepare gyp"
 export GYP_CHROMIUM_NO_ACTION=0
 export GYP_CROSSCOMPILE=1
 export GYP_DEFINES="building_nw=1 clang=1 target_arch=loong64 remove_webcore_debug_symbols=1 clang_base_dir=$llvm_dir $nw_gyp_arg"
-  export GYP_GENERATORS=ninja
-  export GYP_GENERATOR_FLAGS=output_dir=out
+export GYP_GENERATORS=ninja
+export GYP_GENERATOR_FLAGS=output_dir=out
 export PYTHONPATH=${src_dir}/third_party/node-nw/tools/v8_gypfiles
 if [ "$nw_gyp_method" == "v1" ];then
   ./build/gyp_chromium -I third_party/node-nw/common.gypi third_party/node-nw/node.gyp --no-duplicate-basename-check
