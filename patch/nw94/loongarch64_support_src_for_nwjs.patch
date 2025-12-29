@@ -266,6 +266,20 @@ index 673f106c1f42..f9464e50009e 100644
          ]
          }
  
+diff --git chrome/browser/BUILD.gn chrome/browser/BUILD.gn
+index 88be11df7ada..5be6c8648532 100644
+--- chrome/browser/BUILD.gn
++++ chrome/browser/BUILD.gn
+@@ -4130,6 +4130,9 @@ static_library("browser") {
+       "support_tool/system_log_source_data_collector_adaptor.h",
+       "tab_contents/form_interaction_tab_helper.cc",
+       "tab_contents/form_interaction_tab_helper.h",
++      "translate/chrome_translate_client.cc",
++      "translate/translate_ranker_factory.cc",
++      "translate/translate_service.cc",
+       "upgrade_detector/build_state.cc",
+       "upgrade_detector/build_state.h",
+       "upgrade_detector/upgrade_detector.cc",
 diff --git chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc
 index 563d2383fcb2..3e5928c9ebdb 100644
 --- chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc
@@ -306,6 +320,19 @@ index 93cb83f79c89..1e13f09cd22d 100644
  }
  
  void AppUninstallDialogView::OnWidgetInitialized() {
+diff --git chrome/common/logging_chrome.cc chrome/common/logging_chrome.cc
+index a521a9fed6d7..f3d38f5dbd0b 100644
+--- chrome/common/logging_chrome.cc
++++ chrome/common/logging_chrome.cc
+@@ -21,7 +21,7 @@
+ #define IPC_LOG_TABLE_ADD_ENTRY(msg_id, logger) \
+   content::RegisterIPCLogger(msg_id, logger)
+ #include "chrome/common/all_messages.h"
+-#include "extensions/common/extension_messages.h"
++// #include "extensions/common/extension_messages.h"
+ #endif
+ 
+ #if BUILDFLAG(IS_WIN)
 diff --git components/variations/proto/study.proto components/variations/proto/study.proto
 index 7ef5eb238e1a..e4dfc5ebe5ed 100644
 --- components/variations/proto/study.proto

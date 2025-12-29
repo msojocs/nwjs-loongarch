@@ -21,7 +21,7 @@ source_dir="$root_dir/source-code"
 llvm_version=$(node $root_dir/tools/parse-config.js --get-llvm-version $@)
 export PATH="$output_dir/cmake-linux-x86_64/bin:$output_dir/llvm-$llvm_version/bin:$output_dir/toolchain/bin:$output_dir/depot_tools:$PATH"
 src_dir="$source_dir/nwjs/src"
-max_thread=$(($(cat /proc/cpuinfo| grep "processor"| wc -l) - 8))
+max_thread=$(($(cat /proc/cpuinfo| grep "processor"| wc -l) - 2))
 
 cd $src_dir
 

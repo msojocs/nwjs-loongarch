@@ -1,0 +1,13 @@
+diff --git src/api/api.cc src/api/api.cc
+index e971b7feee..1dbeede945 100644
+--- src/api/api.cc
++++ src/api/api.cc
+@@ -4428,7 +4428,7 @@ void v8::RegExp::CheckCast(v8::Value* that) {
+ bool Value::BooleanValue() const {
+   auto obj = Utils::OpenHandle(this);
+   if (i::IsSmi(*obj)) return *obj != i::Smi::zero();
+-  DCHECK(obj->IsHeapObject());
++  DCHECK((*obj).IsHeapObject());
+   i::Isolate* isolate =
+       UnsafeIsolateFromHeapObject(i::Cast<i::HeapObject>(obj));
+   return i::Object::BooleanValue(*obj, isolate);

@@ -56,7 +56,7 @@ node $root_dir/tools/modify-gclient-config.js
 notice "pull v8 with target: $v8_checkout_target"
 if [ ! -f "$nwjs_dir/src/v8/README.md" ];then
   cd "$nwjs_dir"
-  git clone $v8_checkout_target $v8_repo src/v8
+  git clone $v8_repo src/v8
 else
   cd "$nwjs_dir/src/v8" && git checkout $v8_checkout_target --force
 fi
@@ -64,7 +64,7 @@ fi
 notice "pull node-nw with target: $node_checkout_target"
 if [ ! -d "$nwjs_dir/src/third_party/node-nw" ];then
   cd "$nwjs_dir"
-  git clone $node_checkout_target $node_repo src/third_party/node-nw
+  git clone $node_repo src/third_party/node-nw
 else
   cd "$nwjs_dir/src/third_party/node-nw" && git checkout $node_checkout_target --force
 fi
@@ -72,7 +72,7 @@ fi
 notice "pull nw with target: $nw_checkout_target"
 if [ ! -d "$nwjs_dir/src/content/nw" ];then
   cd "$nwjs_dir"
-  git clone $nw_checkout_target "$nw_repo" src/content/nw
+  git clone "$nw_repo" src/content/nw
 else
   cd "$nwjs_dir/src/content/nw"
   git remote set-url origin "$nw_repo"
@@ -92,10 +92,12 @@ notice "Start to sync..."
 if read -t 60 -p "execute 'gclient sync -D'? (Y/N):" name    # -t，设置输入超时时间（本语句设置超时时间为5秒），默认单位是秒；-p，指定输入提示
 then                                              # 如果不超过5秒
   if [ "y" = "$name" ] || [ "Y" = "$name" ];then
-    gclient sync -D
-    "$root_dir/tools/sync-reset.sh"
+    gclient sync -D --force
+    exit 0
   fi
 else                                              # 超过5秒
     echo "Timeout"
 fi
+gclient sync --with_branch_heads
+"$root_dir/tools/sync-reset.sh"
 gclient sync --with_branch_heads
