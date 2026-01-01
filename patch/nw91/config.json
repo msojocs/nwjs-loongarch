@@ -1,9 +1,5 @@
 [
     {
-        "name": "skia",
-        "path": "third_party/skia"
-    },
-    {
         "name": "loongarch64_support_src_for_nwjs",
         "path": "",
         "disabled": false

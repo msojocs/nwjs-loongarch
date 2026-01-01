@@ -2421,6 +2421,33 @@ index 6a64ed38043e..98cbff569e78 100644
          .Else(handle_via_broker);
    } else {
      return handle_via_broker;
+diff --git skia/BUILD.gn skia/BUILD.gn
+index f1ff98958346..36492430c50a 100644
+--- skia/BUILD.gn
++++ skia/BUILD.gn
+@@ -681,7 +681,13 @@ if (current_cpu == "x86" || current_cpu == "x64") {
+     visibility = [ ":skia_opts" ]
+   }
+ }
+-
++if (current_cpu == "loong64") {
++  skia_source_set("skia_opts_lasx") {
++    sources = skia_opts.lasx_sources
++    cflags = [ "-mlasx" ]
++    visibility = [ ":skia_opts" ]
++  }
++}
+ skia_source_set("skia_opts") {
+   cflags = []
+   defines = []
+@@ -721,6 +727,7 @@ skia_source_set("skia_opts") {
+     # Conditional and empty body needed to avoid assert() below.
+   } else if (current_cpu == "loong64") {
+     # Conditional and empty body needed to avoid assert() below.
++  deps += [ ":skia_opts_lasx" ]
+   } else {
+     assert(false, "Unknown cpu target")
+   }
 diff --git third_party/crashpad/crashpad/client/crashpad_client_linux.cc third_party/crashpad/crashpad/client/crashpad_client_linux.cc
 index 1d79be7a08c4..a38d0afa2ac8 100644
 --- third_party/crashpad/crashpad/client/crashpad_client_linux.cc
