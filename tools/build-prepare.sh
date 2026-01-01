@@ -25,13 +25,13 @@ fi
 
 notice "Start to gen nw"
 mkdir -p $output_dir/out
+cd "$src_dir"
 
 # sudo mount -t tmpfs -o size=20G tmpfs $output_dir/out
 # TODO: 需要确认
-cd "$src_dir"
-if [ ! -s "out" ];then
-  ln -s $src_dir/out out
-fi
+# if [ ! -s "out" ];then
+#   ln -s $src_dir/out out
+# fi
 
 ./buildtools/linux64/gn gen out/nw --args="clang_use_chrome_plugins=false treat_warnings_as_errors=false dcheck_always_on=false clang_base_path=\"$llvm_dir\" is_debug=false is_component_build=false is_component_ffmpeg=true target_cpu=\"loong64\" use_sysroot=false $nw_gen_arg"
 

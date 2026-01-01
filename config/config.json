@@ -108,7 +108,7 @@
         },
         "nw92": {
             "llvm": {
-                "tag": "llvmorg-19.1.7",
+                "tag": "llvmorg-20.1.8",
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
