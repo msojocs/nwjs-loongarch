@@ -57,9 +57,9 @@ notice "pull v8 with target: $v8_checkout_target"
 if [ ! -f "$nwjs_dir/src/v8/README.md" ];then
   cd "$nwjs_dir"
   git clone $v8_repo src/v8
-else
-  cd "$nwjs_dir/src/v8" && git checkout $v8_checkout_target --force
 fi
+cd "$nwjs_dir/src/v8"
+git checkout $v8_checkout_target --force
 
 notice "pull node-nw with target: $node_checkout_target"
 if [ ! -d "$nwjs_dir/src/third_party/node-nw" ];then
@@ -76,9 +76,9 @@ if [ ! -d "$nwjs_dir/src/content/nw" ];then
 else
   cd "$nwjs_dir/src/content/nw"
   git remote set-url origin "$nw_repo"
-  git reset --hard HEAD~2
-  git pull origin $nw_checkout_target
-  git checkout $nw_checkout_target --force
+  git fetch --all
+  # git pull origin $nw_checkout_target
+  git checkout origin/$nw_checkout_target --force
 fi
 
 if [ -f "$nwjs_dir/src/README.md" ];then
@@ -92,12 +92,10 @@ notice "Start to sync..."
 if read -t 60 -p "execute 'gclient sync -D'? (Y/N):" name    # -t，设置输入超时时间（本语句设置超时时间为5秒），默认单位是秒；-p，指定输入提示
 then                                              # 如果不超过5秒
   if [ "y" = "$name" ] || [ "Y" = "$name" ];then
-    gclient sync -D --force
+    gclient sync -D
     exit 0
   fi
 else                                              # 超过5秒
     echo "Timeout"
 fi
-gclient sync --with_branch_heads
-"$root_dir/tools/sync-reset.sh"
 gclient sync --with_branch_heads
