@@ -284,7 +284,8 @@
                 "checkoutTarget": "nw-v0.106.1",
                 "genArg": "",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
-                "gypMethod": "v2"
+                "gypMethod": "v2",
+                "packPythonVersion": "python3"
             }
         }
     }

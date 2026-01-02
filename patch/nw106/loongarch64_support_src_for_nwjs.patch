@@ -209,17 +209,17 @@ index 9006da97ac7d..08511e27747f 100644
        }
          
 diff --git chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc
-index b6d8790082ee..8913ea563377 100644
+index b6d8790082ee..bb470c916b47 100644
 --- chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc
 +++ chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc
-@@ -364,6 +364,8 @@ bool ChromeRuntimeAPIDelegate::GetPlatformInfo(PlatformInfo* info) {
-     info->os = extensions::api::runtime::PlatformOs::kOpenbsd;
-   } else if (os == "android") {
-     info->os = extensions::api::runtime::PlatformOs::kAndroid;
-+  } else if (os == "loong64") {
-+    info->os = extensions::api::runtime::PlatformOs::kLoong64;
+@@ -383,6 +383,8 @@ bool ChromeRuntimeAPIDelegate::GetPlatformInfo(PlatformInfo* info) {
+     info->arch = extensions::api::runtime::PlatformArch::kMips64;
+   } else if (arch == "riscv64") {
+     info->arch = extensions::api::runtime::PlatformArch::kRiscv64;
++  } else if (arch == "loong64") {
++    info->arch = extensions::api::runtime::PlatformArch::kLoong64;
    } else {
-     NOTREACHED() << "Platform not supported: " << os;
+     NOTREACHED();
    }
 diff --git chrome/browser/ui/views/apps/app_dialog/app_uninstall_dialog_view.cc chrome/browser/ui/views/apps/app_dialog/app_uninstall_dialog_view.cc
 index 6311bb8d9c7a..1a0d1e355501 100644
@@ -409,9 +409,24 @@ index 56ba083eb81f..8fdb37cb5855 100644
  
    // The statx syscall is a filesystem syscall, which will be denied below with
 diff --git sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.cc sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.cc
-index 424f755250ed..7bd8414c8dc5 100644
+index 424f755250ed..a7c0a06af689 100644
 --- sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.cc
 +++ sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.cc
+@@ -224,10 +224,10 @@ intptr_t SIGSYSIoctlFailure(const struct arch_seccomp_data& args,
+ 
+     message_len = base::strings::SafeSPrintf(
+         message,
+-        "dev=0x%x,ino=%d,mode=0%o,nlink=%d,"
+-        "uid=%d,gid=%d,rdev=0x%x,size=%d,blksize=%d,blocks=%d",
+-        stat_buf.st_dev, stat_buf.st_ino, stat_buf.st_mode, stat_buf.st_nlink,
+-        stat_buf.st_uid, stat_buf.st_gid, stat_buf.st_rdev, stat_buf.st_size,
++        "ino=%d,mode=0%o,nlink=%d,"
++        "uid=%d,gid=%d,size=%d,blksize=%d,blocks=%d",
++        stat_buf.st_ino, stat_buf.st_mode, stat_buf.st_nlink,
++        stat_buf.st_uid, stat_buf.st_gid, stat_buf.st_size,
+         stat_buf.st_blksize, stat_buf.st_blocks);
+   } else {
+     // fstat failed, log the errno.
 @@ -402,6 +402,26 @@ intptr_t SIGSYSFstatatHandler(const struct arch_seccomp_data& args,
    return -ENOSYS;
  }
@@ -3520,6 +3535,88 @@ index df63a77296d0..a897f865c897 100644
  #else
  #error Port
  #endif
+diff --git third_party/tflite/features.gni third_party/tflite/features.gni
+index 65c27fc765ed..084fb915752a 100644
+--- third_party/tflite/features.gni
++++ third_party/tflite/features.gni
+@@ -11,7 +11,7 @@ if (build_with_chromium) {
+ 
+ declare_args() {
+   # This enables building TFLite with XNNPACK.
+-  build_tflite_with_xnnpack = current_cpu != "arm" && !is_fuchsia
++  build_tflite_with_xnnpack = current_cpu != "arm" && current_cpu != "loong64" && !is_fuchsia
+ 
+   # Turns on TFLITE_WITH_RUY, using ruy as the gemm backend instead of gemmlowp.
+   build_tflite_with_ruy = true
+diff --git tools/metrics/common/xml_utils.py tools/metrics/common/xml_utils.py
+index 99f1eba38902..48fa9e30170c 100644
+--- tools/metrics/common/xml_utils.py
++++ tools/metrics/common/xml_utils.py
+@@ -5,13 +5,14 @@
+ from collections.abc import Iterator
+ import html
+ from xml.dom import minidom
++from typing import Union
+ 
+ # A minidom tree is represented by a Document or an Element. A generic Node is
+ # not used because these functions are designed to traverse element containers.
+ # The implementation of Node type is possible with extra runtime checks, however
+ # using a more specific type makes the intent clearer and avoids potential
+ # warnings about attributes like `tagName` not being present on all Node types.
+-DomTree = minidom.Element | minidom.Document
++DomTree = Union[minidom.Element, minidom.Document]
+ 
+ _ELEMENT_NODE = minidom.Node.ELEMENT_NODE
+ 
+diff --git tools/metrics/histograms/extract_histograms.py tools/metrics/histograms/extract_histograms.py
+index e4bad7133b26..cf2fdf80caf7 100644
+--- tools/metrics/histograms/extract_histograms.py
++++ tools/metrics/histograms/extract_histograms.py
+@@ -16,7 +16,7 @@ import logging
+ import os
+ import re
+ import sys
+-from typing import TypedDict
++from typing import TypedDict, Optional
+ import xml.dom.minidom
+ 
+ sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'common'))
+@@ -84,7 +84,7 @@ class EnumDict(TypedDict, total=False):
+   """A dict representing an enum."""
+ 
+   name: str
+-  type: str | None
++  type: Optional[str]
+   buckets: list[_BucketDict]
+   summary: str
+ 
+@@ -108,7 +108,7 @@ def ExpandHistogramNameWithSuffixes(
+     suffix_name: str,
+     histogram_name: str,
+     histogram_suffixes_node: xml.dom.minidom.Element,
+-) -> tuple[str | None, ExtractionErrors]:
++) -> tuple[Optional[str], ExtractionErrors]:
+   """Creates a new histogram name based on a histogram suffix.
+ 
+   Args:
+@@ -310,7 +310,7 @@ def _ExtractOwners(node: xml.dom.minidom.Element) -> tuple[list[str], bool]:
+ 
+ def _ExtractImprovementDirection(
+     histogram_node: xml.dom.minidom.Element,
+-) -> tuple[str | None, ExtractionErrors]:
++) -> tuple[Optional[str], ExtractionErrors]:
+   """Extracts improvement direction from the given histogram element, if any.
+ 
+   Args:
+@@ -644,7 +644,7 @@ def ExtractVariantsFromXmlTree(
+   return variants_dict, errors
+ 
+ 
+-def _GetObsoleteReason(node: xml.dom.minidom.Element) -> str | None:
++def _GetObsoleteReason(node: xml.dom.minidom.Element) -> Optional[str]:
+   """If the node's histogram is obsolete, returns a string explanation.
+ 
+   Otherwise, returns None.
 diff --git ui/gl/features.gni ui/gl/features.gni
 index e0bdd667233d..0aef6de31b2c 100644
 --- ui/gl/features.gni
