@@ -4,7 +4,7 @@ set -ex
 root_dir=$(cd `dirname $0`/.. && pwd -P)
 source "$root_dir/tools/common/log.sh"
 
-max_thread=$(($(cat /proc/cpuinfo| grep "processor"| wc -l) - 6))
+max_thread=$(($(cat /proc/cpuinfo| grep "processor"| wc -l) - 2))
 export JOBS=$max_thread
 
 source_dir="$root_dir/source-code"
@@ -14,6 +14,7 @@ output_dir="$root_dir/output"
 
 llvm_version=$(node $root_dir/tools/parse-config.js --get-llvm-version $@)
 llvm_tag=$(node $root_dir/tools/parse-config.js --get-llvm-tag $@)
+llvm_commit=$(node $root_dir/tools/parse-config.js --get-llvm-commit $@)
 llvm_repo=$(node $root_dir/tools/parse-config.js --get-llvm-repo $@)
 llvm_build_arg=$(node $root_dir/tools/parse-config.js --get-llvm-build-arg $@)
 rt_build_arg=$(node $root_dir/tools/parse-config.js --get-llvm-rt-build-arg $@)
@@ -40,8 +41,21 @@ if [ "$(git status --porcelain)" != "" ]; then
   warn "llvm项目处于未提交状态，自动恢复到最新tag状态"
   git reset --hard HEAD
 fi
-git fetch origin $llvm_tag
-git checkout $llvm_tag --force
+# 检查远程tag是否存在
+git fetch --tags
+if [ -z "$(git tag -l "$llvm_tag")" ];then
+  if [ -n "$llvm_commit" ];then
+    warn "llvm tag: $llvm_tag 不存在，尝试使用commit: $llvm_commit 进行checkout"
+    git checkout $llvm_commit --force
+  else
+    fail "llvm tag: $llvm_tag 不存在，且未指定commit，无法继续"
+    exit 1
+  fi
+else
+  notice "llvm tag: $llvm_tag 存在，继续下一步"
+  git fetch origin $llvm_tag
+  git checkout $llvm_tag --force
+fi
 
 mkdir -p $build_dir
 mkdir -p $project_dir/build-compiler-rt

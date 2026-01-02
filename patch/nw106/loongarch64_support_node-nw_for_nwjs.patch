@@ -1,0 +1,61 @@
+diff --git common.gypi common.gypi
+index a45cc571c6..a147f0bc7a 100644
+--- common.gypi
++++ common.gypi
+@@ -4,8 +4,8 @@
+     'asan%': 0,
+     'ubsan%': 0,
+     'visibility%': 'hidden',          # V8's visibility setting
+-    'target_arch%': 'ia32',           # set v8's target architecture
+-    'host_arch%': 'ia32',             # set v8's host architecture
++    'target_arch%': 'loong64',           # set v8's target architecture
++    'host_arch%': 'x64',             # set v8's host architecture
+     'want_separate_host_toolset%': 1, # V8 should not build target and host
+     'library%': 'static_library',     # allow override to 'shared_library' for DLL/.so builds
+     'component%': 'static_library',   # NB. these names match with what V8 expects
+@@ -141,6 +141,9 @@
+       ['OS=="linux" and target_arch=="arm" and <(building_nw)==1', {
+         'sysroot': '<!(cd <(DEPTH) && pwd -P)/build/linux/debian_sid_arm-sysroot',
+       }],
++      ['OS=="linux" and target_arch=="loong64" and <(building_nw)==1', {
++        'sysroot': '<!(cd <(DEPTH) && pwd -P)/build/linux/debian_bullseye_loong64-sysroot',
++      }],
+       ['OS=="mac"', {
+         'obj_dir%': '<(PRODUCT_DIR)/obj.target',
+         #'v8_base': '<(PRODUCT_DIR)/libv8_snapshot.a',
+@@ -750,6 +753,10 @@
+                 'cflags': [ '-m64', '-march=z196' ],
+                 'ldflags': [ '-m64', '-march=z196' ],
+               }],
++              [ 'target_arch=="loong64" and OS=="linux"', {
++                'cflags': [ '--target=loongarch64-linux-gnu' ],
++                'ldflags': [ '--target=loongarch64-linux-gnu' ],
++              }],
+             ],
+           }],
+         ],
+diff --git config.gypi config.gypi
+index 7e0c96db5c..87ee39aeee 100644
+--- config.gypi
++++ config.gypi
+@@ -6,7 +6,7 @@
+                        'libraries': []},
+   'variables': { 'clang': 1,
+                  'gcc_version': 49,
+-                 'host_arch': 'x64',
++                 'host_arch': 'loong64',
+                  'icu_small': 'false',
+                  'node_install_npm': 'true',
+                  'node_prefix': '',
+@@ -26,9 +26,9 @@
+                  'node_use_mdb': 'false',
+                  'node_use_openssl': 'true',
+                  'node_use_perfctr': 'false',
+-                 'openssl_no_asm': 0,
++                 'openssl_no_asm': 1,
+                  'python': '/usr/bin/python',
+-                 'target_arch': 'x64',
++                 'target_arch': 'loong64',
+                  'uv_library': 'static_library',
+                  'uv_parent_path': '/deps/uv/',
+                  'uv_use_dtrace': 'false',

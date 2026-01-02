@@ -1,25 +1,34 @@
 #!/bin/bash
+set -ex
 
 root_dir=$(cd `dirname $0`/.. && pwd -P)
 
-docker run --rm --privileged loongcr.lcpu.dev/multiarch/archlinux --reset -p yes
+docker run --rm --privileged tonistiigi/binfmt:qemu-v9.2.2-52 --install all
+# apt update && apt install -y gdb build-essential libncurses-dev
+container_name="loongarchlinux-test"
 # 检查docker 容器是否存在
-if [ "$(docker ps -a | grep loongarchlinux-test)" ]; then
-    docker start loongarchlinux-test
+if [ "$(docker ps -a | grep $container_name)" ]; then
+    docker start $container_name
     cd $root_dir/output/dist_nwjs
-    version="0.92.1"
-    tar -zxf nwjs-sdk-v$version-linux-loong64.tar.gz
-    docker exec -it loongarchlinux-test /workspace/output/dist_nwjs/nwjs-sdk-v$version-linux-loong64/nw --disable-gpu --no-sandbox
+    version="0.93.0"
+    name="nwjs-sdk-v$version-linux-loong64"
+    if [ ! -d "$name" ]; then
+        tar -zxf $name.tar.gz
+    fi
+    docker exec -it $container_name bash -c "RUST_BACKTRACE=1 /workspace/source-code/nwjs/src/out/nw/nw --single-process --disable-gpu --no-sandbox --no-zygote"
+    # docker exec -it $container_name /workspace/output/dist_nwjs/$name/nw --single-process --disable-gpu
+    # gdb --args /workspace/output/dist_nwjs/nwjs-v0.94.1-linux-loong64/nw --disable-seccomp-sandbox http://google.com
 else
     docker run -it \
-        --name loongarchlinux-test \
-        --platform="linux/loong64" \
+        --name "$container_name" \
+        --cap-add SYS_PTRACE \
+        --security-opt seccomp=unconfined \
         --env="DISPLAY" \
         --volume="${XAUTHORITY:-${HOME}/.Xauthority}:/root/.Xauthority:ro" \
         --volume="/tmp/.X11-unix:/tmp/.X11-unix:ro" \
         -v "$root_dir":/workspace \
         -w /workspace \
-        ghcr.io/loongarchlinux/archlinux:latest \
+        jiegec/loong64-debian:latest \
         bash
 fi
 # pacman -S --noconfirm nss atk cups libxkbcommon libxcomposite libxdamage libxrandr pango alsa-lib

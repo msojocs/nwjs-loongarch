@@ -15,6 +15,9 @@ const options = {
     '--get-llvm-tag': {
         type: 'boolean',
     },
+    '--get-llvm-commit': {
+        type: 'boolean',
+    },
     '--get-llvm-version': {
         type: 'boolean',
     },
@@ -105,6 +108,10 @@ const useMirror = configArg['use-mirror'] || config.useMirror
 // llvm
 if (configArg['get-llvm-tag']) {
     console.log(targetConfig.llvm.tag);
+    exit(0);
+}
+if (configArg['get-llvm-commit']) {
+    console.log(targetConfig.llvm.commit);
     exit(0);
 }
 if (configArg['get-llvm-version']) {

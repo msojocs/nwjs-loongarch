@@ -65,6 +65,7 @@ fi
 # build
 if [ $CURRENT_STEP == $STEP_BUILD_PREPARE_SUCCESS ];then
   "$tools_dir/build-nwjs.sh"
+  # exit 1
   step_switch $STEP_BUILD_SUCCESS
 fi
 

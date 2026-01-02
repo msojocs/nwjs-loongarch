@@ -1,0 +1,28 @@
+diff --git BUILD.gn BUILD.gn
+index 5bbc5b79a2..1b17c6cabe 100644
+--- BUILD.gn
++++ BUILD.gn
+@@ -446,6 +446,10 @@ config("common_config") {
+     defines += [ "WEBRTC_HAS_NEON" ]
+   }
+ 
++  if (current_cpu == "loong64") {
++    defines += [ "WEBRTC_ARCH_LOONG64" ]
++  }
++
+   if (current_cpu == "arm") {
+     defines += [ "WEBRTC_ARCH_ARM" ]
+     if (arm_version >= 7) {
+diff --git rtc_base/platform_thread_types.cc rtc_base/platform_thread_types.cc
+index 20bf4afc44..b1ff42a05e 100644
+--- rtc_base/platform_thread_types.cc
++++ rtc_base/platform_thread_types.cc
+@@ -16,7 +16,7 @@
+ #include <sys/prctl.h>
+ #include <sys/syscall.h>
+ 
+-#if !defined(WEBRTC_ARCH_ARM) && !defined(WEBRTC_ARCH_ARM64)
++#if !defined(WEBRTC_ARCH_ARM) && !defined(WEBRTC_ARCH_ARM64) && !defined(WEBRTC_ARCH_LOONG64)
+ #include <asm/unistd_64.h>
+ #endif
+ #endif
