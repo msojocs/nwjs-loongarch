@@ -7,7 +7,7 @@ docker run --rm --privileged loongcr.lcpu.dev/multiarch/archlinux --reset -p yes
 if [ "$(docker ps -a | grep loongarchlinux-test)" ]; then
     docker start loongarchlinux-test
     cd $root_dir/output/dist_nwjs
-    version="0.91.1"
+    version="0.92.1"
     tar -zxf nwjs-sdk-v$version-linux-loong64.tar.gz
     docker exec -it loongarchlinux-test /workspace/output/dist_nwjs/nwjs-sdk-v$version-linux-loong64/nw --disable-gpu --no-sandbox
 else

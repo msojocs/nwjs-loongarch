@@ -1,3 +1,16 @@
+diff --git base/system/sys_info.cc base/system/sys_info.cc
+index b74d6550715d..1ebbbd70cefc 100644
+--- base/system/sys_info.cc
++++ base/system/sys_info.cc
+@@ -255,6 +255,8 @@ std::string SysInfo::ProcessCPUArchitecture() {
+   return "ARM_64";
+ #elif defined(ARCH_CPU_RISCV64)
+   return "RISCV_64";
++#elif defined(ARCH_CPU_LOONGARCH64)
++  return "LOONGARCH_64";
+ #else
+   return std::string();
+ #endif
 diff --git build/config/clang/BUILD.gn build/config/clang/BUILD.gn
 index fcca59b0f0bf..589c01b5132f 100644
 --- build/config/clang/BUILD.gn
@@ -284,6 +297,34 @@ index f072f30389e7..5bf99b689b63 100644
  }
  
  void AppUninstallDialogView::OnWidgetInitialized() {
+diff --git components/variations/proto/study.proto components/variations/proto/study.proto
+index 7ef5eb238e1a..e4dfc5ebe5ed 100644
+--- components/variations/proto/study.proto
++++ components/variations/proto/study.proto
+@@ -262,6 +262,9 @@ message Study {
+     // A Mac-only value, indicating an x86-64 binary running on an arm64 host
+     // via "Rosetta 2" binary translation.
+     TRANSLATED_X86_64 = 4;
++    
++    // reference: https://github.com/lcpu-club/loongarch-packages/blob/b0c12b453e6b827d0cb4be5bae9df41314ca420a/electron33/components-variations-add-loong64.patch
++    LOONGARCH64 = 5;
+   }
+ 
+   // Enum to pass as optional bool.
+diff --git components/variations/service/variations_field_trial_creator_base.cc components/variations/service/variations_field_trial_creator_base.cc
+index d97f5f584a8a..fbf330bca11e 100644
+--- components/variations/service/variations_field_trial_creator_base.cc
++++ components/variations/service/variations_field_trial_creator_base.cc
+@@ -120,6 +120,9 @@ Study::CpuArchitecture GetCurrentCpuArchitecture() {
+     }
+     return Study::X86_64;
+   }
++  if (process_arch == "LOONGARCH_64") {
++    return Study::LOONGARCH64;
++  }
+   NOTREACHED_IN_MIGRATION();
+   return Study::X86_64;
+ }
 diff --git extensions/common/api/runtime.json extensions/common/api/runtime.json
 index 8de99c14106a..e4d539163b8f 100644
 --- extensions/common/api/runtime.json

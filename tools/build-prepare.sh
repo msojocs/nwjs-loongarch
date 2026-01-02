@@ -3,6 +3,7 @@ set -ex
 
 root_dir=$(cd `dirname $0`/.. && pwd -P)
 source "$root_dir/tools/common/log.sh"
+source "$root_dir/tools/common/ccache.sh"
 
 source_dir="$root_dir/source-code"
 src_dir="$source_dir/nwjs/src"
@@ -33,7 +34,7 @@ cd "$src_dir"
 #   ln -s $src_dir/out out
 # fi
 
-./buildtools/linux64/gn gen out/nw --args="clang_use_chrome_plugins=false treat_warnings_as_errors=false dcheck_always_on=false clang_base_path=\"$llvm_dir\" is_debug=false is_component_build=false is_component_ffmpeg=true target_cpu=\"loong64\" use_sysroot=false $nw_gen_arg"
+./buildtools/linux64/gn gen out/nw --args="clang_use_chrome_plugins=false treat_warnings_as_errors=false dcheck_always_on=false clang_base_path=\"$llvm_dir\" is_debug=false is_component_build=false is_component_ffmpeg=true target_cpu=\"loong64\" use_sysroot=false cc_wrapper=\"env CCACHE_SLOPPINESS=time_macros ccache\" $nw_gen_arg"
 
 # https://nwjs.readthedocs.io/en/latest/For%20Developers/Building%20NW.js/
 notice "start to prepare gyp"

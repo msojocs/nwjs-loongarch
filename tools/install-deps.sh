@@ -33,7 +33,7 @@ notice "Install packages for nwjs"
 sudo apt install -y \
 libpango1.0-dev \
 libdbus-1-dev \
-libx11-xcb-dev \
+libx11-xcb-dev
 # python
 # xz-utils \
 # curl \
@@ -45,4 +45,4 @@ libx11-xcb-dev \
 # libgbm-dev \
 # gperf \
 # libkrb5-dev
-sudo apt install -y gcc-multilib g++-multilib
+sudo apt install -y gcc-multilib g++-multilib ccache
