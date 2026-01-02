@@ -1,15 +1,3 @@
-diff --git .gitignore .gitignore
-index 3125d4ac3a34..387da62ee56e 100644
---- .gitignore
-+++ .gitignore
-@@ -89,6 +89,7 @@ vs-chromium-project.txt
- /MODULE.bazel
- /MODULE.bazel.lock
- 
-+/out
- /_out
- /android_emulator_sdk
- /ash/ash_unittests_run.xml
 diff --git base/process/launch.h base/process/launch.h
 index 009d75093c78..d570b93740cd 100644
 --- base/process/launch.h
@@ -266,20 +254,6 @@ index 673f106c1f42..f9464e50009e 100644
          ]
          }
  
-diff --git chrome/browser/BUILD.gn chrome/browser/BUILD.gn
-index 88be11df7ada..5be6c8648532 100644
---- chrome/browser/BUILD.gn
-+++ chrome/browser/BUILD.gn
-@@ -4130,6 +4130,9 @@ static_library("browser") {
-       "support_tool/system_log_source_data_collector_adaptor.h",
-       "tab_contents/form_interaction_tab_helper.cc",
-       "tab_contents/form_interaction_tab_helper.h",
-+      "translate/chrome_translate_client.cc",
-+      "translate/translate_ranker_factory.cc",
-+      "translate/translate_service.cc",
-       "upgrade_detector/build_state.cc",
-       "upgrade_detector/build_state.h",
-       "upgrade_detector/upgrade_detector.cc",
 diff --git chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc
 index 563d2383fcb2..3e5928c9ebdb 100644
 --- chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc
@@ -320,19 +294,6 @@ index 93cb83f79c89..1e13f09cd22d 100644
  }
  
  void AppUninstallDialogView::OnWidgetInitialized() {
-diff --git chrome/common/logging_chrome.cc chrome/common/logging_chrome.cc
-index a521a9fed6d7..f3d38f5dbd0b 100644
---- chrome/common/logging_chrome.cc
-+++ chrome/common/logging_chrome.cc
-@@ -21,7 +21,7 @@
- #define IPC_LOG_TABLE_ADD_ENTRY(msg_id, logger) \
-   content::RegisterIPCLogger(msg_id, logger)
- #include "chrome/common/all_messages.h"
--#include "extensions/common/extension_messages.h"
-+// #include "extensions/common/extension_messages.h"
- #endif
- 
- #if BUILDFLAG(IS_WIN)
 diff --git components/variations/proto/study.proto components/variations/proto/study.proto
 index 7ef5eb238e1a..e4dfc5ebe5ed 100644
 --- components/variations/proto/study.proto
@@ -1253,10 +1214,10 @@ index 438147b4018b..c7f0f82f7d44 100644
  
 diff --git sandbox/linux/system_headers/loong64_linux_syscalls.h sandbox/linux/system_headers/loong64_linux_syscalls.h
 new file mode 100644
-index 000000000000..2153ea28150c
+index 000000000000..db0e15af4aa5
 --- /dev/null
 +++ sandbox/linux/system_headers/loong64_linux_syscalls.h
-@@ -0,0 +1,1202 @@
+@@ -0,0 +1,1262 @@
 +// Copyright 2022 The Chromium Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style license that can be
 +// found in the LICENSE file.
@@ -2454,12 +2415,71 @@ index 000000000000..2153ea28150c
 +#define __NR_landlock_restrict_self 446
 +#endif
 +
++#if !defined(__NR_memfd_secret)
++#define __NR_memfd_secret 447
++#endif
++
++#if !defined(__NR_process_mrelease)
++#define __NR_process_mrelease 448
++#endif
++
++#if !defined(__NR_futex_waitv)
++#define __NR_futex_waitv 449
++#endif
++
++#if !defined(__NR_set_mempolicy_home_node)
++#define __NR_set_mempolicy_home_node 450
++#endif
++
++#if !defined(__NR_cachestat)
++#define __NR_cachestat 451
++#endif
++
++#if !defined(__NR_fchmodat2)
++#define __NR_fchmodat2 452
++#endif
++
++#if !defined(__NR_map_shadow_stack)
++#define __NR_map_shadow_stack 453
++#endif
++
++#if !defined(__NR_futex_wake)
++#define __NR_futex_wake 454
++#endif
++
++#if !defined(__NR_futex_wait)
++#define __NR_futex_wait 455
++#endif
++
++#if !defined(__NR_futex_requeue)
++#define __NR_futex_requeue 456
++#endif
++
++#if !defined(__NR_statmount)
++#define __NR_statmount 457
++#endif
++
++#if !defined(__NR_listmount)
++#define __NR_listmount 458
++#endif
++
++#if !defined(__NR_lsm_get_self_attr)
++#define __NR_lsm_get_self_attr 459
++#endif
++
++#if !defined(__NR_lsm_set_self_attr)
++#define __NR_lsm_set_self_attr 460
++#endif
++
++#if !defined(__NR_lsm_list_modules)
++#define __NR_lsm_list_modules 461
++#endif
++
 +#if !defined(__NR_mseal)
 +#define __NR_mseal 462
 +#endif
 +
 +#endif  // SANDBOX_LINUX_SYSTEM_HEADERS_LOONG64_LINUX_SYSCALLS_H_
-\ No newline at end of file
 diff --git sandbox/policy/linux/bpf_cros_amd_gpu_policy_linux.cc sandbox/policy/linux/bpf_cros_amd_gpu_policy_linux.cc
 index df2567f74981..42275afc1dc1 100644
 --- sandbox/policy/linux/bpf_cros_amd_gpu_policy_linux.cc
@@ -2519,18 +2539,6 @@ index 6a64ed38043e..98cbff569e78 100644
          .Else(handle_via_broker);
    } else {
      return handle_via_broker;
-diff --git services/cert_verifier/cert_net_url_loader/BUILD.gn services/cert_verifier/cert_net_url_loader/BUILD.gn
-index ffc6bdc4ab70..d1c4f7be330f 100644
---- services/cert_verifier/cert_net_url_loader/BUILD.gn
-+++ services/cert_verifier/cert_net_url_loader/BUILD.gn
-@@ -15,6 +15,7 @@ component("cert_net_url_loader") {
-     "//base",
-     "//mojo/public/cpp/bindings",
-     "//net",
-+    "//services/cert_verifier/public/mojom",
-     "//services/network/public/cpp",
-     "//services/network/public/mojom",
-   ]
 diff --git services/tracing/public/cpp/perfetto/shared_memory.cc services/tracing/public/cpp/perfetto/shared_memory.cc
 index 81258946d320..b85064adfa38 100644
 --- services/tracing/public/cpp/perfetto/shared_memory.cc
@@ -2545,7 +2553,7 @@ index 81258946d320..b85064adfa38 100644
  }
  
 diff --git services/tracing/public/cpp/perfetto/shared_memory.h services/tracing/public/cpp/perfetto/shared_memory.h
-index 34397639c059..feba3a3d2754 100644
+index 34397639c059..161c12819351 100644
 --- services/tracing/public/cpp/perfetto/shared_memory.h
 +++ services/tracing/public/cpp/perfetto/shared_memory.h
 @@ -40,7 +40,7 @@ class COMPONENT_EXPORT(TRACING_CPP) ChromeBaseSharedMemory
@@ -2553,7 +2561,7 @@ index 34397639c059..feba3a3d2754 100644
    // perfetto::SharedMemory implementation. Called internally by Perfetto
    // classes.
 -  void* start() const override;
-+    const void* start() const override;
++  const void* start() const override;
    size_t size() const override;
  
   private:

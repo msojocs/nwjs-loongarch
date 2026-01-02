@@ -1,5 +1,5 @@
 {
-    "buildTarget": "nw92",
+    "buildTarget": "nw94",
     "useMirror": true,
     "buildConfig": {
         "nw80": {
@@ -210,7 +210,7 @@
                 "mirror": "http://127.0.0.1:3000/msojocs/official-nw.js.git",
                 "checkoutTarget": "nw94",
                 "genArg": "",
-                "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
+                "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 build_type=Release_x64",
                 "gypMethod": "v2"
             }
         },

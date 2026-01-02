@@ -1,5 +1,5 @@
 diff --git common.gypi common.gypi
-index d0adc6eef1..3e12cc793a 100644
+index a45cc571c6..a147f0bc7a 100644
 --- common.gypi
 +++ common.gypi
 @@ -4,8 +4,8 @@
@@ -23,7 +23,7 @@ index d0adc6eef1..3e12cc793a 100644
        ['OS=="mac"', {
          'obj_dir%': '<(PRODUCT_DIR)/obj.target',
          #'v8_base': '<(PRODUCT_DIR)/libv8_snapshot.a',
-@@ -756,6 +759,10 @@
+@@ -750,6 +753,10 @@
                  'cflags': [ '-m64', '-march=z196' ],
                  'ldflags': [ '-m64', '-march=z196' ],
                }],
@@ -59,20 +59,3 @@ index 7e0c96db5c..87ee39aeee 100644
                   'uv_library': 'static_library',
                   'uv_parent_path': '/deps/uv/',
                   'uv_use_dtrace': 'false',
-diff --git deps/uv/include/uv/unix.h deps/uv/include/uv/unix.h
-index 538f98b6c5..2dd310e8ee 100644
---- deps/uv/include/uv/unix.h
-+++ deps/uv/include/uv/unix.h
-@@ -43,10 +43,10 @@
- #include <pthread.h>
- #include <signal.h>
- 
--#include "uv/threadpool.h"
-+#include "threadpool.h"
- 
- #if defined(__linux__)
--# include "uv/linux.h"
-+# include "linux.h"
- #elif defined (__MVS__)
- # include "uv/os390.h"
- #elif defined(__PASE__)  /* __PASE__ and _AIX are both defined on IBM i */

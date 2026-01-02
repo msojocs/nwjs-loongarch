@@ -28,10 +28,5 @@
         "name": "loongarch64_vector_ffmpeg_for_nwjs",
         "path": "third_party/ffmpeg",
         "disabled": false
-    },
-    {
-        "name": "loongarch64_fix_v8",
-        "patch": "v8",
-        "disabled": false
     }
 ]
