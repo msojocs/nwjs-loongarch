@@ -66,8 +66,9 @@ if [ ! -d "$nwjs_dir/src/third_party/node-nw" ];then
   cd "$nwjs_dir"
   git clone $node_repo src/third_party/node-nw
 else
-  cd "$nwjs_dir/src/third_party/node-nw" && git checkout $node_checkout_target --force
+  cd "$nwjs_dir/src/third_party/node-nw"
 fi
+git checkout $node_checkout_target --force
 
 notice "pull nw with target: $nw_checkout_target"
 if [ ! -d "$nwjs_dir/src/content/nw" ];then
@@ -78,8 +79,8 @@ else
   git remote set-url origin "$nw_repo"
   git fetch --all
   # git pull origin $nw_checkout_target
-  git checkout origin/$nw_checkout_target --force
 fi
+git checkout $nw_checkout_target --force
 
 if [ -f "$nwjs_dir/src/README.md" ];then
   cd "$nwjs_dir/src"

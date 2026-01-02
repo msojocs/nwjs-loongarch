@@ -41,7 +41,7 @@ notice "start to prepare gyp"
 # 参考 http://buildbot-master.nwjs.io:8010/builders/nw83_linux64/builds/0/steps/node_gyp/logs/stdio
 export GYP_CHROMIUM_NO_ACTION=0
 export GYP_CROSSCOMPILE=1
-export GYP_DEFINES="building_nw=1 clang=1 target_arch=loong64 remove_webcore_debug_symbols=1 clang_base_dir=$llvm_dir $nw_gyp_arg"
+export GYP_DEFINES="building_nw=1 clang=1 target_arch=loong64 remove_webcore_debug_symbols=1 clang_base_dir=$llvm_dir buildtype=Official $nw_gyp_arg"
 export GYP_GENERATORS=ninja
 export GYP_GENERATOR_FLAGS=output_dir=out
 export PYTHONPATH=${src_dir}/third_party/node-nw/tools/v8_gypfiles
