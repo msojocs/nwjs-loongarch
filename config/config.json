@@ -1,5 +1,5 @@
 {
-    "buildTarget": "nw106",
+    "buildTarget": "nw89",
     "useMirror": true,
     "buildConfig": {
         "nw80": {
@@ -34,6 +34,41 @@
                 "repo": "https://github.com/loongson/nw.js.git",
                 "mirror": "http://127.0.0.1:3000/msojocs/nw.js.git",
                 "checkoutTarget": "nw80"
+            }
+        },
+        "nw89": {
+            "llvm": {
+                "tag": "llvmorg-19.1.7",
+                "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
+                "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
+                "repo": "https://github.com/llvm/llvm-project.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+            },
+            "binutils": {
+                "repo": "https://sourceware.org/git/binutils-gdb.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/binutils-gdb.git"
+            },
+            "chromium": {
+                "repo": "https://github.com/nwjs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "checkoutTarget": "nw89"
+            },
+            "v8": {
+                "repo": "https://github.com/nwjs/v8.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "checkoutTarget": "nw89"
+            },
+            "node": {
+                "repo": "https://github.com/nwjs/node.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "checkoutTarget": "nw89"
+            },
+            "nw": {
+                "genArg": "",
+                "repo": "https://github.com/loongson/nw.js.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/nw.js.git",
+                "checkoutTarget": "nw89",
+                "gypMethod": "v2"
             }
         },
         "nw90": {

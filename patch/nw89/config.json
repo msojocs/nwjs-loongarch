@@ -1,0 +1,10 @@
+[
+    {
+        "name": "loongarch64_src",
+        "path": ""
+    },
+    {
+        "name": "loongarch64_perfetto",
+        "path": "third_party/perfetto"
+    }
+]

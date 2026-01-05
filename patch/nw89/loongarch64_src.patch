@@ -1,0 +1,71 @@
+diff --git build/config/linux/libffi/BUILD.gn build/config/linux/libffi/BUILD.gn
+index 6e45f4c22615..528a65156b60 100644
+--- build/config/linux/libffi/BUILD.gn
++++ build/config/linux/libffi/BUILD.gn
+@@ -19,6 +19,7 @@ if (use_system_libffi) {
+   }
+ } else {
+   config("libffi") {
+-    libs = [ "ffi_pic" ]
++    # libs = [ "ffi_pic" ]
++    libs = [ "ffi" ]
+   }
+ }
+diff --git third_party/blink/renderer/platform/wtf/hash_table.h third_party/blink/renderer/platform/wtf/hash_table.h
+index 4241c6453589..d5dfd957ad77 100644
+--- third_party/blink/renderer/platform/wtf/hash_table.h
++++ third_party/blink/renderer/platform/wtf/hash_table.h
+@@ -4,7 +4,7 @@
+  * Copyright (C) 2008 David Levin <levin@chromium.org>
+  *
+  * This library is free software; you can redistribute it and/or
+- * modify it under the terms of the GNU Library General Public
++  Allocator::BackingWriteBarrier(&table_);
+  * License as published by the Free Software Foundation; either
+  * version 2 of the License, or (at your option) any later version.
+  *
+@@ -1639,7 +1639,7 @@ HashTable<Key, Value, Extractor, Traits, KeyTraits, Allocator>::ExpandBuffer(
+     }
+   }
+   table_ = temporary_table;
+-  Allocator::template BackingWriteBarrier(&table_);
++  Allocator::BackingWriteBarrier(&table_);
+ 
+   HashTableBucketInitializer<Traits, Allocator, Value>::InitializeTable(
+       original_table, new_table_size);
+@@ -1693,7 +1693,7 @@ Value* HashTable<Key, Value, Extractor, Traits, KeyTraits, Allocator>::RehashTo(
+   // This swaps the newly allocated buffer with the current one. The store to
+   // the current table has to be atomic to prevent races with concurrent marker.
+   AsAtomicPtr(&table_)->store(new_hash_table.table_, std::memory_order_relaxed);
+-  Allocator::template BackingWriteBarrier(&table_);
++  Allocator::BackingWriteBarrier(&table_);
+   table_size_ = new_table_size;
+ 
+   new_hash_table.table_ = old_table;
+@@ -1845,8 +1845,8 @@ void HashTable<Key, Value, Extractor, Traits, KeyTraits, Allocator>::swap(
+   // on the mutator thread, which is also the only one that writes to them, so
+   // there is *no* risk of data races when reading.
+   AtomicWriteSwap(table_, other.table_);
+-  Allocator::template BackingWriteBarrier(&table_);
+-  Allocator::template BackingWriteBarrier(&other.table_);
++  Allocator::BackingWriteBarrier(&table_);
++  Allocator::BackingWriteBarrier(&other.table_);
+   if (IsWeak<ValueType>::value) {
+     // Weak processing is omitted when no backing store is present. In case such
+     // an empty table is later on used it needs to be strongified.
+diff --git third_party/libpng/BUILD.gn third_party/libpng/BUILD.gn
+index 81648e3b2a81..99d6a1b57909 100644
+--- third_party/libpng/BUILD.gn
++++ third_party/libpng/BUILD.gn
+@@ -91,6 +91,11 @@ source_set("libpng_sources") {
+       "mips/filter_msa_intrinsics.c",
+       "mips/mips_init.c",
+     ]
++  } else if (current_cpu == "loong64" || current_cpu == "loongarch64") {
++    sources += [
++      "loongarch/loongarch_lsx_init.c",
++      "loongarch/filter_lsx_intrinsics.c",
++    ]
+   }
+ 
+   configs -= [ "//build/config/compiler:chromium_code" ]

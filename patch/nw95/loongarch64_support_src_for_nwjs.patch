@@ -137,7 +137,7 @@ index 60856e609d08..af0b9d9703c4 100644
  } else if (current_cpu == "riscv64") {
    rust_target_arch = "riscv64"
 +} else if (current_cpu == "loong64") {
-+  rust_target_arch = "loong64"
++  rust_target_arch = "loongarch64"
  }
  
  assert(!toolchain_has_rust || rust_target_arch != "")

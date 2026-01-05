@@ -100,3 +100,5 @@ else                                              # 超过5秒
     echo "Timeout"
 fi
 gclient sync --with_branch_heads
+
+node "$root_dir/tools/patch-apply.js" "$nw_version" "stage"

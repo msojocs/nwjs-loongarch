@@ -10,13 +10,13 @@ container_name="loongarchlinux-test"
 if [ "$(docker ps -a | grep $container_name)" ]; then
     docker start $container_name
     cd $root_dir/output/dist_nwjs
-    version="0.93.0"
+    version="0.94.1"
     name="nwjs-sdk-v$version-linux-loong64"
     if [ ! -d "$name" ]; then
         tar -zxf $name.tar.gz
     fi
-    docker exec -it $container_name bash -c "RUST_BACKTRACE=1 /workspace/source-code/nwjs/src/out/nw/nw --single-process --disable-gpu --no-sandbox --no-zygote"
-    # docker exec -it $container_name /workspace/output/dist_nwjs/$name/nw --single-process --disable-gpu
+    docker exec -it $container_name bash -c "ls -al ~/.config && rm -rf ~/.config/* && /workspace/source-code/nwjs/src/out/nw/nw --disable-gpu"
+    # docker exec -it $container_name /workspace/output/dist_nwjs/$name/nw --disable-gpu
     # gdb --args /workspace/output/dist_nwjs/nwjs-v0.94.1-linux-loong64/nw --disable-seccomp-sandbox http://google.com
 else
     docker run -it \
