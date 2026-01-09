@@ -1,6 +1,7 @@
 {
-    "buildTarget": "nw88",
+    "buildTarget": "nw94",
     "useMirror": true,
+    "debugBuild": false,
     "buildConfig": {
         "nw80": {
             "llvm": {

@@ -1,3 +1,16 @@
+diff --git base/BUILD.gn base/BUILD.gn
+index cf595f1f6955..d73bd778a0ed 100644
+--- base/BUILD.gn
++++ base/BUILD.gn
+@@ -110,7 +110,7 @@ if (is_fuchsia) {
+ # TODO(crbug.com/40811643): Drop toolchain_has_rust and move the C++ parser into
+ # components/nacl to just run in-process there. Don't compile base::JSONReader
+ # on NaCL at all.
+-build_rust_json_reader = toolchain_has_rust && enable_rust_json
++build_rust_json_reader = toolchain_has_rust && enable_rust_json && target_cpu != "loong64"
+ 
+ # Rust to C++ type conversions. Also can not be enabled while NaCl depends on
+ # //base.
 diff --git base/process/launch.h base/process/launch.h
 index 009d75093c78..d570b93740cd 100644
 --- base/process/launch.h
@@ -95,7 +108,7 @@ index 9a95ec915137..a9dc9d28dbeb 100644
    }
  }
 diff --git build/config/rust.gni build/config/rust.gni
-index 5b7807a1b84b..6c7ba2466299 100644
+index 5b7807a1b84b..e3db604b9448 100644
 --- build/config/rust.gni
 +++ build/config/rust.gni
 @@ -223,6 +223,9 @@ if (is_linux || is_chromeos) {
@@ -220,6 +233,20 @@ index f146ea68bc72..3bfcec5b1e4c 100644
 +        "URL": "https://commondatastorage.googleapis.com/chrome-linux-sysroot"
      }
  }
+diff --git build/rust/rust_target.gni build/rust/rust_target.gni
+index b8b0e3a0ea1f..6969c9c485cc 100644
+--- build/rust/rust_target.gni
++++ build/rust/rust_target.gni
+@@ -399,6 +399,9 @@ template("rust_target") {
+       if (_rustc_metadata != "") {
+         rustflags += [ "-Cmetadata=${_rustc_metadata}" ]
+       }
++      if (current_cpu == "loong64") {
++        rustflags += [ "-Ccode-model=medium" ]
++      }
+       rustenv = _rustenv
+ 
+       if (_generate_crate_root) {
 diff --git build/vs_toolchain.py build/vs_toolchain.py
 index f3a6fc7deec4..45623cbee3be 100755
 --- build/vs_toolchain.py
@@ -3697,10 +3724,3 @@ index 245959e90801..b3f95471fd27 100644
 +       target_cpu == "arm64" || target_cpu == "mipsel" || target_cpu == "loong64" ||
         target_cpu == "mips64el" || target_cpu == "riscv64")
  }
-diff --git v8 v8
-index e38771cb283b..dc5ca041bdf6 160000
---- v8
-+++ v8
-@@ -1 +1 @@
--Subproject commit e38771cb283b9689683c5ac0b5831dd89f8ec690
-+Subproject commit dc5ca041bdf6dfbdedc33cf2e6091968fe1ad7ac

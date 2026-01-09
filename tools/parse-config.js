@@ -75,6 +75,9 @@ const options = {
     '--get-binutils-tag': {
         type: 'boolean',
     },
+    '--get-build-mode': {
+        type: 'boolean',
+    },
 }
 const configArg = {
     target: config.buildTarget,
@@ -198,5 +201,11 @@ if (configArg['get-binutils-repo']) {
 }
 if (configArg['get-binutils-tag']) {
     console.log(targetConfig.binutils.tag);
+    exit(0);
+}
+
+// build mode
+if (configArg['get-build-mode']) {
+    console.log(config.debugBuild ? "debug" : "release");
     exit(0);
 }
