@@ -35,7 +35,9 @@ for (const patchItem of patchConfig) {
     console.log(`Applying patch: ${patchItem.name}`);
     try {
       console.info(`Changing directory to: ${currentDir}`);
-      // TODO: 检查 -> 撤销已应用的补丁（工作区）
+      // 撤销工作区的更改，确保干净的状态
+      execSync(`git clean -fd`, { stdio: 'inherit', cwd: currentDir });
+      execSync(`git restore .`, { stdio: 'inherit', cwd: currentDir });
       execSync(`git apply -p0 ${patchPath}`, { stdio: 'inherit', cwd: currentDir });
       console.log(`Successfully applied patch: ${patchItem.name}`);
     } catch (error) {

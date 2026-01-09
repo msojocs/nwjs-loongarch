@@ -34,17 +34,21 @@ cd "$src_dir"
 # if [ ! -s "out" ];then
 #   ln -s $src_dir/out out
 # fi
-build_mode_flag="is_debug=false"
+build_mode_flags="is_debug=false is_component_build=false"
+gyp_flags="remove_webcore_debug_symbols=1"
+build_dir="Release"
 if [ "$build_mode" == "debug" ];then
-  build_mode_flag="is_debug=true"
+  build_mode_flags="is_debug=true is_component_build=true"
+  gyp_flags="remove_webcore_debug_symbols=0"
+  build_dir="Debug"
 fi
-./buildtools/linux64/gn gen out/nw --args="clang_use_chrome_plugins=false treat_warnings_as_errors=false dcheck_always_on=false clang_base_path=\"$llvm_dir\" $build_mode_flag is_component_build=false is_component_ffmpeg=true target_cpu=\"loong64\" use_sysroot=false cc_wrapper=\"env CCACHE_SLOPPINESS=time_macros ccache\" $nw_gen_arg"
+./buildtools/linux64/gn gen out/nw --args="clang_use_chrome_plugins=false treat_warnings_as_errors=false dcheck_always_on=false clang_base_path=\"$llvm_dir\" $build_mode_flags is_component_ffmpeg=true target_cpu=\"loong64\" use_sysroot=false cc_wrapper=\"env CCACHE_SLOPPINESS=time_macros ccache\" $nw_gen_arg"
 # https://nwjs.readthedocs.io/en/latest/For%20Developers/Building%20NW.js/
 notice "start to prepare gyp"
 # 参考 http://buildbot-master.nwjs.io:8010/builders/nw83_linux64/builds/0/steps/node_gyp/logs/stdio
 export GYP_CHROMIUM_NO_ACTION=0
 export GYP_CROSSCOMPILE=1
-export GYP_DEFINES="building_nw=1 clang=1 target_arch=loong64 remove_webcore_debug_symbols=1 clang_base_dir=$llvm_dir buildtype=Official $nw_gyp_arg"
+export GYP_DEFINES="building_nw=1 clang=1 target_arch=loong64 $gyp_flags clang_base_dir=$llvm_dir buildtype=Official $nw_gyp_arg"
 export GYP_GENERATORS=ninja
 export GYP_GENERATOR_FLAGS=output_dir=out
 export PYTHONPATH=${src_dir}/third_party/node-nw/tools/v8_gypfiles
@@ -59,7 +63,7 @@ if [ ! -d "$src_dir/out/nw" ];then
   fail "out/nw 文件夹不存在"
   exit 1;
 fi
-if [ ! -d "$src_dir/out/Release" ];then
-  fail "out/Release 文件夹不存在"
+if [ ! -d "$src_dir/out/$build_dir" ];then
+  fail "out/$build_dir 文件夹不存在"
   exit 1;
 fi

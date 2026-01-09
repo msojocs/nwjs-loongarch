@@ -19,6 +19,7 @@ source_dir="$root_dir/source-code"
 ###/usr/bin/ld: unrecognised emulation mode: elf64loongarch####
 ###############################################################
 llvm_version=$(node $root_dir/tools/parse-config.js --get-llvm-version $@)
+build_mode=$(node $root_dir/tools/parse-config.js --get-build-mode $@)
 export PATH="$output_dir/cmake-linux-x86_64/bin:$output_dir/llvm-$llvm_version/bin:$output_dir/toolchain/bin:$output_dir/depot_tools:$PATH"
 src_dir="$source_dir/nwjs/src"
 max_thread=$(($(cat /proc/cpuinfo| grep "processor"| wc -l) - 6))
@@ -30,7 +31,12 @@ notice "Start to build nwjs"
 ninja -C out/nw nwjs -j$max_thread
 
 notice "Start to build node"
-ninja -C out/Release node
+if [ "$build_mode" == "debug" ];then
+  build_dir="Debug"
+else
+  build_dir="Release"
+fi
+ninja -C out/$build_dir node
 ninja -C out/nw copy_node
 
 notice "Start to build components"
