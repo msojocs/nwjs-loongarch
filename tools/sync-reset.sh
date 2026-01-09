@@ -16,6 +16,7 @@ root_dir=$(cd `dirname $0`/.. && pwd -P)
 source_dir="$root_dir/source-code"
 nwjs_dir="$source_dir/nwjs"
 dirs=("src"
+"src/net/third_party/quiche/src"
 "src/third_party/boringssl/src"
 "src/third_party/devtools-frontend/src"
 "src/third_party/ffmpeg"
