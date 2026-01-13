@@ -38,7 +38,7 @@ build_mode_flags="is_debug=false is_component_build=false"
 gyp_flags="remove_webcore_debug_symbols=1"
 build_dir="Release"
 if [ "$build_mode" == "debug" ];then
-  build_mode_flags="is_debug=true is_component_build=true"
+  build_mode_flags="is_debug=true is_component_build=false symbol_level=0"
   gyp_flags="remove_webcore_debug_symbols=0"
   build_dir="Debug"
 fi

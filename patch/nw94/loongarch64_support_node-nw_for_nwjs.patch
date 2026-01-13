@@ -1,5 +1,5 @@
 diff --git common.gypi common.gypi
-index ce5f532946..add4413fe0 100644
+index d0adc6eef1..4cb4faf109 100644
 --- common.gypi
 +++ common.gypi
 @@ -4,8 +4,8 @@
@@ -68,16 +68,16 @@ index 7e0c96db5c..87ee39aeee 100644
                   'uv_library': 'static_library',
                   'uv_parent_path': '/deps/uv/',
                   'uv_use_dtrace': 'false',
-diff --git deps/v8/BUILD.gn deps/v8/BUILD.gn
-index e2e0c16d97..4a7b69ec20 100644
---- deps/v8/BUILD.gn
-+++ deps/v8/BUILD.gn
-@@ -471,7 +471,7 @@ if (v8_enable_snapshot_native_code_counters == "") {
- }
+diff --git deps/v8/gni/v8.gni deps/v8/gni/v8.gni
+index b606c1b85b..01f0f31946 100644
+--- deps/v8/gni/v8.gni
++++ deps/v8/gni/v8.gni
+@@ -213,7 +213,7 @@ assert(!(v8_enable_webassembly && v8_enable_lite_mode),
+ 
  if (v8_enable_pointer_compression == "") {
    v8_enable_pointer_compression =
 -      v8_current_cpu == "arm64" || v8_current_cpu == "x64"
 +      v8_current_cpu == "arm64" || v8_current_cpu == "x64" || v8_current_cpu == "loong64"
  }
  
- # Toggle pointer compression for correctness fuzzing when building the
+ # The Wasm interpreter is currently supported only on arm64 and x64, on

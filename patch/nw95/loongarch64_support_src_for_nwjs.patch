@@ -119,7 +119,7 @@ index 9a95ec915137..a9dc9d28dbeb 100644
    }
  }
 diff --git build/config/rust.gni build/config/rust.gni
-index 60856e609d08..af0b9d9703c4 100644
+index 60856e609d08..141194588910 100644
 --- build/config/rust.gni
 +++ build/config/rust.gni
 @@ -200,6 +200,9 @@ if (is_linux || is_chromeos) {
@@ -208,7 +208,7 @@ index 000000000000..5f189950904c
 +../../../../sysroot
 \ No newline at end of file
 diff --git build/linux/sysroot_scripts/install-sysroot.py build/linux/sysroot_scripts/install-sysroot.py
-index abd58136efc8..cf86e6c7e7e8 100755
+index abd58136efc8..b41d75c4a9e6 100755
 --- build/linux/sysroot_scripts/install-sysroot.py
 +++ build/linux/sysroot_scripts/install-sysroot.py
 @@ -36,7 +36,7 @@ from urllib.request import urlopen
@@ -224,7 +224,7 @@ index abd58136efc8..cf86e6c7e7e8 100755
      "arm": "armhf",
      "mips": "mipsel",
      "mips64": "mips64el",
-++    "loong64": "loong64",
++    "loong64": "loong64",
  }
  
  DEFAULT_SYSROOTS_PATH = os.path.join(os.path.relpath(SCRIPT_DIR, SRC_DIR),
@@ -244,6 +244,20 @@ index f146ea68bc72..3bfcec5b1e4c 100644
 +        "URL": "https://commondatastorage.googleapis.com/chrome-linux-sysroot"
      }
  }
+diff --git build/rust/rust_target.gni build/rust/rust_target.gni
+index 1a2f96337d43..5450c592fd28 100644
+--- build/rust/rust_target.gni
++++ build/rust/rust_target.gni
+@@ -434,6 +434,9 @@ template("rust_target") {
+       if (_rustc_metadata != "") {
+         rustflags += [ "-Cmetadata=${_rustc_metadata}" ]
+       }
++      if (current_cpu == "loong64") {
++        rustflags += [ "-Ccode-model=medium" ]
++      }
+       rustenv = _rustenv
+ 
+       if (_generate_crate_root) {
 diff --git build/vs_toolchain.py build/vs_toolchain.py
 index f0b8bacf5736..7a8c2add1d6a 100755
 --- build/vs_toolchain.py
@@ -2438,6 +2452,66 @@ index 000000000000..2153ea28150c
 +#define __NR_landlock_restrict_self 446
 +#endif
 +
++#if !defined(__NR_memfd_secret)
++#define __NR_memfd_secret 447
++#endif
++
++#if !defined(__NR_process_mrelease)
++#define __NR_process_mrelease 448
++#endif
++
++#if !defined(__NR_futex_waitv)
++#define __NR_futex_waitv 449
++#endif
++
++#if !defined(__NR_set_mempolicy_home_node)
++#define __NR_set_mempolicy_home_node 450
++#endif
++
++#if !defined(__NR_cachestat)
++#define __NR_cachestat 451
++#endif
++
++#if !defined(__NR_fchmodat2)
++#define __NR_fchmodat2 452
++#endif
++
++#if !defined(__NR_map_shadow_stack)
++#define __NR_map_shadow_stack 453
++#endif
++
++#if !defined(__NR_futex_wake)
++#define __NR_futex_wake 454
++#endif
++
++#if !defined(__NR_futex_wait)
++#define __NR_futex_wait 455
++#endif
++
++#if !defined(__NR_futex_requeue)
++#define __NR_futex_requeue 456
++#endif
++
++#if !defined(__NR_statmount)
++#define __NR_statmount 457
++#endif
++
++#if !defined(__NR_listmount)
++#define __NR_listmount 458
++#endif
++
++#if !defined(__NR_lsm_get_self_attr)
++#define __NR_lsm_get_self_attr 459
++#endif
++
++#if !defined(__NR_lsm_set_self_attr)
++#define __NR_lsm_set_self_attr 460
++#endif
++
++#if !defined(__NR_lsm_list_modules)
++#define __NR_lsm_list_modules 461
++#endif
++
 +#if !defined(__NR_mseal)
 +#define __NR_mseal 462
 +#endif
@@ -3647,10 +3721,3 @@ index a548a4d97b61..66278c1b6519 100644
 +       target_cpu == "arm64" || target_cpu == "mipsel" || target_cpu == "loong64" ||
         target_cpu == "mips64el" || target_cpu == "riscv64")
  }
-diff --git v8 v8
-index e51f1d7dbd11..89fc90354bd5 160000
---- v8
-+++ v8
-@@ -1 +1 @@
--Subproject commit e51f1d7dbd113aa01ddfb30890c8a89b11fcd96c
-+Subproject commit 89fc90354bd59a7541754bf3055818245b19b493
