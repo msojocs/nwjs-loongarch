@@ -1,3 +1,16 @@
+diff --git base/features.cc base/features.cc
+index 6c64e3d8da33..bbb1de739420 100644
+--- base/features.cc
++++ base/features.cc
+@@ -44,7 +44,7 @@ BASE_FEATURE(kFeatureParamWithCache,
+ // introduces too much latency.
+ BASE_FEATURE(kUseRustJsonParser,
+              "UseRustJsonParser",
+-#if BUILDFLAG(IS_ANDROID)
++#if BUILDFLAG(IS_ANDROID) || defined(ARCH_CPU_LOONGARCH64)
+              FEATURE_DISABLED_BY_DEFAULT
+ #else
+              FEATURE_ENABLED_BY_DEFAULT
 diff --git base/metrics/histogram_macros_internal.h base/metrics/histogram_macros_internal.h
 index 9cdddf1a107f..e36e16b44e45 100644
 --- base/metrics/histogram_macros_internal.h
