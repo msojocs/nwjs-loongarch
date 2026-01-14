@@ -11,3 +11,17 @@ index 67dfeb0ec..dcb13614a 100644
  
      deps = [
        ":swiftshader_reactor_base",
+diff --git third_party/llvm-16.0/llvm/include/llvm/Support/AlignOf.h third_party/llvm-16.0/llvm/include/llvm/Support/AlignOf.h
+index a8c45785c..df69962ba 100644
+--- third_party/llvm-16.0/llvm/include/llvm/Support/AlignOf.h
++++ third_party/llvm-16.0/llvm/include/llvm/Support/AlignOf.h
+@@ -20,7 +20,8 @@ namespace llvm {
+ /// A suitably aligned and sized character array member which can hold elements
+ /// of any type.
+ template <typename T, typename... Ts> struct AlignedCharArrayUnion {
+-  alignas(Ts...) char buffer[std::max({sizeof(Ts)...})];
++  static constexpr std::size_t Align = std::max({alignof(T), alignof(Ts)...});
++  alignas(Align) char buffer[std::max({sizeof(T), sizeof(Ts)...})];
+ };
+ 
+ } // end namespace llvm
