@@ -1,0 +1,83 @@
+diff --git common.gypi common.gypi
+index 03504a36da..60a8a16457 100644
+--- common.gypi
++++ common.gypi
+@@ -4,8 +4,8 @@
+     'asan%': 0,
+     'ubsan%': 0,
+     'visibility%': 'hidden',          # V8's visibility setting
+-    'target_arch%': 'ia32',           # set v8's target architecture
+-    'host_arch%': 'ia32',             # set v8's host architecture
++    'target_arch%': 'loong64',           # set v8's target architecture
++    'host_arch%': 'x64',             # set v8's host architecture
+     'want_separate_host_toolset%': 1, # V8 should not build target and host
+     'library%': 'static_library',     # allow override to 'shared_library' for DLL/.so builds
+     'component%': 'static_library',   # NB. these names match with what V8 expects
+@@ -128,7 +128,7 @@
+         'obj_dir%': '<(PRODUCT_DIR)/obj.target',
+         #'v8_base': '<(PRODUCT_DIR)/obj.target/tools/v8_gypfiles/libv8_snapshot.a',
+       }],
+-      ['target_arch=="x64" or target_arch=="arm64"', {
++      ['target_arch=="x64" or target_arch=="arm64" or target_arch=="loong64"', {
+         'v8_enable_pointer_compression': 1,
+         'v8_enable_31bit_smis_on_64bit_arch': 1,
+       }],
+@@ -141,6 +141,9 @@
+       ['OS=="linux" and target_arch=="arm" and <(building_nw)==1', {
+         'sysroot': '<!(cd <(DEPTH) && pwd -P)/build/linux/debian_sid_arm-sysroot',
+       }],
++      ['OS=="linux" and target_arch=="loong64" and <(building_nw)==1', {
++        'sysroot': '<!(cd <(DEPTH) && pwd -P)/build/linux/debian_bullseye_loong64-sysroot',
++      }],
+       ['OS=="mac"', {
+         'obj_dir%': '<(PRODUCT_DIR)/obj.target',
+         #'v8_base': '<(PRODUCT_DIR)/libv8_snapshot.a',
+@@ -756,6 +759,10 @@
+                 'cflags': [ '-m64', '-march=z196' ],
+                 'ldflags': [ '-m64', '-march=z196' ],
+               }],
++              [ 'target_arch=="loong64" and OS=="linux"', {
++                'cflags': [ '--target=loongarch64-linux-gnu' ],
++                'ldflags': [ '--target=loongarch64-linux-gnu' ],
++              }],
+             ],
+           }],
+         ],
+diff --git config.gypi config.gypi
+index 7e0c96db5c..87ee39aeee 100644
+--- config.gypi
++++ config.gypi
+@@ -6,7 +6,7 @@
+                        'libraries': []},
+   'variables': { 'clang': 1,
+                  'gcc_version': 49,
+-                 'host_arch': 'x64',
++                 'host_arch': 'loong64',
+                  'icu_small': 'false',
+                  'node_install_npm': 'true',
+                  'node_prefix': '',
+@@ -26,9 +26,9 @@
+                  'node_use_mdb': 'false',
+                  'node_use_openssl': 'true',
+                  'node_use_perfctr': 'false',
+-                 'openssl_no_asm': 0,
++                 'openssl_no_asm': 1,
+                  'python': '/usr/bin/python',
+-                 'target_arch': 'x64',
++                 'target_arch': 'loong64',
+                  'uv_library': 'static_library',
+                  'uv_parent_path': '/deps/uv/',
+                  'uv_use_dtrace': 'false',
+diff --git deps/v8/gni/v8.gni deps/v8/gni/v8.gni
+index b606c1b85b..01f0f31946 100644
+--- deps/v8/gni/v8.gni
++++ deps/v8/gni/v8.gni
+@@ -213,7 +213,7 @@ assert(!(v8_enable_webassembly && v8_enable_lite_mode),
+ 
+ if (v8_enable_pointer_compression == "") {
+   v8_enable_pointer_compression =
+-      v8_current_cpu == "arm64" || v8_current_cpu == "x64"
++      v8_current_cpu == "arm64" || v8_current_cpu == "x64" || v8_current_cpu == "loong64"
+ }
+ 
+ # The Wasm interpreter is currently supported only on arm64 and x64, on

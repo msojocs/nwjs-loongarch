@@ -43,7 +43,7 @@ do
   target_dir="$nwjs_dir/$dir"
   if [ -d "$target_dir" ];then
     notice "clean: $target_dir"
-    cd $target_dir && git checkout . && git clean -xdf
+    cd $target_dir && git restore --staged . &&git checkout . && git clean -xdf
   else
     notice "skip: $target_dir"
   fi
