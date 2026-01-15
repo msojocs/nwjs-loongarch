@@ -1,5 +1,5 @@
 {
-    "buildTarget": "nw98",
+    "buildTarget": "nw99",
     "useMirror": true,
     "debugBuild": false,
     "buildConfig": {
@@ -424,6 +424,42 @@
                 "repo": "https://github.com/nwjs/nw.js.git",
                 "mirror": "http://127.0.0.1:3000/msojocs/official-nw.js.git",
                 "checkoutTarget": "nw-v0.98.2",
+                "genArg": "",
+                "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
+                "gypMethod": "v2"
+            }
+        },
+        "nw99": {
+            "llvm": {
+                "tag": "llvmorg-21.1.8",
+                "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
+                "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
+                "repo": "https://github.com/llvm/llvm-project.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+            },
+            "binutils": {
+                "repo": "https://sourceware.org/git/binutils-gdb.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/binutils-gdb.git"
+            },
+            "chromium": {
+                "repo": "https://github.com/nwjs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "checkoutTarget": "15f869993462b8bd0cf9828489a0a7b7c6bd6967"
+            },
+            "v8": {
+                "repo": "https://github.com/nwjs/v8.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "checkoutTarget": "8284e4ee099068ccfbbd3663f8d814c12ed7bc77"
+            },
+            "node": {
+                "repo": "https://github.com/nwjs/node.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "checkoutTarget": "9517d2b442af58cc3c14c73f0e8aff79f1b349dc"
+            },
+            "nw": {
+                "repo": "https://github.com/nwjs/nw.js.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/official-nw.js.git",
+                "checkoutTarget": "b2361d54d4b47093cac670c8013423a65e91c051",
                 "genArg": "",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
                 "gypMethod": "v2"
