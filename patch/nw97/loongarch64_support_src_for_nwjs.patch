@@ -346,6 +346,19 @@ index d4667897c428..aa704228f34e 100644
  }
  
  void AppUninstallDialogView::OnWidgetInitialized() {
+diff --git components/metrics/debug/metrics_internals_utils.cc components/metrics/debug/metrics_internals_utils.cc
+index 69d3709fcd41..056fa42e086f 100644
+--- components/metrics/debug/metrics_internals_utils.cc
++++ components/metrics/debug/metrics_internals_utils.cc
+@@ -69,6 +69,8 @@ std::string CpuArchitectureToString(
+       return "arm32";
+     case variations::Study::TRANSLATED_X86_64:
+       return "translated_x86_64";
++    case variations::Study::LOONGARCH64:
++      return "loong64";
+   }
+   NOTREACHED();
+ }
 diff --git components/variations/proto/study.proto components/variations/proto/study.proto
 index 7ef5eb238e1a..e4dfc5ebe5ed 100644
 --- components/variations/proto/study.proto
