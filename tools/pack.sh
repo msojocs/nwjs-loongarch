@@ -17,7 +17,7 @@ output_dir="$root_dir/output"
 
 cd "$src_dir"
 mkdir -p "$output_dir/dist_nwjs/"{simple,sdk}
-
+nw_version=$(node $root_dir/tools/parse-config.js --get-nw-version $@)
 python_version=$(node $root_dir/tools/parse-config.js --get-pack-python-version $@)
 if [ "$python_version" == "python3" ];then
   python=python3
@@ -32,22 +32,33 @@ notice "Start to pack SDK"
 $python content/nw/tools/package_binaries.py -p out/nw -a loong64 -n symbol -m sdk
 mv "out/nw/dist/"* "$output_dir/dist_nwjs/sdk"
 
-mv "$output_dir/dist_nwjs/simple/nwjs"*.tar.gz "$output_dir/dist_nwjs"
-mv "$output_dir/dist_nwjs/sdk/nwjs"*.tar.gz "$output_dir/dist_nwjs"
-mv "$output_dir/dist_nwjs/sdk/nw-"*.tar.gz "$output_dir/dist_nwjs"
+dist_dir="$output_dir/dist_nwjs/$nw_version"
+mkdir -p "$dist_dir"
+mv "$output_dir/dist_nwjs/simple/nwjs"*.tar.gz "$dist_dir"
+mv "$output_dir/dist_nwjs/sdk/nwjs"*.tar.gz "$dist_dir"
+mv "$output_dir/dist_nwjs/sdk/nw-"*.tar.gz "$dist_dir"
 
-> "$output_dir/dist_nwjs/SHASUMS256.txt"
+> "$dist_dir/SHASUMS256.txt"
 notice "Start to merge SHASUMS256.txt"
+cd $dist_dir
 if [ -f "$output_dir/dist_nwjs/simple/SHASUMS256.txt" ];then
-  cat "$output_dir/dist_nwjs/simple/SHASUMS256.txt" >> "$output_dir/dist_nwjs/SHASUMS256.txt"
-  echo "" >> "$output_dir/dist_nwjs/SHASUMS256.txt"
-  cat "$output_dir/dist_nwjs/sdk/SHASUMS256.txt" >> "$output_dir/dist_nwjs/SHASUMS256.txt"
+  cat "$output_dir/dist_nwjs/sdk/"nw-headers-*.tar.gz.sha256.txt >> "$dist_dir/SHASUMS256.txt"
+  echo "" >> "$dist_dir/SHASUMS256.txt"
+
+  sha256sum nwjs-*-linux-loong64.tar.gz | awk '{print $1, $2}' >> "$dist_dir/SHASUMS256.txt"
+  echo "" >> "$dist_dir/SHASUMS256.txt"
+  
+  cat "$output_dir/dist_nwjs/simple/SHASUMS256.txt" >> "$dist_dir/SHASUMS256.txt"
+  echo "" >> "$dist_dir/SHASUMS256.txt"
+  cat "$output_dir/dist_nwjs/sdk/SHASUMS256.txt" >> "$dist_dir/SHASUMS256.txt"
 else
-  cat "$output_dir/dist_nwjs/simple/"nwjs-*-linux-loong64.tar.gz.sha256.txt >> "$output_dir/dist_nwjs/SHASUMS256.txt"
-  echo "" >> "$output_dir/dist_nwjs/SHASUMS256.txt"
-  cat "$output_dir/dist_nwjs/sdk/"nwjs-sdk-*-linux-loong64.tar.gz.sha256.txt >> "$output_dir/dist_nwjs/SHASUMS256.txt"
-  echo "" >> "$output_dir/dist_nwjs/SHASUMS256.txt"
-  cat "$output_dir/dist_nwjs/sdk/"nw-headers-*.tar.gz.sha256.txt >> "$output_dir/dist_nwjs/SHASUMS256.txt"
+  cat "$output_dir/dist_nwjs/sdk/"nw-headers-*.tar.gz.sha256.txt >> "$dist_dir/SHASUMS256.txt"
+  echo "" >> "$dist_dir/SHASUMS256.txt"
+
+  sha256sum nwjs-*-linux-loong64.tar.gz | awk '{print $1, $2}' >> "$dist_dir/SHASUMS256.txt"
+
+  cat "$output_dir/dist_nwjs/simple/"nwjs-*-linux-loong64.sha256.txt >> "$dist_dir/SHASUMS256.txt"
+  cat "$output_dir/dist_nwjs/sdk/"nwjs-sdk-*-linux-loong64.sha256.txt >> "$dist_dir/SHASUMS256.txt"
 fi
 
 rm -rf "$output_dir/dist_nwjs/simple" "$output_dir/dist_nwjs/sdk"
