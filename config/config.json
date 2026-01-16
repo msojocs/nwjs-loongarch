@@ -1,5 +1,5 @@
 {
-    "buildTarget": "nw99",
+    "buildTarget": "nw100",
     "useMirror": true,
     "debugBuild": false,
     "buildConfig": {
