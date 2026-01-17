@@ -297,6 +297,24 @@ index 33c047b01fbc..6a82566d3bc6 100644
    }
  #elif BUILDFLAG(IS_FUCHSIA)
    std::string cpu_arch = base::SysInfo::ProcessCPUArchitecture();
+diff --git components/input/BUILD.gn components/input/BUILD.gn
+index 7f7d3c593040..db867de093d0 100644
+--- components/input/BUILD.gn
++++ components/input/BUILD.gn
+@@ -91,6 +91,13 @@ component("input") {
+   deps = [
+     ":mojom",
+     "//base",
++    "//content/public/common:interfaces",
++    "//content/common:buildflags",
++    "//content/services/auction_worklet/public/mojom",
++    "//components/services/storage/privileged/mojom",
++    "//components/services/quarantine/public/mojom",
++    "//tools/v8_context_snapshot:buildflags",
++    "//components/language_detection/content/common",
+     "//cc",
+     "//media/mojo/mojom:remoting",
+     "//services/cert_verifier/public/mojom",
 diff --git components/metrics/debug/metrics_internals_utils.cc components/metrics/debug/metrics_internals_utils.cc
 index aa534aac33d6..2f593ca17854 100644
 --- components/metrics/debug/metrics_internals_utils.cc
@@ -338,6 +356,18 @@ index 4d71cf267b23..84641e3378f1 100644
    if (process_arch == "x86") {
      return Study::X86_32;
    }
+diff --git content/public/common/BUILD.gn content/public/common/BUILD.gn
+index 35fc76646e91..db4b0bfd151b 100644
+--- content/public/common/BUILD.gn
++++ content/public/common/BUILD.gn
+@@ -381,6 +381,7 @@ mojom("interfaces") {
+     "//content/common/*",
+     "//extensions/common:mojom",
+     "//extensions/common:mojom_blink",
++    "//components/input:input",
+   ]
+ 
+   sources = [
 diff --git extensions/common/api/runtime.json extensions/common/api/runtime.json
 index 7f174a53f9db..24782b0fc86d 100644
 --- extensions/common/api/runtime.json
