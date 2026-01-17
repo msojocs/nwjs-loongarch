@@ -1,0 +1,32 @@
+[
+    {
+        "name": "loongarch64_support_src_for_nwjs",
+        "path": "",
+        "disabled": false
+    },
+    {
+        "name": "loongarch64_add_swiftshader_for_nwjs",
+        "path": "third_party/swiftshader",
+        "disabled": false
+    },
+    {
+        "name": "loongarch64_fix_lss_for_nwjs",
+        "path": "third_party/lss",
+        "disabled": false
+    },
+    {
+        "name": "loongarch64_support_node-nw_for_nwjs",
+        "path": "third_party/node-nw",
+        "disabled": false
+    },
+    {
+        "name": "loongarch64_support_boringssl_for_nwjs",
+        "path": "third_party/boringssl/src",
+        "disabled": false
+    },
+    {
+        "name": "loongarch64_vector_ffmpeg_for_nwjs",
+        "path": "third_party/ffmpeg",
+        "disabled": false
+    }
+]
