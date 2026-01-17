@@ -27,6 +27,6 @@ else
         -v "$root_dir":/workspace \
         -w /workspace \
         loongarchlinux-test-image:latest \
-        bash -c "pacman -Syu --noconfirm nss atk cups libxkbcommon libxcomposite libxdamage libxrandr pango alsa-lib mesa libdrm && tail -f /etc/issue"
+        bash -c "pacman -Syu --noconfirm nss atk cups libxkbcommon libxcomposite libxdamage libxrandr pango alsa-lib mesa libdrm && bash"
 fi
 # pacman -Sy --noconfirm mesa nss atk cups libxkbcommon libxcomposite libxdamage libxrandr pango alsa-lib

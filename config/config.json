@@ -725,6 +725,43 @@
                 "gypMethod": "v2",
                 "packPythonVersion": "python3"
             }
+        },
+        "nw107.0": {
+            "llvm": {
+                "tag": "llvmorg-21.1.8",
+                "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
+                "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
+                "repo": "https://github.com/llvm/llvm-project.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+            },
+            "binutils": {
+                "repo": "https://sourceware.org/git/binutils-gdb.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/binutils-gdb.git"
+            },
+            "chromium": {
+                "repo": "https://github.com/nwjs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "checkoutTarget": "b42ad82234b155e14142b98b48ab8def130b9ab9"
+            },
+            "v8": {
+                "repo": "https://github.com/nwjs/v8.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "checkoutTarget": "da0e23659d349fb64f4ca0c2a443ec4715896785"
+            },
+            "node": {
+                "repo": "https://github.com/nwjs/node.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "checkoutTarget": "7a9b1278d3a5569182c9bb129a55af378e5ea61a"
+            },
+            "nw": {
+                "repo": "https://github.com/nwjs/nw.js.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/official-nw.js.git",
+                "checkoutTarget": "320b083992ab377471385e37d68a71f2c155499d",
+                "genArg": "",
+                "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
+                "gypMethod": "v2",
+                "packPythonVersion": "python3"
+            }
         }
     }
 }
