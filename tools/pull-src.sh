@@ -34,7 +34,7 @@ output_dir="$root_dir/output"
 source_dir="$root_dir/source-code"
 nwjs_dir="$source_dir/nwjs"
 src_dir="$nwjs_dir/src"
-export PATH=$output_dir/toolchain/bin:$output_dir/cmake-linux-x86_64/bin:$output_dir/depot_tools:$PATH
+export PATH=$output_dir/toolchain/bin:$output_dir/cmake-linux-x86_64/bin:$output_dir/depot_tools:$src_dir/third_party/depot_tools:$PATH
 
 # git 地址
 chromium_repo=$(node $root_dir/tools/parse-config.js --get-chromium-repo $@)

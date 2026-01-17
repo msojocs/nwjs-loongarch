@@ -13,4 +13,7 @@ content = content.replace(`"custom_deps" : {
       "src/chrome/tools/test/reference_build/chrome_mac": None,
       "src/chrome/tools/test/reference_build/chrome_win": None,
     },`)
+content = content.replace(`"custom_vars": {},`, `"custom_vars": {
+      "checkout_configuration": "small"
+    },`);
 fs.writeFileSync(configFile, content, 'utf-8');
