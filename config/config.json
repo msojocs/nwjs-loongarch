@@ -17,17 +17,17 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "nw55"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "nw55"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "nw55"
             },
             "nw": {
@@ -51,17 +51,17 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "nw80"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "nw80"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "nw80"
             },
             "nw": {
@@ -85,17 +85,17 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "nw88"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "nw88"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "nw88"
             },
             "nw": {
@@ -120,17 +120,17 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "nw89"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "nw89"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "nw89"
             },
             "nw": {
@@ -155,17 +155,17 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "nw90"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "nw90"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "nw90"
             },
             "nw": {
@@ -189,17 +189,17 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "nw91"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "nw91"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "nw91"
             },
             "nw": {
@@ -225,17 +225,17 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "nw92"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "nw92"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "nw92"
             },
             "nw": {
@@ -261,17 +261,17 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "nw93"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "nw93"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "nw93"
             },
             "nw": {
@@ -297,22 +297,22 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "nw94"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "nw94"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "nw94"
             },
             "nw": {
                 "repo": "https://github.com/nwjs/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/official-nw.js.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/nw.js.git",
                 "checkoutTarget": "nw94",
                 "genArg": "",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 build_type=Release_x64",
@@ -333,22 +333,22 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "nw95"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "nw95"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "nw95"
             },
             "nw": {
                 "repo": "https://github.com/nwjs/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/official-nw.js.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/nw.js.git",
                 "checkoutTarget": "nw95",
                 "genArg": "",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
@@ -369,22 +369,22 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "nw96"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "nw96"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "nw96"
             },
             "nw": {
                 "repo": "https://github.com/nwjs/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/official-nw.js.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/nw.js.git",
                 "checkoutTarget": "nw96",
                 "genArg": "",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
@@ -405,22 +405,22 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "nw97"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "nw97"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "nw97"
             },
             "nw": {
                 "repo": "https://github.com/nwjs/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/official-nw.js.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/nw.js.git",
                 "checkoutTarget": "nw97",
                 "genArg": "",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
@@ -441,22 +441,22 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "c68bf79a98e838d3ad42dafe41c6cc47a986d6ce"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "6b25ce86e4f7b7290292a431043c2aa505377024"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "fe5eec7c029ca2ef43e8e2086ddc590c235ad891"
             },
             "nw": {
                 "repo": "https://github.com/nwjs/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/official-nw.js.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/nw.js.git",
                 "checkoutTarget": "nw-v0.98.2",
                 "genArg": "",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
@@ -477,22 +477,22 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "15f869993462b8bd0cf9828489a0a7b7c6bd6967"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "8284e4ee099068ccfbbd3663f8d814c12ed7bc77"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "9517d2b442af58cc3c14c73f0e8aff79f1b349dc"
             },
             "nw": {
                 "repo": "https://github.com/nwjs/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/official-nw.js.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/nw.js.git",
                 "checkoutTarget": "b2361d54d4b47093cac670c8013423a65e91c051",
                 "genArg": "",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
@@ -514,22 +514,22 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "1469aca7ec3cede51aec67de4a6394b127e007a4"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "25dc9b3bfa4ae011d1b6d665fd141e7be4ea2a29"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "aa9be8db785eb2facca3f30ddcd1db5ccbc3ce58"
             },
             "nw": {
                 "repo": "https://github.com/nwjs/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/official-nw.js.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/nw.js.git",
                 "checkoutTarget": "143d781925284db6a9eebc6160d66bf522296002",
                 "genArg": "",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
@@ -551,22 +551,22 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "55c1b8a8d24021e588d82bef63210dea75b670d9"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "c00da5f475590adaf8f2b3e5c109f1afa277dbe3"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "6076c1be47112f994431fa1b074e61547cc578b5"
             },
             "nw": {
                 "repo": "https://github.com/nwjs/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/official-nw.js.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/nw.js.git",
                 "checkoutTarget": "82c2cb3ae11018e9635046efd4442d1de6d299ef",
                 "genArg": "",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
@@ -588,22 +588,22 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "1434dd5899fb2421f55aa370ab9a327c1a4be447"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "627694ab485558f72d3dc5dcc4e38fba9cb1c00a"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "5b401b026346f991a495cc19b1f23e1a42df1cbf"
             },
             "nw": {
                 "repo": "https://github.com/nwjs/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/official-nw.js.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/nw.js.git",
                 "checkoutTarget": "59426c66b39f8ce3cf9bc39199be63e154008201",
                 "genArg": "",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
@@ -625,22 +625,22 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "e70af655a580637ff1896b24dffabbed7d3efc5c"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "f12b597d57d61a01cf4faef5cc16c922c14bf73c"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "7099a40da8d4a852bb8a863394e81954db168b97"
             },
             "nw": {
                 "repo": "https://github.com/nwjs/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/official-nw.js.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/nw.js.git",
                 "checkoutTarget": "43a0dfbb0982f7041978a07bdf6f22b412045ab4",
                 "genArg": "",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
@@ -662,22 +662,22 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "a99026b78851445ce33f6e79324efc11c522354b"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "b3460d32a67eab3e9151c2d91388cfa4c753f4fa"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "dbe018e15b85d41a1e1e2e90fa47b10c383804a1"
             },
             "nw": {
                 "repo": "https://github.com/nwjs/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/official-nw.js.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/nw.js.git",
                 "checkoutTarget": "ca321283c0003fe251173ccaabe476507df6323f",
                 "genArg": "",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
@@ -699,22 +699,22 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "466e8eeb37fd13f626b721588a71f867cb457ce9"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "df88c3cf6b09aacfb3dac0a61c8a08596441b220"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "42a0962e766e39e179de7098d9ebd7342e0c2543"
             },
             "nw": {
                 "repo": "https://github.com/nwjs/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/official-nw.js.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/nw.js.git",
                 "checkoutTarget": "15d6f9d1782afd9dddc3474bcca1bb9679a12d8c",
                 "genArg": "",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
@@ -737,22 +737,22 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "4f142487b6349fc5b46dab140dd45553bdeeb61b"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "7e79209241a0786e5fef2799a485669916e325f4"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "e49f9e1f0da18722f229e9057d3e2411575f2d14"
             },
             "nw": {
                 "repo": "https://github.com/nwjs/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/official-nw.js.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/nw.js.git",
                 "checkoutTarget": "nw-v0.106.1",
                 "genArg": "",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
@@ -774,22 +774,22 @@
             },
             "chromium": {
                 "repo": "https://github.com/nwjs/chromium.src.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
                 "checkoutTarget": "b42ad82234b155e14142b98b48ab8def130b9ab9"
             },
             "v8": {
                 "repo": "https://github.com/nwjs/v8.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
                 "checkoutTarget": "da0e23659d349fb64f4ca0c2a443ec4715896785"
             },
             "node": {
                 "repo": "https://github.com/nwjs/node.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
                 "checkoutTarget": "7a9b1278d3a5569182c9bb129a55af378e5ea61a"
             },
             "nw": {
                 "repo": "https://github.com/nwjs/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/official-nw.js.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/nw.js.git",
                 "checkoutTarget": "320b083992ab377471385e37d68a71f2c155499d",
                 "genArg": "",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
