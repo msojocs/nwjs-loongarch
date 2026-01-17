@@ -36,7 +36,7 @@ if [ "$build_mode" == "debug" ];then
 else
   build_dir="Release"
 fi
-ninja -C out/$build_dir node
+ninja -C out/$build_dir node -j$max_thread
 ninja -C out/nw copy_node
 
 notice "Start to build components"
