@@ -57,6 +57,9 @@ notice "pull v8 with target: $v8_checkout_target"
 if [ ! -f "$nwjs_dir/src/v8/README.md" ];then
   cd "$nwjs_dir"
   git clone $v8_repo src/v8
+else
+  cd "$nwjs_dir/src/v8"
+  git remote set-url origin "$v8_repo"
 fi
 cd "$nwjs_dir/src/v8"
 git checkout $v8_checkout_target --force
@@ -67,6 +70,7 @@ if [ ! -d "$nwjs_dir/src/third_party/node-nw" ];then
   git clone $node_repo src/third_party/node-nw
 else
   cd "$nwjs_dir/src/third_party/node-nw"
+  git remote set-url origin "$node_repo"
 fi
 git checkout $node_checkout_target --force
 
@@ -84,9 +88,14 @@ git checkout $nw_checkout_target --force
 
 if [ -f "$nwjs_dir/src/README.md" ];then
   cd "$nwjs_dir/src"
+  git remote set-url origin "$chromium_repo"
+  git remote set-url --push origin "$chromium_repo"
   git fetch origin $chromium_checkout_target
   git checkout $chromium_checkout_target --force
 fi
+
+export GIT_CACHE_PATH="$root_dir/cache/.git_cache"
+mkdir -p $GIT_CACHE_PATH
 
 "$root_dir/tools/sync-reset.sh"
 notice "Start to sync..."
