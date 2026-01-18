@@ -679,7 +679,7 @@
                 "repo": "https://github.com/nwjs/nw.js.git",
                 "mirror": "http://127.0.0.1:3000/nwjs/nw.js.git",
                 "checkoutTarget": "ca321283c0003fe251173ccaabe476507df6323f",
-                "genArg": "",
+                "genArg": "use_clang_modules = false",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
                 "gypMethod": "v2",
                 "packPythonVersion": "python3"
