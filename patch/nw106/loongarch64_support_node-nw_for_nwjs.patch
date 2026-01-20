@@ -1,5 +1,5 @@
 diff --git common.gypi common.gypi
-index a45cc571c6..a147f0bc7a 100644
+index 8a1d33cfc0..3cdc44cf02 100644
 --- common.gypi
 +++ common.gypi
 @@ -4,8 +4,8 @@
@@ -13,7 +13,16 @@ index a45cc571c6..a147f0bc7a 100644
      'want_separate_host_toolset%': 1, # V8 should not build target and host
      'library%': 'static_library',     # allow override to 'shared_library' for DLL/.so builds
      'component%': 'static_library',   # NB. these names match with what V8 expects
-@@ -141,6 +141,9 @@
+@@ -136,7 +136,7 @@
+         'obj_dir%': '<(PRODUCT_DIR)/obj.target',
+         #'v8_base': '<(PRODUCT_DIR)/obj.target/tools/v8_gypfiles/libv8_snapshot.a',
+       }],
+-      ['target_arch=="x64" or target_arch=="arm64"', {
++      ['target_arch=="x64" or target_arch=="arm64" or target_arch=="loong64"', {
+         'v8_enable_pointer_compression': 1,
+         'v8_enable_31bit_smis_on_64bit_arch': 1,
+       }],
+@@ -149,6 +149,9 @@
        ['OS=="linux" and target_arch=="arm" and <(building_nw)==1', {
          'sysroot': '<!(cd <(DEPTH) && pwd -P)/build/linux/debian_sid_arm-sysroot',
        }],
@@ -23,7 +32,7 @@ index a45cc571c6..a147f0bc7a 100644
        ['OS=="mac"', {
          'obj_dir%': '<(PRODUCT_DIR)/obj.target',
          #'v8_base': '<(PRODUCT_DIR)/libv8_snapshot.a',
-@@ -750,6 +753,10 @@
+@@ -784,6 +787,10 @@
                  'cflags': [ '-m64', '-march=z196' ],
                  'ldflags': [ '-m64', '-march=z196' ],
                }],
@@ -59,3 +68,156 @@ index 7e0c96db5c..87ee39aeee 100644
                   'uv_library': 'static_library',
                   'uv_parent_path': '/deps/uv/',
                   'uv_use_dtrace': 'false',
+diff --git deps/brotli/c/dec/decode.c deps/brotli/c/dec/decode.c
+index 220c7e85c6..32b4e1b590 100644
+--- deps/brotli/c/dec/decode.c
++++ deps/brotli/c/dec/decode.c
+@@ -2297,9 +2297,10 @@ BrotliDecoderResult BrotliDecoderDecompress(
+       buffer ahead of time
+     - when result is "success" decoder MUST return all unused data back to input
+       buffer; this is possible because the invariant is held on enter */
++__attribute__((optnone))
+ BrotliDecoderResult BrotliDecoderDecompressStream(
+-    BrotliDecoderState* s, size_t* available_in, const uint8_t** next_in,
+-    size_t* available_out, uint8_t** next_out, size_t* total_out) {
++  BrotliDecoderState* s, size_t* available_in, const uint8_t** next_in,
++  size_t* available_out, uint8_t** next_out, size_t* total_out) {
+   BrotliDecoderErrorCode result = BROTLI_DECODER_SUCCESS;
+   BrotliBitReader* br = &s->br;
+   size_t input_size = *available_in;
+diff --git deps/openssl/openssl/crypto/des/set_key.c deps/openssl/openssl/crypto/des/set_key.c
+index 5c958cdbb6..82a22572f1 100644
+--- deps/openssl/openssl/crypto/des/set_key.c
++++ deps/openssl/openssl/crypto/des/set_key.c
+@@ -71,16 +71,17 @@ void DES_set_odd_parity(DES_cblock *key)
+ int DES_check_key_parity(const_DES_cblock *key)
+ {
+     unsigned int i;
+-    unsigned char res = 0377, b;
++    /* Use wider integer types to avoid backend widening issues on LoongArch. */
++    unsigned int res = 0xffu, b;
+ 
+     for (i = 0; i < DES_KEY_SZ; i++) {
+-        b = (*key)[i];
++        b = (unsigned int)(*key)[i];
+         b ^= b >> 4;
+         b ^= b >> 2;
+         b ^= b >> 1;
+-        res &= constant_time_eq_8(b & 1, 1);
++        res &= (unsigned int)constant_time_eq_8(b & 1u, 1u);
+     }
+-    return (int)(res & 1);
++    return (int)(res & 1u);
+ }
+ 
+ /*-
+diff --git deps/zstd/lib/compress/zstd_compress.c deps/zstd/lib/compress/zstd_compress.c
+index d928b1d3ee..56dd00ad59 100644
+--- deps/zstd/lib/compress/zstd_compress.c
++++ deps/zstd/lib/compress/zstd_compress.c
+@@ -1787,7 +1787,7 @@ static size_t ZSTD_estimateCCtxSize_internal(int compressionLevel)
+ {
+     int tier = 0;
+     size_t largestSize = 0;
+-    static const unsigned long long srcSizeTiers[4] = {16 KB, 128 KB, 256 KB, ZSTD_CONTENTSIZE_UNKNOWN};
++    static const unsigned long long srcSizeTiers[4] = {(16ULL<<10), (128ULL<<10), (256ULL<<10), ZSTD_CONTENTSIZE_UNKNOWN};
+     for (; tier < 4; ++tier) {
+         /* Choose the set of cParams for a given level across all srcSizes that give the largest cctxSize */
+         ZSTD_compressionParameters const cParams = ZSTD_getCParams_internal(compressionLevel, srcSizeTiers[tier], 0, ZSTD_cpm_noAttachDict);
+@@ -2294,16 +2294,16 @@ void ZSTD_invalidateRepCodes(ZSTD_CCtx* cctx) {
+  * in-place.
+  */
+ static const size_t attachDictSizeCutoffs[ZSTD_STRATEGY_MAX+1] = {
+-    8 KB,  /* unused */
+-    8 KB,  /* ZSTD_fast */
+-    16 KB, /* ZSTD_dfast */
+-    32 KB, /* ZSTD_greedy */
+-    32 KB, /* ZSTD_lazy */
+-    32 KB, /* ZSTD_lazy2 */
+-    32 KB, /* ZSTD_btlazy2 */
+-    32 KB, /* ZSTD_btopt */
+-    8 KB,  /* ZSTD_btultra */
+-    8 KB   /* ZSTD_btultra2 */
++    (8u<<10),  /* unused */
++    (8u<<10),  /* ZSTD_fast */
++    (16u<<10), /* ZSTD_dfast */
++    (32u<<10), /* ZSTD_greedy */
++    (32u<<10), /* ZSTD_lazy */
++    (32u<<10), /* ZSTD_lazy2 */
++    (32u<<10), /* ZSTD_btlazy2 */
++    (32u<<10), /* ZSTD_btopt */
++    (8u<<10),  /* ZSTD_btultra */
++    (8u<<10)   /* ZSTD_btultra2 */
+ };
+ 
+ static int ZSTD_shouldAttachDict(const ZSTD_CDict* cdict,
+@@ -3835,7 +3835,7 @@ ZSTD_estimateBlockSize_literal(const BYTE* literals, size_t litSize,
+ {
+     unsigned* const countWksp = (unsigned*)workspace;
+     unsigned maxSymbolValue = HUF_SYMBOLVALUE_MAX;
+-    size_t literalSectionHeaderSize = 3 + (litSize >= 1 KB) + (litSize >= 16 KB);
++    size_t literalSectionHeaderSize = 3 + (litSize >= (1u<<10)) + (litSize >= (16u<<10));
+     U32 singleStream = litSize < 256;
+ 
+     if (hufMetadata->hType == set_basic) return litSize;
+@@ -4557,7 +4557,7 @@ static size_t ZSTD_optimalBlockSize(ZSTD_CCtx* cctx, const void* src, size_t src
+      * While it's possible to go lower, let's keep it simple for a first implementation.
+      * Besides, benefits of splitting are reduced when blocks are already small.
+      */
+-    if (srcSize < 128 KB || blockSizeMax < 128 KB)
++    if (srcSize < (128u<<10) || blockSizeMax < (128u<<10))
+         return MIN(srcSize, blockSizeMax);
+     /* do not split incompressible data though:
+      * require verified savings to allow pre-splitting.
+@@ -4565,12 +4565,12 @@ static size_t ZSTD_optimalBlockSize(ZSTD_CCtx* cctx, const void* src, size_t src
+      */
+     if (savings < 3) {
+         DEBUGLOG(6, "don't attempt splitting: savings (%i) too low", (int)savings);
+-        return 128 KB;
++        return (size_t)(128u<<10);
+     }
+     /* apply @splitLevel, or use default value (which depends on @strat).
+      * note that splitting heuristic is still conditioned by @savings >= 3,
+      * so the first block will not reach this code path */
+-    if (splitLevel == 1) return 128 KB;
++    if (splitLevel == 1) return (size_t)(128u<<10);
+     if (splitLevel == 0) {
+         assert(ZSTD_fast <= strat && strat <= ZSTD_btultra2);
+         splitLevel = splitLevels[strat];
+@@ -5058,6 +5058,7 @@ static FSE_repeat ZSTD_dictNCountRepeat(short* normalizedCounter, unsigned dictM
+     return FSE_repeat_valid;
+ }
+ 
++__attribute__((optnone))
+ size_t ZSTD_loadCEntropy(ZSTD_compressedBlockState_t* bs, void* workspace,
+                          const void* const dict, size_t dictSize)
+ {
+@@ -5132,8 +5133,8 @@ size_t ZSTD_loadCEntropy(ZSTD_compressedBlockState_t* bs, void* workspace,
+ 
+     {   size_t const dictContentSize = (size_t)(dictEnd - dictPtr);
+         U32 offcodeMax = MaxOff;
+-        if (dictContentSize <= ((U32)-1) - 128 KB) {
+-            U32 const maxOffset = (U32)dictContentSize + 128 KB; /* The maximum offset that must be supported */
++        if (dictContentSize <= ((U32)-1) - (128u<<10)) {
++            U32 const maxOffset = (U32)dictContentSize + (128u<<10); /* The maximum offset that must be supported */
+             offcodeMax = ZSTD_highbit32(maxOffset); /* Calculate minimum offset code required to represent maxOffset */
+         }
+         /* All offset values <= dictContentSize + 128 KB must be representable for a valid table */
+@@ -5229,7 +5230,7 @@ ZSTD_compress_insertDictionary(ZSTD_compressedBlockState_t* bs,
+         bs, ms, ws, params, dict, dictSize, dtlm, tfp, workspace);
+ }
+ 
+-#define ZSTD_USE_CDICT_PARAMS_SRCSIZE_CUTOFF (128 KB)
++#define ZSTD_USE_CDICT_PARAMS_SRCSIZE_CUTOFF (128u<<10)
+ #define ZSTD_USE_CDICT_PARAMS_DICTSIZE_MULTIPLIER (6ULL)
+ 
+ /*! ZSTD_compressBegin_internal() :
+@@ -7759,7 +7760,7 @@ static U64 ZSTD_getCParamRowSize(U64 srcSizeHint, size_t dictSize, ZSTD_CParamMo
+ static ZSTD_compressionParameters ZSTD_getCParams_internal(int compressionLevel, unsigned long long srcSizeHint, size_t dictSize, ZSTD_CParamMode_e mode)
+ {
+     U64 const rSize = ZSTD_getCParamRowSize(srcSizeHint, dictSize, mode);
+-    U32 const tableID = (rSize <= 256 KB) + (rSize <= 128 KB) + (rSize <= 16 KB);
++    U32 const tableID = (rSize <= (256ULL<<10)) + (rSize <= (128ULL<<10)) + (rSize <= (16ULL<<10));
+     int row;
+     DEBUGLOG(5, "ZSTD_getCParams_internal (cLevel=%i)", compressionLevel);
+ 

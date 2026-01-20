@@ -1,8 +1,8 @@
 diff --git linux_syscall_support.h linux_syscall_support.h
-index af7d2dd..031dfce 100644
+index c80fbfd..069900b 100644
 --- linux_syscall_support.h
 +++ linux_syscall_support.h
-@@ -3969,17 +3969,17 @@ struct kernel_statx {
+@@ -3967,17 +3967,17 @@ struct kernel_statx {
       * So, we just have to redefine all of the _syscallX() macros.
       */
      #undef LSS_REG
@@ -25,7 +25,7 @@ index af7d2dd..031dfce 100644
            int64_t __res;                                                      \
            __asm__ __volatile__ ("syscall 0x0\n"                               \
                                  : "=r"(__res_a0)                              \
-@@ -4042,12 +4042,12 @@ struct kernel_statx {
+@@ -4040,12 +4040,12 @@ struct kernel_statx {
                                     void *newtls, int *child_tidptr) {
        int64_t __res;
        {

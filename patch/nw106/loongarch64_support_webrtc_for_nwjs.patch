@@ -1,8 +1,8 @@
 diff --git BUILD.gn BUILD.gn
-index 5bbc5b79a2..1b17c6cabe 100644
+index 3357c2dcdf..d8b6d7c52b 100644
 --- BUILD.gn
 +++ BUILD.gn
-@@ -446,6 +446,10 @@ config("common_config") {
+@@ -441,6 +441,10 @@ config("common_config") {
      defines += [ "WEBRTC_HAS_NEON" ]
    }
  

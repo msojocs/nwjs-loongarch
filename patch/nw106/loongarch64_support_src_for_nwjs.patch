@@ -1,8 +1,8 @@
 diff --git base/system/sys_info.cc base/system/sys_info.cc
-index b95916c28306..4035091bbb00 100644
+index 5782b000d30c2..0551f89030a5b 100644
 --- base/system/sys_info.cc
 +++ base/system/sys_info.cc
-@@ -265,6 +265,8 @@ std::string SysInfo::ProcessCPUArchitecture() {
+@@ -254,6 +254,8 @@ std::string SysInfo::ProcessCPUArchitecture() {
    return "ARM_64";
  #elif defined(ARCH_CPU_RISCV64)
    return "RISCV_64";
@@ -12,10 +12,10 @@ index b95916c28306..4035091bbb00 100644
    return std::string();
  #endif
 diff --git build/config/compiler/BUILD.gn build/config/compiler/BUILD.gn
-index 0fed6b5de109..51908b0021f5 100644
+index 95d97b2bdfcdf..866909d29c28b 100644
 --- build/config/compiler/BUILD.gn
 +++ build/config/compiler/BUILD.gn
-@@ -1214,6 +1214,10 @@ config("compiler") {
+@@ -1202,6 +1202,10 @@ config("compiler") {
    if (current_cpu == "arm64") {
      defines += [ "__ARM_NEON__=1" ]
    }
@@ -27,7 +27,7 @@ index 0fed6b5de109..51908b0021f5 100644
  
  # Don't allow unstable features to be enabled by `#![feature()]` without
 diff --git build/config/linux/libffi/BUILD.gn build/config/linux/libffi/BUILD.gn
-index 6e45f4c22615..37bc80a89c3d 100644
+index 6e45f4c22615e..37bc80a89c3df 100644
 --- build/config/linux/libffi/BUILD.gn
 +++ build/config/linux/libffi/BUILD.gn
 @@ -19,6 +19,6 @@ if (use_system_libffi) {
@@ -39,7 +39,7 @@ index 6e45f4c22615..37bc80a89c3d 100644
    }
  }
 diff --git build/config/linux/pkg_config.gni build/config/linux/pkg_config.gni
-index f8a4bbe72fdb..c86e05499eb9 100644
+index f8a4bbe72fdb9..c86e05499eb9f 100644
 --- build/config/linux/pkg_config.gni
 +++ build/config/linux/pkg_config.gni
 @@ -47,7 +47,11 @@ declare_args() {
@@ -56,7 +56,7 @@ index f8a4bbe72fdb..c86e05499eb9 100644
  
  pkg_config_script = "//build/config/linux/pkg-config.py"
 diff --git build/config/loongarch64.gni build/config/loongarch64.gni
-index 9a95ec915137..a9dc9d28dbeb 100644
+index 9a95ec915137e..a9dc9d28dbeb4 100644
 --- build/config/loongarch64.gni
 +++ build/config/loongarch64.gni
 @@ -7,7 +7,7 @@ import("//build/config/v8_target_cpu.gni")
@@ -69,7 +69,7 @@ index 9a95ec915137..a9dc9d28dbeb 100644
    }
  }
 diff --git build/config/sysroot.gni build/config/sysroot.gni
-index e3a57328231d..096134caf2b8 100644
+index e3a57328231d9..096134caf2b8f 100644
 --- build/config/sysroot.gni
 +++ build/config/sysroot.gni
 @@ -26,6 +26,9 @@ declare_args() {
@@ -83,7 +83,7 @@ index e3a57328231d..096134caf2b8 100644
        target_sysroot != "") {
      sysroot = target_sysroot
 diff --git build/gn_helpers.py build/gn_helpers.py
-index 90ac0694fd11..5644a440323b 100644
+index 90ac0694fd110..5644a440323ba 100644
 --- build/gn_helpers.py
 +++ build/gn_helpers.py
 @@ -575,16 +575,16 @@ def CreateBuildCommand(output_directory):
@@ -117,7 +117,7 @@ index 90ac0694fd11..5644a440323b 100644
    if siso_deps:
      return siso_cmd
 diff --git build/gyp_chromium build/gyp_chromium
-index 4fc62bad9ba1..0dcee00615e7 100755
+index 4fc62bad9ba19..0dcee00615e78 100755
 --- build/gyp_chromium
 +++ build/gyp_chromium
 @@ -1,4 +1,4 @@
@@ -135,7 +135,7 @@ index 000000000000..5f189950904c
 +../../../../sysroot
 \ No newline at end of file
 diff --git build/linux/sysroot_scripts/install-sysroot.py build/linux/sysroot_scripts/install-sysroot.py
-index 31589722c664..9baeaf5968d8 100755
+index 31589722c664d..80763b76bb6cd 100755
 --- build/linux/sysroot_scripts/install-sysroot.py
 +++ build/linux/sysroot_scripts/install-sysroot.py
 @@ -36,7 +36,7 @@ from urllib.request import urlopen
@@ -143,7 +143,7 @@ index 31589722c664..9baeaf5968d8 100755
  SRC_DIR = os.path.dirname(os.path.dirname(os.path.dirname(SCRIPT_DIR)))
  
 -VALID_ARCHS = ("amd64", "i386", "armhf", "arm64", "mipsel", "mips64el",
-+VALID_ARCHS = ("amd64", "i386", "armhf", "arm64", "mipsel", "mips64el", "loong64"
++VALID_ARCHS = ("amd64", "loong64", "i386", "armhf", "arm64", "mipsel", "mips64el",
                 "ppc64el", "riscv64")
  
  ARCH_TRANSLATIONS = {
@@ -155,27 +155,25 @@ index 31589722c664..9baeaf5968d8 100755
  }
  
  DEFAULT_TARGET_PLATFORMS = {
-diff --git build/linux/sysroot_scripts/sysroots.json.rej build/linux/sysroot_scripts/sysroots.json.rej
-new file mode 100644
-index 000000000000..7ff9c70902a6
---- /dev/null
-+++ build/linux/sysroot_scripts/sysroots.json.rej
-@@ -0,0 +1,13 @@
-+diff a/build/linux/sysroot_scripts/sysroots.json b/build/linux/sysroot_scripts/sysroots.json	(rejected hunks)
-+@@ -34,5 +34,11 @@
-+         "SysrootDir": "debian_bullseye_mipsel-sysroot",
-+         "Tarball": "debian_bullseye_mipsel_sysroot.tar.xz",
-+         "URL": "https://commondatastorage.googleapis.com/chrome-linux-sysroot"
-++    },
-++    "bullseye_loong64": {
-++        "Sha256Sum": "783cb79f26736c69e8125788d95ffb65a28172349009d75188838a004280a92b",
-++        "SysrootDir": "debian_bullseye_loong64-sysroot",
-++        "Tarball": "debian_bullseye_loong64_sysroot.tar.xz",
-++        "URL": "https://commondatastorage.googleapis.com/chrome-linux-sysroot"
-+     }
-+ }
+diff --git build/linux/sysroot_scripts/sysroots.json build/linux/sysroot_scripts/sysroots.json
+index d6093b007118d..8447c84191733 100644
+--- build/linux/sysroot_scripts/sysroots.json
++++ build/linux/sysroot_scripts/sysroots.json
+@@ -35,6 +35,12 @@
+         "Tarball": "debian_bullseye_mipsel_sysroot.tar.xz",
+         "URL": "https://commondatastorage.googleapis.com/chrome-linux-sysroot"
+     },
++    "bullseye_loong64": {
++        "Sha256Sum": "783cb79f26736c69e8125788d95ffb65a28172349009d75188838a004280a92b",
++        "SysrootDir": "debian_bullseye_loong64-sysroot",
++        "Tarball": "debian_bullseye_loong64_sysroot.tar.xz",
++        "URL": "https://commondatastorage.googleapis.com/chrome-linux-sysroot"
++    },
+     "bullseye_ppc64el": {
+         "Sha256Sum": "485f85dde52830594f7b58ad53b9ca8ff6088b397cacb52aff682be5ffd6f198",
+         "SysrootDir": "debian_bullseye_ppc64el-sysroot",
 diff --git build/vs_toolchain.py build/vs_toolchain.py
-index d909f5b36f48..00915b46f7a3 100755
+index 724dfff9c3a30..9f3154b3f0a3c 100755
 --- build/vs_toolchain.py
 +++ build/vs_toolchain.py
 @@ -514,7 +514,7 @@ def Update(force=False, no_download=False):
@@ -187,7 +185,7 @@ index d909f5b36f48..00915b46f7a3 100755
      return 1
    if force == '--force' or os.path.exists(json_data_file):
      force = True
-@@ -660,7 +660,7 @@ def main():
+@@ -656,7 +656,7 @@ def main():
        'copy_dlls': CopyDlls,
    }
    if len(sys.argv) < 2 or sys.argv[1] not in commands:
@@ -197,10 +195,10 @@ index d909f5b36f48..00915b46f7a3 100755
    return commands[sys.argv[1]](*sys.argv[2:])
  
 diff --git chrome/BUILD.gn chrome/BUILD.gn
-index 9006da97ac7d..08511e27747f 100644
+index 6a22f73ef4e51..742446219020b 100644
 --- chrome/BUILD.gn
 +++ chrome/BUILD.gn
-@@ -319,6 +319,7 @@ if (!is_android && !is_mac) {
+@@ -320,6 +320,7 @@ if (!is_android && !is_mac) {
        } else {
          deps += [
            ":chrome_dll",
@@ -209,20 +207,20 @@ index 9006da97ac7d..08511e27747f 100644
        }
          
 diff --git chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc
-index b6d8790082ee..bb470c916b47 100644
+index 8fdbfb61703bd..f7e9513966889 100644
 --- chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc
 +++ chrome/browser/extensions/api/runtime/chrome_runtime_api_delegate.cc
-@@ -383,6 +383,8 @@ bool ChromeRuntimeAPIDelegate::GetPlatformInfo(PlatformInfo* info) {
-     info->arch = extensions::api::runtime::PlatformArch::kMips64;
-   } else if (arch == "riscv64") {
-     info->arch = extensions::api::runtime::PlatformArch::kRiscv64;
+@@ -377,6 +377,8 @@ bool ChromeRuntimeAPIDelegate::GetPlatformInfo(PlatformInfo* info) {
+     info->arch = extensions::api::runtime::PlatformArch::kX86_32;
+   } else if (arch == "x64") {
+     info->arch = extensions::api::runtime::PlatformArch::kX86_64;
 +  } else if (arch == "loong64") {
 +    info->arch = extensions::api::runtime::PlatformArch::kLoong64;
-   } else {
-     NOTREACHED();
-   }
+   } else if (arch == "mipsel") {
+     info->arch = extensions::api::runtime::PlatformArch::kMips;
+   } else if (arch == "mips64el") {
 diff --git chrome/browser/ui/views/apps/app_dialog/app_uninstall_dialog_view.cc chrome/browser/ui/views/apps/app_dialog/app_uninstall_dialog_view.cc
-index 6311bb8d9c7a..1a0d1e355501 100644
+index 6311bb8d9c7a6..1a0d1e355501d 100644
 --- chrome/browser/ui/views/apps/app_dialog/app_uninstall_dialog_view.cc
 +++ chrome/browser/ui/views/apps/app_dialog/app_uninstall_dialog_view.cc
 @@ -551,18 +551,22 @@ void AppUninstallDialogView::InitializeViewForArcApp(
@@ -248,8 +246,34 @@ index 6311bb8d9c7a..1a0d1e355501 100644
  }
  
  void AppUninstallDialogView::OnWidgetInitialized() {
+diff --git components/embedder_support/user_agent_utils.cc components/embedder_support/user_agent_utils.cc
+index 194c6976ba8e0..3d2071a36ccac 100644
+--- components/embedder_support/user_agent_utils.cc
++++ components/embedder_support/user_agent_utils.cc
+@@ -811,6 +811,8 @@ std::string GetCpuArchitecture() {
+               cpu_info.substr(2, 2) == "86") ||
+              base::StartsWith(cpu_info, "x86")) {
+     return "x86";
++  } else if (base::StartsWith(cpu_info, "loong")) {
++    return "loongarch";
+   }
+ #elif BUILDFLAG(IS_FUCHSIA)
+   std::string cpu_arch = base::SysInfo::ProcessCPUArchitecture();
+diff --git components/metrics/debug/metrics_internals_utils.cc components/metrics/debug/metrics_internals_utils.cc
+index b63ffa6dfaa9c..300d3bd75f7ff 100644
+--- components/metrics/debug/metrics_internals_utils.cc
++++ components/metrics/debug/metrics_internals_utils.cc
+@@ -73,6 +73,8 @@ std::string CpuArchitectureToString(
+       return "arm32";
+     case variations::Study::TRANSLATED_X86_64:
+       return "translated_x86_64";
++    case variations::Study::LOONGARCH64:
++      return "loong64";
+   }
+   NOTREACHED();
+ }
 diff --git components/variations/proto/study.proto components/variations/proto/study.proto
-index 909de4e18e23..08a75ad8d2f8 100644
+index 909de4e18e231..08a75ad8d2f86 100644
 --- components/variations/proto/study.proto
 +++ components/variations/proto/study.proto
 @@ -293,6 +293,9 @@ message Study {
@@ -262,8 +286,20 @@ index 909de4e18e23..08a75ad8d2f8 100644
    }
  
    // Enum to pass as optional bool.
+diff --git content/public/common/BUILD.gn content/public/common/BUILD.gn
+index 8e91c465c68be..427b51b075a64 100644
+--- content/public/common/BUILD.gn
++++ content/public/common/BUILD.gn
+@@ -371,6 +371,7 @@ mojom("interfaces") {
+     "//content/common/*",
+     "//extensions/common:mojom",
+     "//extensions/common:mojom_blink",
++    "//components/input:input",
+   ]
+ 
+   sources = [
 diff --git extensions/common/api/runtime.json extensions/common/api/runtime.json
-index d6307adda787..356e50d7c785 100644
+index 22f97dfc0bb57..9d48bb7a80f79 100644
 --- extensions/common/api/runtime.json
 +++ extensions/common/api/runtime.json
 @@ -98,6 +98,7 @@
@@ -285,7 +321,7 @@ index d6307adda787..356e50d7c785 100644
        },
        {
 diff --git sandbox/features.gni sandbox/features.gni
-index 8c5db2c6fa6c..561f46eb85ba 100644
+index 8c5db2c6fa6cf..561f46eb85ba7 100644
 --- sandbox/features.gni
 +++ sandbox/features.gni
 @@ -7,6 +7,6 @@
@@ -297,10 +333,10 @@ index 8c5db2c6fa6c..561f46eb85ba 100644
                     current_cpu == "arm" || current_cpu == "arm64" ||
                     current_cpu == "mipsel" || current_cpu == "mips64el")
 diff --git sandbox/linux/BUILD.gn sandbox/linux/BUILD.gn
-index 478194aaf43a..507a04c70349 100644
+index 9ffc44d2ff138..9f5636245e6f5 100644
 --- sandbox/linux/BUILD.gn
 +++ sandbox/linux/BUILD.gn
-@@ -395,6 +395,7 @@ source_set("sandbox_services_headers") {
+@@ -396,6 +396,7 @@ source_set("sandbox_services_headers") {
      "system_headers/mips_linux_syscalls.h",
      "system_headers/x86_32_linux_syscalls.h",
      "system_headers/x86_64_linux_syscalls.h",
@@ -309,7 +345,7 @@ index 478194aaf43a..507a04c70349 100644
  }
  
 diff --git sandbox/linux/bpf_dsl/linux_syscall_ranges.h sandbox/linux/bpf_dsl/linux_syscall_ranges.h
-index 1d0590b7dd6c..e730b2f7ffef 100644
+index 1d0590b7dd6ce..e730b2f7ffefb 100644
 --- sandbox/linux/bpf_dsl/linux_syscall_ranges.h
 +++ sandbox/linux/bpf_dsl/linux_syscall_ranges.h
 @@ -56,6 +56,12 @@
@@ -326,7 +362,7 @@ index 1d0590b7dd6c..e730b2f7ffef 100644
  #error "Unsupported architecture"
  #endif
 diff --git sandbox/linux/bpf_dsl/seccomp_macros.h sandbox/linux/bpf_dsl/seccomp_macros.h
-index 87d5825aa3dd..56910372f672 100644
+index 87d5825aa3ddb..56910372f6721 100644
 --- sandbox/linux/bpf_dsl/seccomp_macros.h
 +++ sandbox/linux/bpf_dsl/seccomp_macros.h
 @@ -343,6 +343,53 @@ struct regs_struct {
@@ -384,18 +420,9 @@ index 87d5825aa3dd..56910372f672 100644
  #error Unsupported target platform
  
 diff --git sandbox/linux/seccomp-bpf-helpers/baseline_policy.cc sandbox/linux/seccomp-bpf-helpers/baseline_policy.cc
-index 56ba083eb81f..8fdb37cb5855 100644
+index 56ba083eb81f8..c4638fc98d0b2 100644
 --- sandbox/linux/seccomp-bpf-helpers/baseline_policy.cc
 +++ sandbox/linux/seccomp-bpf-helpers/baseline_policy.cc
-@@ -259,7 +259,7 @@ ResultExpr EvaluateSyscallImpl(int fs_denied_errno,
- 
-   // TODO(crbug.com/40528912): should i386 really be in this list?
- #if defined(__i386__) || defined(__x86_64__) || defined(__mips__) || \
--    defined(__aarch64__)
-+    defined(__aarch64__) || defined(__loongarch64)
-   if (sysno == __NR_mmap)
-     return RestrictMmapFlags();
- #endif
 @@ -308,7 +308,11 @@ ResultExpr EvaluateSyscallImpl(int fs_denied_errno,
    // with fs_denied_errno. However some allowed fstat syscalls are rewritten by
    // libc implementations to fstatat syscalls, and we need to rewrite them back.
@@ -409,7 +436,7 @@ index 56ba083eb81f..8fdb37cb5855 100644
  
    // The statx syscall is a filesystem syscall, which will be denied below with
 diff --git sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.cc sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.cc
-index 424f755250ed..a7c0a06af689 100644
+index 424f755250ed2..a7c0a06af689b 100644
 --- sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.cc
 +++ sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.cc
 @@ -224,10 +224,10 @@ intptr_t SIGSYSIoctlFailure(const struct arch_seccomp_data& args,
@@ -469,7 +496,7 @@ index 424f755250ed..a7c0a06af689 100644
  bool CanRewriteSocketcall() {
    static bool can_rewrite_socketcall = []() {
 diff --git sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.h sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.h
-index 5fca3fdaf671..476db3186a14 100644
+index 5fca3fdaf6716..476db3186a143 100644
 --- sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.h
 +++ sandbox/linux/seccomp-bpf-helpers/sigsys_handlers.h
 @@ -89,6 +89,12 @@ SANDBOX_EXPORT intptr_t
@@ -496,7 +523,7 @@ index 5fca3fdaf671..476db3186a14 100644
  #if defined(__NR_socketcall)
  // True if the kernel supports direct socket-API syscalls like socket(2) and
 diff --git sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
-index c160e6e45421..48a008fcbdad 100644
+index d520ee20fa151..2420c8fff1c86 100644
 --- sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
 +++ sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
 @@ -45,7 +45,7 @@
@@ -522,7 +549,7 @@ index c160e6e45421..48a008fcbdad 100644
  #if defined(__arm__)
                   PTRACE_GETVFPREGS,
 diff --git sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc
-index f3b9561aaf60..862661f0a314 100644
+index f3b9561aaf601..862661f0a3149 100644
 --- sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc
 +++ sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc
 @@ -103,7 +103,7 @@ bool SyscallSets::IsUmask(int sysno) {
@@ -788,7 +815,7 @@ index f3b9561aaf60..862661f0a314 100644
  #endif
        return true;
 diff --git sandbox/linux/seccomp-bpf-helpers/syscall_sets.h sandbox/linux/seccomp-bpf-helpers/syscall_sets.h
-index fa49942cb8a9..a5d01f16abd1 100644
+index fa49942cb8a9e..a5d01f16abd15 100644
 --- sandbox/linux/seccomp-bpf-helpers/syscall_sets.h
 +++ sandbox/linux/seccomp-bpf-helpers/syscall_sets.h
 @@ -52,7 +52,7 @@ class SANDBOX_EXPORT SyscallSets {
@@ -825,7 +852,7 @@ index fa49942cb8a9..a5d01f16abd1 100644
  #endif
  
 diff --git sandbox/linux/seccomp-bpf/syscall.cc sandbox/linux/seccomp-bpf/syscall.cc
-index b0cdc71b8f97..01097fbff541 100644
+index b0cdc71b8f972..01097fbff5415 100644
 --- sandbox/linux/seccomp-bpf/syscall.cc
 +++ sandbox/linux/seccomp-bpf/syscall.cc
 @@ -19,7 +19,7 @@ namespace sandbox {
@@ -885,7 +912,7 @@ index b0cdc71b8f97..01097fbff541 100644
  #error "Unimplemented architecture"
  #endif
 diff --git sandbox/linux/services/credentials.cc sandbox/linux/services/credentials.cc
-index baeb313a6d95..bc9e93251852 100644
+index baeb313a6d958..bc9e932518528 100644
 --- sandbox/linux/services/credentials.cc
 +++ sandbox/linux/services/credentials.cc
 @@ -85,7 +85,7 @@ bool ChrootToSafeEmptyDir() {
@@ -898,7 +925,7 @@ index baeb313a6d95..bc9e93251852 100644
    // downward on these architectures, this is the topmost address of the memory
    // space for the stack, and the address will not be dereferenced.
 diff --git sandbox/linux/services/syscall_wrappers.cc sandbox/linux/services/syscall_wrappers.cc
-index ecc897e27c63..45217480a123 100644
+index ecc897e27c63c..45217480a1234 100644
 --- sandbox/linux/services/syscall_wrappers.cc
 +++ sandbox/linux/services/syscall_wrappers.cc
 @@ -68,7 +68,7 @@ long sys_clone(unsigned long flags,
@@ -935,7 +962,7 @@ index ecc897e27c63..45217480a123 100644
    res = syscall(__NR_lstat, path, stat_buf);
  #endif
 diff --git sandbox/linux/syscall_broker/broker_process.cc sandbox/linux/syscall_broker/broker_process.cc
-index 9845f875091c..2bfab56359e8 100644
+index 9845f875091c6..2bfab56359e8e 100644
 --- sandbox/linux/syscall_broker/broker_process.cc
 +++ sandbox/linux/syscall_broker/broker_process.cc
 @@ -120,44 +120,46 @@ bool BrokerProcess::IsSyscallBrokerable(int sysno, bool fast_check) const {
@@ -1011,7 +1038,7 @@ index 9845f875091c..2bfab56359e8 100644
        return !fast_check || policy_->allowed_command_set.test(COMMAND_UNLINK);
  #endif
 diff --git sandbox/linux/system_headers/linux_seccomp.h sandbox/linux/system_headers/linux_seccomp.h
-index 8690a96eb01b..97638236f4d5 100644
+index 8690a96eb01b1..97638236f4d59 100644
 --- sandbox/linux/system_headers/linux_seccomp.h
 +++ sandbox/linux/system_headers/linux_seccomp.h
 @@ -39,6 +39,10 @@
@@ -1037,7 +1064,7 @@ index 8690a96eb01b..97638236f4d5 100644
  #ifndef PR_SET_SECCOMP
  #define PR_SET_SECCOMP               22
 diff --git sandbox/linux/system_headers/linux_signal.h sandbox/linux/system_headers/linux_signal.h
-index 69ccaf108157..00d7fd1070c1 100644
+index 69ccaf1081578..00d7fd1070c13 100644
 --- sandbox/linux/system_headers/linux_signal.h
 +++ sandbox/linux/system_headers/linux_signal.h
 @@ -13,7 +13,7 @@
@@ -1050,7 +1077,7 @@ index 69ccaf108157..00d7fd1070c1 100644
  #define LINUX_SIGHUP 1
  #define LINUX_SIGINT 2
 diff --git sandbox/linux/system_headers/linux_stat.h sandbox/linux/system_headers/linux_stat.h
-index 3aae8cbced77..273e3915bce3 100644
+index 3aae8cbced775..273e3915bce31 100644
 --- sandbox/linux/system_headers/linux_stat.h
 +++ sandbox/linux/system_headers/linux_stat.h
 @@ -150,7 +150,7 @@ struct kernel_stat {
@@ -1123,7 +1150,7 @@ index 3aae8cbced77..273e3915bce3 100644
  #error "one of fstatat64 and newfstatat must be defined"
  #endif
 diff --git sandbox/linux/system_headers/linux_syscalls.h sandbox/linux/system_headers/linux_syscalls.h
-index 450fe3b5427a..10bce3724970 100644
+index 450fe3b5427a6..10bce37249705 100644
 --- sandbox/linux/system_headers/linux_syscalls.h
 +++ sandbox/linux/system_headers/linux_syscalls.h
 @@ -44,4 +44,8 @@
@@ -1135,12 +1162,13 @@ index 450fe3b5427a..10bce3724970 100644
 +#endif
 +
  #endif  // SANDBOX_LINUX_SYSTEM_HEADERS_LINUX_SYSCALLS_H_
+ 
 diff --git sandbox/linux/system_headers/loong64_linux_syscalls.h sandbox/linux/system_headers/loong64_linux_syscalls.h
 new file mode 100644
 index 000000000000..2153ea28150c
 --- /dev/null
 +++ sandbox/linux/system_headers/loong64_linux_syscalls.h
-@@ -0,0 +1,1202 @@
+@@ -0,0 +1,1262 @@
 +// Copyright 2022 The Chromium Authors. All rights reserved.
 +// Use of this source code is governed by a BSD-style license that can be
 +// found in the LICENSE file.
@@ -2338,6 +2366,66 @@ index 000000000000..2153ea28150c
 +#define __NR_landlock_restrict_self 446
 +#endif
 +
++#if !defined(__NR_memfd_secret)
++#define __NR_memfd_secret 447
++#endif
++
++#if !defined(__NR_process_mrelease)
++#define __NR_process_mrelease 448
++#endif
++
++#if !defined(__NR_futex_waitv)
++#define __NR_futex_waitv 449
++#endif
++
++#if !defined(__NR_set_mempolicy_home_node)
++#define __NR_set_mempolicy_home_node 450
++#endif
++
++#if !defined(__NR_cachestat)
++#define __NR_cachestat 451
++#endif
++
++#if !defined(__NR_fchmodat2)
++#define __NR_fchmodat2 452
++#endif
++
++#if !defined(__NR_map_shadow_stack)
++#define __NR_map_shadow_stack 453
++#endif
++
++#if !defined(__NR_futex_wake)
++#define __NR_futex_wake 454
++#endif
++
++#if !defined(__NR_futex_wait)
++#define __NR_futex_wait 455
++#endif
++
++#if !defined(__NR_futex_requeue)
++#define __NR_futex_requeue 456
++#endif
++
++#if !defined(__NR_statmount)
++#define __NR_statmount 457
++#endif
++
++#if !defined(__NR_listmount)
++#define __NR_listmount 458
++#endif
++
++#if !defined(__NR_lsm_get_self_attr)
++#define __NR_lsm_get_self_attr 459
++#endif
++
++#if !defined(__NR_lsm_set_self_attr)
++#define __NR_lsm_set_self_attr 460
++#endif
++
++#if !defined(__NR_lsm_list_modules)
++#define __NR_lsm_list_modules 461
++#endif
++
 +#if !defined(__NR_mseal)
 +#define __NR_mseal 462
 +#endif
@@ -2345,7 +2433,7 @@ index 000000000000..2153ea28150c
 +#endif  // SANDBOX_LINUX_SYSTEM_HEADERS_LOONG64_LINUX_SYSCALLS_H_
 \ No newline at end of file
 diff --git sandbox/policy/linux/bpf_cros_amd_gpu_policy_linux.cc sandbox/policy/linux/bpf_cros_amd_gpu_policy_linux.cc
-index 1ea2f0f6bee5..c62f6081bdac 100644
+index 1ea2f0f6bee56..c62f6081bdac4 100644
 --- sandbox/policy/linux/bpf_cros_amd_gpu_policy_linux.cc
 +++ sandbox/policy/linux/bpf_cros_amd_gpu_policy_linux.cc
 @@ -39,7 +39,7 @@ ResultExpr CrosAmdGpuProcessPolicy::EvaluateSyscall(int sysno) const {
@@ -2358,7 +2446,7 @@ index 1ea2f0f6bee5..c62f6081bdac 100644
      case __NR_stat:
  #endif
 diff --git sandbox/policy/linux/bpf_gpu_policy_linux.cc sandbox/policy/linux/bpf_gpu_policy_linux.cc
-index 41cf2e902e14..003dafb58c80 100644
+index 41cf2e902e141..003dafb58c80a 100644
 --- sandbox/policy/linux/bpf_gpu_policy_linux.cc
 +++ sandbox/policy/linux/bpf_gpu_policy_linux.cc
 @@ -73,7 +73,7 @@ ResultExpr GpuProcessPolicy::EvaluateSyscall(int sysno) const {
@@ -2371,7 +2459,7 @@ index 41cf2e902e14..003dafb58c80 100644
  #endif
      case __NR_getdents64:
 diff --git sandbox/policy/linux/bpf_network_policy_linux.cc sandbox/policy/linux/bpf_network_policy_linux.cc
-index 19d1f5d106ac..414f3733c1ee 100644
+index 19d1f5d106ac2..414f3733c1ee7 100644
 --- sandbox/policy/linux/bpf_network_policy_linux.cc
 +++ sandbox/policy/linux/bpf_network_policy_linux.cc
 @@ -259,7 +259,7 @@ ResultExpr NetworkProcessPolicy::EvaluateSyscall(int sysno) const {
@@ -2384,7 +2472,7 @@ index 19d1f5d106ac..414f3733c1ee 100644
  #endif
      case __NR_getdents64:
 diff --git sandbox/policy/linux/sandbox_linux.cc sandbox/policy/linux/sandbox_linux.cc
-index 1ca193411594..b4a8b1ff8df8 100644
+index 1ca193411594d..b4a8b1ff8df82 100644
 --- sandbox/policy/linux/sandbox_linux.cc
 +++ sandbox/policy/linux/sandbox_linux.cc
 @@ -579,9 +579,15 @@ bpf_dsl::ResultExpr SandboxLinux::HandleViaBroker(int sysno) const {
@@ -2404,7 +2492,7 @@ index 1ca193411594..b4a8b1ff8df8 100644
    } else {
      return handle_via_broker;
 diff --git services/cert_verifier/cert_net_url_loader/BUILD.gn services/cert_verifier/cert_net_url_loader/BUILD.gn
-index ffc6bdc4ab70..d1c4f7be330f 100644
+index ffc6bdc4ab706..d1c4f7be330f6 100644
 --- services/cert_verifier/cert_net_url_loader/BUILD.gn
 +++ services/cert_verifier/cert_net_url_loader/BUILD.gn
 @@ -15,6 +15,7 @@ component("cert_net_url_loader") {
@@ -2416,7 +2504,7 @@ index ffc6bdc4ab70..d1c4f7be330f 100644
      "//services/network/public/mojom",
    ]
 diff --git third_party/crashpad/crashpad/client/crashpad_client_linux.cc third_party/crashpad/crashpad/client/crashpad_client_linux.cc
-index 8241d23a14b8..448ed918843a 100644
+index 8241d23a14b8c..448ed918843ac 100644
 --- third_party/crashpad/crashpad/client/crashpad_client_linux.cc
 +++ third_party/crashpad/crashpad/client/crashpad_client_linux.cc
 @@ -728,6 +728,10 @@ void CrashpadClient::DumpWithoutCrash(NativeCPUContext* context) {
@@ -2431,7 +2519,7 @@ index 8241d23a14b8..448ed918843a 100644
  
    siginfo_t siginfo;
 diff --git third_party/crashpad/crashpad/compat/linux/sys/ptrace.h third_party/crashpad/crashpad/compat/linux/sys/ptrace.h
-index 604a46ab06ac..0f13e1288df8 100644
+index 604a46ab06ac1..0f13e1288df87 100644
 --- third_party/crashpad/crashpad/compat/linux/sys/ptrace.h
 +++ third_party/crashpad/crashpad/compat/linux/sys/ptrace.h
 @@ -38,6 +38,10 @@ static constexpr __ptrace_request PTRACE_GET_THREAD_AREA =
@@ -2446,7 +2534,7 @@ index 604a46ab06ac..0f13e1288df8 100644
  #endif  // !PTRACE_GET_THREAD_AREA && !PT_GET_THREAD_AREA && defined(__GLIBC__)
  
 diff --git third_party/crashpad/crashpad/compat/non_win/winnt.h third_party/crashpad/crashpad/compat/non_win/winnt.h
-index 5fd78b0d8e08..57a972000ba1 100644
+index 5fd78b0d8e08d..57a972000ba1a 100644
 --- third_party/crashpad/crashpad/compat/non_win/winnt.h
 +++ third_party/crashpad/crashpad/compat/non_win/winnt.h
 @@ -67,6 +67,7 @@
@@ -2458,7 +2546,7 @@ index 5fd78b0d8e08..57a972000ba1 100644
  //! \}
  
 diff --git third_party/crashpad/crashpad/minidump/minidump_context.h third_party/crashpad/crashpad/minidump/minidump_context.h
-index 9dcbcb468cbf..ab2a59c8a0bd 100644
+index 9dcbcb468cbf1..ab2a59c8a0bdd 100644
 --- third_party/crashpad/crashpad/minidump/minidump_context.h
 +++ third_party/crashpad/crashpad/minidump/minidump_context.h
 @@ -686,6 +686,56 @@ struct MinidumpContextRISCV64 {
@@ -2519,7 +2607,7 @@ index 9dcbcb468cbf..ab2a59c8a0bd 100644
  
  #endif  // CRASHPAD_MINIDUMP_MINIDUMP_CONTEXT_H_
 diff --git third_party/crashpad/crashpad/minidump/minidump_context_writer.cc third_party/crashpad/crashpad/minidump/minidump_context_writer.cc
-index 4a6130b63e95..3ee96c965d95 100644
+index 4a6130b63e954..3ee96c965d951 100644
 --- third_party/crashpad/crashpad/minidump/minidump_context_writer.cc
 +++ third_party/crashpad/crashpad/minidump/minidump_context_writer.cc
 @@ -110,6 +110,13 @@ MinidumpContextWriter::CreateFromSnapshot(const CPUContext* context_snapshot) {
@@ -2581,7 +2669,7 @@ index 4a6130b63e95..3ee96c965d95 100644
 +
  }  // namespace crashpad
 diff --git third_party/crashpad/crashpad/minidump/minidump_context_writer.h third_party/crashpad/crashpad/minidump/minidump_context_writer.h
-index 8e39c6692f29..e99e78abf1d3 100644
+index 8e39c6692f294..e99e78abf1d3a 100644
 --- third_party/crashpad/crashpad/minidump/minidump_context_writer.h
 +++ third_party/crashpad/crashpad/minidump/minidump_context_writer.h
 @@ -413,6 +413,44 @@ class MinidumpContextRISCV64Writer final : public MinidumpContextWriter {
@@ -2630,7 +2718,7 @@ index 8e39c6692f29..e99e78abf1d3 100644
  
  #endif  // CRASHPAD_MINIDUMP_MINIDUMP_CONTEXT_WRITER_H_
 diff --git third_party/crashpad/crashpad/minidump/minidump_extensions.h third_party/crashpad/crashpad/minidump/minidump_extensions.h
-index 55af5fa25b68..fdad9a385c8a 100644
+index 55af5fa25b68e..fdad9a385c8a8 100644
 --- third_party/crashpad/crashpad/minidump/minidump_extensions.h
 +++ third_party/crashpad/crashpad/minidump/minidump_extensions.h
 @@ -154,6 +154,7 @@ enum MinidumpCPUArchitecture : uint16_t {
@@ -2642,7 +2730,7 @@ index 55af5fa25b68..fdad9a385c8a 100644
  
    //! \brief 32-bit PowerPC.
 diff --git third_party/crashpad/crashpad/minidump/minidump_misc_info_writer.cc third_party/crashpad/crashpad/minidump/minidump_misc_info_writer.cc
-index 1abb46c31814..e0779980d0ea 100644
+index 1abb46c318142..e0779980d0ea4 100644
 --- third_party/crashpad/crashpad/minidump/minidump_misc_info_writer.cc
 +++ third_party/crashpad/crashpad/minidump/minidump_misc_info_writer.cc
 @@ -177,6 +177,8 @@ std::string MinidumpMiscInfoDebugBuildString() {
@@ -2655,7 +2743,7 @@ index 1abb46c31814..e0779980d0ea 100644
  #error define kCPU for this CPU
  #endif
 diff --git third_party/crashpad/crashpad/minidump/minidump_system_info_writer.cc third_party/crashpad/crashpad/minidump/minidump_system_info_writer.cc
-index e9e05124aa11..3f01f1abf348 100644
+index e9e05124aa111..3f01f1abf348e 100644
 --- third_party/crashpad/crashpad/minidump/minidump_system_info_writer.cc
 +++ third_party/crashpad/crashpad/minidump/minidump_system_info_writer.cc
 @@ -135,6 +135,9 @@ void MinidumpSystemInfoWriter::InitializeFromSnapshot(
@@ -2669,7 +2757,7 @@ index e9e05124aa11..3f01f1abf348 100644
        NOTREACHED();
    }
 diff --git third_party/crashpad/crashpad/snapshot/BUILD.gn third_party/crashpad/crashpad/snapshot/BUILD.gn
-index 5ae9c1018f05..8304301dcf6f 100644
+index 5ae9c1018f054..8304301dcf6f9 100644
 --- third_party/crashpad/crashpad/snapshot/BUILD.gn
 +++ third_party/crashpad/crashpad/snapshot/BUILD.gn
 @@ -468,7 +468,7 @@ source_set("snapshot_test") {
@@ -2691,7 +2779,7 @@ index 5ae9c1018f05..8304301dcf6f 100644
      testonly = true
      sources = [ "hash_types_test.cc" ]
 diff --git third_party/crashpad/crashpad/snapshot/capture_memory.cc third_party/crashpad/crashpad/snapshot/capture_memory.cc
-index f2ff5d74bb96..c0f6121f3fc5 100644
+index f2ff5d74bb96a..c0f6121f3fc5d 100644
 --- third_party/crashpad/crashpad/snapshot/capture_memory.cc
 +++ third_party/crashpad/crashpad/snapshot/capture_memory.cc
 @@ -123,6 +123,10 @@ void CaptureMemory::PointedToByContext(const CPUContext& context,
@@ -2706,7 +2794,7 @@ index f2ff5d74bb96..c0f6121f3fc5 100644
  #error Port.
  #endif
 diff --git third_party/crashpad/crashpad/snapshot/cpu_architecture.h third_party/crashpad/crashpad/snapshot/cpu_architecture.h
-index 26d45f841229..702a2a7d1bec 100644
+index 26d45f841229a..702a2a7d1becf 100644
 --- third_party/crashpad/crashpad/snapshot/cpu_architecture.h
 +++ third_party/crashpad/crashpad/snapshot/cpu_architecture.h
 @@ -47,6 +47,9 @@ enum CPUArchitecture {
@@ -2720,7 +2808,7 @@ index 26d45f841229..702a2a7d1bec 100644
  
  }  // namespace crashpad
 diff --git third_party/crashpad/crashpad/snapshot/cpu_context.cc third_party/crashpad/crashpad/snapshot/cpu_context.cc
-index 6b69edefd532..0e3e22fcc974 100644
+index 6b69edefd5326..0e3e22fcc9749 100644
 --- third_party/crashpad/crashpad/snapshot/cpu_context.cc
 +++ third_party/crashpad/crashpad/snapshot/cpu_context.cc
 @@ -173,6 +173,8 @@ uint64_t CPUContext::InstructionPointer() const {
@@ -2750,7 +2838,7 @@ index 6b69edefd532..0e3e22fcc974 100644
      case kCPUArchitectureX86:
      case kCPUArchitectureARM:
 diff --git third_party/crashpad/crashpad/snapshot/cpu_context.h third_party/crashpad/crashpad/snapshot/cpu_context.h
-index c3640c328c64..9cb1d32ea2fd 100644
+index c3640c328c645..9cb1d32ea2fd0 100644
 --- third_party/crashpad/crashpad/snapshot/cpu_context.h
 +++ third_party/crashpad/crashpad/snapshot/cpu_context.h
 @@ -371,6 +371,22 @@ struct CPUContextRISCV64 {
@@ -2785,7 +2873,7 @@ index c3640c328c64..9cb1d32ea2fd 100644
  };
  
 diff --git third_party/crashpad/crashpad/snapshot/elf/elf_symbol_table_reader.cc third_party/crashpad/crashpad/snapshot/elf/elf_symbol_table_reader.cc
-index 4c59d7459949..dad0120dde28 100644
+index 4c59d74599498..dad0120dde280 100644
 --- third_party/crashpad/crashpad/snapshot/elf/elf_symbol_table_reader.cc
 +++ third_party/crashpad/crashpad/snapshot/elf/elf_symbol_table_reader.cc
 @@ -72,16 +72,21 @@ bool ElfSymbolTableReader::ScanSymbolTable(const std::string& name,
@@ -2820,7 +2908,7 @@ index 4c59d7459949..dad0120dde28 100644
      // TODO(scottmg): This should respect DT_SYMENT if present.
      address += sizeof(entry);
 diff --git third_party/crashpad/crashpad/snapshot/linux/cpu_context_linux.cc third_party/crashpad/crashpad/snapshot/linux/cpu_context_linux.cc
-index 6c4cb3ebce6c..0ada1b151c03 100644
+index 6c4cb3ebce6c5..0ada1b151c039 100644
 --- third_party/crashpad/crashpad/snapshot/linux/cpu_context_linux.cc
 +++ third_party/crashpad/crashpad/snapshot/linux/cpu_context_linux.cc
 @@ -281,6 +281,40 @@ void InitializeCPUContextRISCV64(const ThreadContext::t64_t& thread_context,
@@ -2865,7 +2953,7 @@ index 6c4cb3ebce6c..0ada1b151c03 100644
  
  }  // namespace internal
 diff --git third_party/crashpad/crashpad/snapshot/linux/cpu_context_linux.h third_party/crashpad/crashpad/snapshot/linux/cpu_context_linux.h
-index 507d1b44dd0e..112d858d4a40 100644
+index 507d1b44dd0e5..112d858d4a40c 100644
 --- third_party/crashpad/crashpad/snapshot/linux/cpu_context_linux.h
 +++ third_party/crashpad/crashpad/snapshot/linux/cpu_context_linux.h
 @@ -188,6 +188,45 @@ void InitializeCPUContextRISCV64(const ThreadContext::t64_t& thread_context,
@@ -2915,7 +3003,7 @@ index 507d1b44dd0e..112d858d4a40 100644
  }  // namespace crashpad
  
 diff --git third_party/crashpad/crashpad/snapshot/linux/exception_snapshot_linux.cc third_party/crashpad/crashpad/snapshot/linux/exception_snapshot_linux.cc
-index 677afdaa7736..3a9553e5ad39 100644
+index 677afdaa77362..3a9553e5ad392 100644
 --- third_party/crashpad/crashpad/snapshot/linux/exception_snapshot_linux.cc
 +++ third_party/crashpad/crashpad/snapshot/linux/exception_snapshot_linux.cc
 @@ -15,6 +15,7 @@
@@ -3031,7 +3119,7 @@ index 677afdaa7736..3a9553e5ad39 100644
          !ReadSiginfo<Traits32>(process_reader, siginfo_address)) {
        return false;
 diff --git third_party/crashpad/crashpad/snapshot/linux/exception_snapshot_linux.h third_party/crashpad/crashpad/snapshot/linux/exception_snapshot_linux.h
-index e08fce59a172..b1485276a505 100644
+index e08fce59a1721..b1485276a505c 100644
 --- third_party/crashpad/crashpad/snapshot/linux/exception_snapshot_linux.h
 +++ third_party/crashpad/crashpad/snapshot/linux/exception_snapshot_linux.h
 @@ -94,6 +94,8 @@ class ExceptionSnapshotLinux final : public ExceptionSnapshot {
@@ -3044,7 +3132,7 @@ index e08fce59a172..b1485276a505 100644
    } context_union_;
    CPUContext context_;
 diff --git third_party/crashpad/crashpad/snapshot/linux/process_reader_linux.cc third_party/crashpad/crashpad/snapshot/linux/process_reader_linux.cc
-index 45713386d953..3afcd5147892 100644
+index 45713386d953e..3afcd51478922 100644
 --- third_party/crashpad/crashpad/snapshot/linux/process_reader_linux.cc
 +++ third_party/crashpad/crashpad/snapshot/linux/process_reader_linux.cc
 @@ -129,6 +129,8 @@ void ProcessReaderLinux::Thread::InitializeStack(ProcessReaderLinux* reader) {
@@ -3057,7 +3145,7 @@ index 45713386d953..3afcd5147892 100644
  #error Port.
  #endif
 diff --git third_party/crashpad/crashpad/snapshot/linux/signal_context.h third_party/crashpad/crashpad/snapshot/linux/signal_context.h
-index a76852e20edf..3be9318b7148 100644
+index a76852e20edfa..3be9318b71482 100644
 --- third_party/crashpad/crashpad/snapshot/linux/signal_context.h
 +++ third_party/crashpad/crashpad/snapshot/linux/signal_context.h
 @@ -41,7 +41,7 @@ union Sigval {
@@ -3114,7 +3202,7 @@ index a76852e20edf..3be9318b7148 100644
  #error Port.
  #endif  // ARCH_CPU_X86_FAMILY
 diff --git third_party/crashpad/crashpad/snapshot/linux/system_snapshot_linux.cc third_party/crashpad/crashpad/snapshot/linux/system_snapshot_linux.cc
-index 99c35b3aaf17..c164e24e947a 100644
+index 99c35b3aaf179..c164e24e947a2 100644
 --- third_party/crashpad/crashpad/snapshot/linux/system_snapshot_linux.cc
 +++ third_party/crashpad/crashpad/snapshot/linux/system_snapshot_linux.cc
 @@ -229,6 +229,8 @@ CPUArchitecture SystemSnapshotLinux::GetCPUArchitecture() const {
@@ -3157,7 +3245,7 @@ index 99c35b3aaf17..c164e24e947a 100644
  #error Port.
  #endif  // ARCH_CPU_X86_FAMILY
 diff --git third_party/crashpad/crashpad/snapshot/linux/thread_snapshot_linux.cc third_party/crashpad/crashpad/snapshot/linux/thread_snapshot_linux.cc
-index 85882e8ee464..348669e47ced 100644
+index 85882e8ee464f..348669e47ced2 100644
 --- third_party/crashpad/crashpad/snapshot/linux/thread_snapshot_linux.cc
 +++ third_party/crashpad/crashpad/snapshot/linux/thread_snapshot_linux.cc
 @@ -196,6 +196,13 @@ bool ThreadSnapshotLinux::Initialize(
@@ -3175,7 +3263,7 @@ index 85882e8ee464..348669e47ced 100644
  #error Port.
  #endif
 diff --git third_party/crashpad/crashpad/snapshot/linux/thread_snapshot_linux.h third_party/crashpad/crashpad/snapshot/linux/thread_snapshot_linux.h
-index 66d8c3e1d0c3..e1058bde2aad 100644
+index 66d8c3e1d0c30..e1058bde2aad0 100644
 --- third_party/crashpad/crashpad/snapshot/linux/thread_snapshot_linux.h
 +++ third_party/crashpad/crashpad/snapshot/linux/thread_snapshot_linux.h
 @@ -79,6 +79,8 @@ class ThreadSnapshotLinux final : public ThreadSnapshot {
@@ -3188,7 +3276,7 @@ index 66d8c3e1d0c3..e1058bde2aad 100644
  #error Port.
  #endif  // ARCH_CPU_X86_FAMILY
 diff --git third_party/crashpad/crashpad/snapshot/minidump/minidump_context_converter.cc third_party/crashpad/crashpad/snapshot/minidump/minidump_context_converter.cc
-index ec02dff12667..9dea890cd7e8 100644
+index ec02dff126678..9dea890cd7e85 100644
 --- third_party/crashpad/crashpad/snapshot/minidump/minidump_context_converter.cc
 +++ third_party/crashpad/crashpad/snapshot/minidump/minidump_context_converter.cc
 @@ -293,6 +293,30 @@ bool MinidumpContextConverter::Initialize(
@@ -3223,7 +3311,7 @@ index ec02dff12667..9dea890cd7e8 100644
      // Architecture is listed as "unknown".
      DLOG(ERROR) << "Unknown architecture";
 diff --git third_party/crashpad/crashpad/snapshot/minidump/system_snapshot_minidump.cc third_party/crashpad/crashpad/snapshot/minidump/system_snapshot_minidump.cc
-index b7c7bfd0a866..94ff318903cf 100644
+index b7c7bfd0a8664..94ff318903cfc 100644
 --- third_party/crashpad/crashpad/snapshot/minidump/system_snapshot_minidump.cc
 +++ third_party/crashpad/crashpad/snapshot/minidump/system_snapshot_minidump.cc
 @@ -70,6 +70,8 @@ CPUArchitecture SystemSnapshotMinidump::GetCPUArchitecture() const {
@@ -3236,7 +3324,7 @@ index b7c7bfd0a866..94ff318903cf 100644
      default:
        return CPUArchitecture::kCPUArchitectureUnknown;
 diff --git third_party/crashpad/crashpad/util/linux/exception_handler_client.cc third_party/crashpad/crashpad/util/linux/exception_handler_client.cc
-index 68dc67eff913..10f8496cf704 100644
+index 68dc67eff9137..10f8496cf7049 100644
 --- third_party/crashpad/crashpad/util/linux/exception_handler_client.cc
 +++ third_party/crashpad/crashpad/util/linux/exception_handler_client.cc
 @@ -41,9 +41,9 @@ namespace {
@@ -3290,7 +3378,7 @@ index 68dc67eff913..10f8496cf704 100644
      return errno;
    }
 diff --git third_party/crashpad/crashpad/util/linux/ptracer.cc third_party/crashpad/crashpad/util/linux/ptracer.cc
-index a985cb1d1ff9..406da1a3b40c 100644
+index a985cb1d1ff97..406da1a3b40c0 100644
 --- third_party/crashpad/crashpad/util/linux/ptracer.cc
 +++ third_party/crashpad/crashpad/util/linux/ptracer.cc
 @@ -430,6 +430,60 @@ bool GetThreadArea64(pid_t tid,
@@ -3355,7 +3443,7 @@ index a985cb1d1ff9..406da1a3b40c 100644
  #error Port.
  #endif  // ARCH_CPU_X86_FAMILY
 diff --git third_party/crashpad/crashpad/util/linux/thread_info.h third_party/crashpad/crashpad/util/linux/thread_info.h
-index 808b35a3affa..81a5482b1585 100644
+index 808b35a3affa2..81a5482b15851 100644
 --- third_party/crashpad/crashpad/util/linux/thread_info.h
 +++ third_party/crashpad/crashpad/util/linux/thread_info.h
 @@ -87,6 +87,8 @@ union ThreadContext {
@@ -3428,7 +3516,7 @@ index 808b35a3affa..81a5482b1585 100644
  #elif defined(ARCH_CPU_RISCV64)
    static_assert(sizeof(f64) == sizeof(__riscv_d_ext_state), "Size mismatch");
 diff --git third_party/crashpad/crashpad/util/misc/capture_context.h third_party/crashpad/crashpad/util/misc/capture_context.h
-index ac7707b48cab..f6487147417c 100644
+index ac7707b48cab5..f6487147417cc 100644
 --- third_party/crashpad/crashpad/util/misc/capture_context.h
 +++ third_party/crashpad/crashpad/util/misc/capture_context.h
 @@ -70,6 +70,7 @@ using NativeCPUContext = ucontext_t;
@@ -3440,7 +3528,7 @@ index ac7707b48cab..f6487147417c 100644
  //!     Additionally, the value `LR` on ARM/ARM64 will be the return address of
  //!     this function.
 diff --git third_party/crashpad/crashpad/util/misc/capture_context_linux.S third_party/crashpad/crashpad/util/misc/capture_context_linux.S
-index cfad85738e57..70c6e77deb72 100644
+index cfad85738e572..70c6e77deb72f 100644
 --- third_party/crashpad/crashpad/util/misc/capture_context_linux.S
 +++ third_party/crashpad/crashpad/util/misc/capture_context_linux.S
 @@ -24,16 +24,19 @@
@@ -3523,7 +3611,7 @@ index cfad85738e57..70c6e77deb72 100644
 +
  #endif  // __i386__
 diff --git third_party/crashpad/crashpad/util/net/http_transport_libcurl.cc third_party/crashpad/crashpad/util/net/http_transport_libcurl.cc
-index df63a77296d0..a897f865c897 100644
+index df63a77296d04..a897f865c8977 100644
 --- third_party/crashpad/crashpad/util/net/http_transport_libcurl.cc
 +++ third_party/crashpad/crashpad/util/net/http_transport_libcurl.cc
 @@ -239,6 +239,8 @@ std::string UserAgent() {
@@ -3536,7 +3624,7 @@ index df63a77296d0..a897f865c897 100644
  #error Port
  #endif
 diff --git third_party/tflite/features.gni third_party/tflite/features.gni
-index 65c27fc765ed..084fb915752a 100644
+index 65c27fc765ed5..084fb915752ab 100644
 --- third_party/tflite/features.gni
 +++ third_party/tflite/features.gni
 @@ -11,7 +11,7 @@ if (build_with_chromium) {
@@ -3590,25 +3678,33 @@ index e4bad7133b26..cf2fdf80caf7 100644
    buckets: list[_BucketDict]
    summary: str
  
-@@ -108,7 +108,7 @@ def ExpandHistogramNameWithSuffixes(
-     suffix_name: str,
-     histogram_name: str,
-     histogram_suffixes_node: xml.dom.minidom.Element,
+@@ -99,10 +99,10 @@ class HistogramDict(TypedDict, total=False):
+ 
+ 
+ def ExpandHistogramNameWithSuffixes(
+-    suffix_name: str,
+-    histogram_name: str,
+-    histogram_suffixes_node: xml.dom.minidom.Element,
 -) -> tuple[str | None, ExtractionErrors]:
++  suffix_name: str,
++  histogram_name: str,
++  histogram_suffixes_node: xml.dom.minidom.Element,
 +) -> tuple[Optional[str], ExtractionErrors]:
    """Creates a new histogram name based on a histogram suffix.
  
    Args:
-@@ -310,7 +310,7 @@ def _ExtractOwners(node: xml.dom.minidom.Element) -> tuple[list[str], bool]:
+@@ -303,8 +303,8 @@ def _ExtractOwners(node: xml.dom.minidom.Element) -> tuple[list[str], bool]:
+ 
  
  def _ExtractImprovementDirection(
-     histogram_node: xml.dom.minidom.Element,
+-    histogram_node: xml.dom.minidom.Element,
 -) -> tuple[str | None, ExtractionErrors]:
++  histogram_node: xml.dom.minidom.Element,
 +) -> tuple[Optional[str], ExtractionErrors]:
    """Extracts improvement direction from the given histogram element, if any.
  
    Args:
-@@ -644,7 +644,7 @@ def ExtractVariantsFromXmlTree(
+@@ -639,7 +639,7 @@ def ExtractVariantsFromXmlTree(
    return variants_dict, errors
  
  
@@ -3617,11 +3713,33 @@ index e4bad7133b26..cf2fdf80caf7 100644
    """If the node's histogram is obsolete, returns a string explanation.
  
    Otherwise, returns None.
+diff --git tools/metrics/histograms/name_expansion_metadata.py tools/metrics/histograms/name_expansion_metadata.py
+index b2165ba2b36dd..5f4583d816bb7 100644
+--- tools/metrics/histograms/name_expansion_metadata.py
++++ tools/metrics/histograms/name_expansion_metadata.py
+@@ -7,7 +7,7 @@ See here for specifications:
+ https://source.chromium.org/chromium/chromium/src/+/main:tools/metrics/histograms/histogram_configuration_model.py
+ """
+ 
+-from typing import TypedDict
++from typing import TypedDict, Optional
+ 
+ 
+ class Variant(TypedDict, total=False):
+@@ -40,7 +40,7 @@ class Variant(TypedDict, total=False):
+   """
+   name: str
+   summary: str
+-  obsolete: str | None
++  obsolete: Optional[str]
+   owners: list[str]
+ 
+ 
 diff --git ui/gl/features.gni ui/gl/features.gni
-index e0bdd667233d..0aef6de31b2c 100644
+index 84678cb2f3140..4f6c2d78542d3 100644
 --- ui/gl/features.gni
 +++ ui/gl/features.gni
-@@ -27,6 +27,6 @@ declare_args() {
+@@ -28,6 +28,6 @@ declare_args() {
    enable_swiftshader =
        (is_win || is_linux || is_chromeos || is_mac || is_fuchsia) &&
        (target_cpu == "x86" || target_cpu == "x64" || target_cpu == "arm" ||
@@ -3629,10 +3747,3 @@ index e0bdd667233d..0aef6de31b2c 100644
 +       target_cpu == "arm64" || target_cpu == "mipsel" || target_cpu == "loong64" ||
         target_cpu == "mips64el" || target_cpu == "riscv64")
  }
-diff --git v8 v8
-index 326f5f8cad3f..7e79209241a0 160000
---- v8
-+++ v8
-@@ -1 +1 @@
--Subproject commit 326f5f8cad3f0e436c8ea8f82a6894936a32e860
-+Subproject commit 7e79209241a0786e5fef2799a485669916e325f4
