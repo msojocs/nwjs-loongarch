@@ -42,7 +42,7 @@ if [ "$build_mode" == "debug" ];then
   gyp_flags="remove_webcore_debug_symbols=0"
   build_dir="Debug"
 fi
-./buildtools/linux64/gn gen out/nw --args="clang_use_chrome_plugins=false treat_warnings_as_errors=false dcheck_always_on=false clang_base_path=\"$llvm_dir\" $build_mode_flags is_component_ffmpeg=true target_cpu=\"loong64\" use_sysroot=false cc_wrapper=\"env CCACHE_SLOPPINESS=time_macros ccache\" $nw_gen_arg"
+./buildtools/linux64/gn gen out/nw --args="clang_use_chrome_plugins=false treat_warnings_as_errors=false dcheck_always_on=false clang_base_path=\"$llvm_dir\" $build_mode_flags is_component_ffmpeg=true target_cpu=\"loong64\" use_sysroot=false cc_wrapper=\"env CCACHE_SLOPPINESS=file_macro,include_file_mtime,time_macros ccache\" $nw_gen_arg"
 # https://nwjs.readthedocs.io/en/latest/For%20Developers/Building%20NW.js/
 notice "start to prepare gyp"
 # 参考 http://buildbot-master.nwjs.io:8010/builders/nw83_linux64/builds/0/steps/node_gyp/logs/stdio

@@ -761,9 +761,10 @@
                 "packPythonVersion": "python3"
             }
         },
-        "nw107.0": {
+        "nw107": {
             "llvm": {
-                "tag": "llvmorg-21.1.8",
+                "tag": "llvmorg-22.1.0",
+                "commit": "6055f87d20ce97700c665dfc993a3bf35ca51df6",
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
