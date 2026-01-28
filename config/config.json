@@ -1,5 +1,5 @@
 {
-    "buildTarget": "nw100",
+    "buildTarget": "nw105",
     "useMirror": true,
     "debugBuild": false,
     "buildConfig": {
@@ -687,8 +687,7 @@
         },
         "nw105": {
             "llvm": {
-                "tag": "llvmorg-22.1.0",
-                "commit": "6055f87d20ce97700c665dfc993a3bf35ca51df6",
+                "tag": "llvmorg-21.1.8",
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
@@ -725,8 +724,7 @@
         },
         "nw106": {
             "llvm": {
-                "tag": "llvmorg-22.1.0",
-                "commit": "6055f87d20ce97700c665dfc993a3bf35ca51df6",
+                "tag": "llvmorg-21.1.8",
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
@@ -763,8 +761,7 @@
         },
         "nw107": {
             "llvm": {
-                "tag": "llvmorg-22.1.0",
-                "commit": "6055f87d20ce97700c665dfc993a3bf35ca51df6",
+                "tag": "llvmorg-22-init",
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",

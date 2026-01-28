@@ -15,7 +15,7 @@ fi
 if [ "$(docker ps -a | grep $container_name)" ]; then
     docker start $container_name
     # docker exec -it $container_name bash -c "ls -al ~/.config && rm -rf ~/.config/* && /workspace/source-code/nwjs/src/out/nw/nw --disable-gpu --no-sandbox"
-    docker exec -it $container_name $@
+    docker exec -it "$container_name" "$@"
     # gdb --args /workspace/output/dist_nwjs/nwjs-v0.94.1-linux-loong64/nw --disable-seccomp-sandbox http://google.com
 else
     docker run -it \

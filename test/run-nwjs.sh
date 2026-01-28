@@ -9,11 +9,9 @@ cd "$root_dir/output/dist_nwjs/$name"
 # Handle multiple matches by taking the first one.
 shopt -s nullglob
 matches=(nwjs-sdk-*-linux-loong64)
-if [ ${#matches[@]} -eq 0 ]; then
-    tar -zxf nwjs-sdk-*-linux-loong64.tar.gz
-    matches=(nwjs-sdk-*-linux-loong64)
-fi
+tar -zxf nwjs-sdk-*-linux-loong64.tar.gz
+matches=(nwjs-sdk-*-linux-loong64)
 shopt -u nullglob
 dir="${matches[0]}"
 
-"$root_dir/test/qemu-loongarch64-docker.sh" "output/dist_nwjs/$name/$dir/nw" --disable-gpu --no-sandbox
+"$root_dir/test/qemu-loongarch64-docker.sh" bash -c "rm -rf ~/.config && output/dist_nwjs/$name/$dir/nw --disable-gpu"

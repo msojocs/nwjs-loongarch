@@ -98,7 +98,9 @@ export GIT_CACHE_PATH="$root_dir/cache/.git_cache"
 mkdir -p $GIT_CACHE_PATH
 
 "$root_dir/tools/sync-reset.sh"
+
 notice "Start to sync..."
+cd "$nwjs_dir"
 if read -t 60 -p "execute 'gclient sync -D'? (Y/N):" name    # -t，设置输入超时时间（本语句设置超时时间为5秒），默认单位是秒；-p，指定输入提示
 then                                              # 如果不超过5秒
   if [ "y" = "$name" ] || [ "Y" = "$name" ];then

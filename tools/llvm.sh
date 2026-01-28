@@ -18,6 +18,7 @@ llvm_commit=$(node $root_dir/tools/parse-config.js --get-llvm-commit $@)
 llvm_repo=$(node $root_dir/tools/parse-config.js --get-llvm-repo $@)
 llvm_build_arg=$(node $root_dir/tools/parse-config.js --get-llvm-build-arg $@)
 rt_build_arg=$(node $root_dir/tools/parse-config.js --get-llvm-rt-build-arg $@)
+nw_version=$(node $root_dir/tools/parse-config.js --get-nw-version $@)
 export PATH=$output_dir/toolchain/bin:$output_dir/cmake-linux-x86_64/bin:$PATH
 llvm_dir="$output_dir/llvm-$llvm_version"
 
@@ -82,4 +83,12 @@ if [ ! -f "$llvm_dir/lib/clang/$llvm_version/lib/x86_64-unknown-linux-gnu/liborc
   notice "cmake for x86_64-unknown-linux-gnu"
   cmake ../compiler-rt/ -G Ninja -DCMAKE_AR=$llvm_dir/bin/llvm-ar -DCMAKE_ASM_COMPILER_TARGET=x86_64-unknown-linux-gnu -DCMAKE_ASM_FLAGS="" -DCMAKE_C_COMPILER=$llvm_dir/bin/clang -DCMAKE_C_COMPILER_TARGET=x86_64-unknown-linux-gnu -DCMAKE_C_FLAGS="" -DLLVM_ENABLE_PER_TARGET_RUNTIME_DIR=ON -DCMAKE_NM=$llvm_dir/bin/llvm-nm -DCMAKE_RANLIB=$llvm_dir/bin/llvm-ranlib  -DCOMPILER_RT_BUILD_BUILTINS=ON -DCOMPILER_RT_BUILD_LIBFUZZER=OFF -DCOMPILER_RT_BUILD_MEMPROF=OFF -DCOMPILER_RT_BUILD_PROFILE=ON -DCOMPILER_RT_BUILD_SANITIZERS=OFF -DCOMPILER_RT_BUILD_XRAY=OFF -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON -DLLVM_CMAKE_DIR=$llvm_dir -DCMAKE_INSTALL_PREFIX=$llvm_dir/lib/clang/$llvm_version $rt_build_arg
   ninja -j$max_thread && ninja install
+fi
+
+# nw 大于105时，llvm打路径补丁
+nw_version="${nw_version/nw/}"
+if [ "$nw_version" -ge 105 ];then
+  notice "Patching llvm path for nwjs $nw_version"
+  cd $llvm_dir/lib/clang
+  ln -s $llvm_version 22
 fi
