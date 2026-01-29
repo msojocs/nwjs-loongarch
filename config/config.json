@@ -1,5 +1,5 @@
 {
-    "buildTarget": "nw105",
+    "buildTarget": "nw107",
     "useMirror": true,
     "debugBuild": false,
     "buildConfig": {
@@ -9,7 +9,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=\"clang\" -DLLVM_DEFAULT_TARGET_TRIPLE=\"x86_64-linux-gnu;loongarch64-linux-gnu\"",
                 "rtBuildArg": "",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -43,7 +43,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=\"clang\" -DLLVM_DEFAULT_TARGET_TRIPLE=\"x86_64-linux-gnu;loongarch64-linux-gnu\"",
                 "rtBuildArg": "",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -77,7 +77,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -112,7 +112,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -147,7 +147,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -181,7 +181,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -217,7 +217,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -253,7 +253,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -289,7 +289,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -325,7 +325,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -361,7 +361,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -397,7 +397,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -433,7 +433,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -469,7 +469,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -506,7 +506,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -543,7 +543,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -580,7 +580,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -617,7 +617,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -654,7 +654,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -691,7 +691,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -728,7 +728,7 @@
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",
@@ -761,11 +761,11 @@
         },
         "nw107": {
             "llvm": {
-                "tag": "llvmorg-22-init",
+                "tag": "llvmorg-21.1.8",
                 "buildArg": "-DLLVM_ENABLE_PROJECTS=clang;lld",
                 "rtBuildArg": "-DCMAKE_EXE_LINKER_FLAGS=\"-fuse-ld=lld\"",
                 "repo": "https://github.com/llvm/llvm-project.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/llvm-project.git"
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
             },
             "binutils": {
                 "repo": "https://sourceware.org/git/binutils-gdb.git",

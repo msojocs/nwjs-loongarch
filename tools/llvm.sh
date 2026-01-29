@@ -23,12 +23,15 @@ export PATH=$output_dir/toolchain/bin:$output_dir/cmake-linux-x86_64/bin:$PATH
 llvm_dir="$output_dir/llvm-$llvm_version"
 
 notice "检查llvm项目是否存在"
+
 if [ ! -d "$project_dir" ]; then
   notice "请确保阁下的网络稳定快速"
   notice "llvm-project not cloned, start to clone......"
   cd "$source_dir"
   git clone $llvm_repo
 fi
+cd $project_dir
+git remote set-url origin "$llvm_repo"
 
 notice "检查llvm项目是否拉取成功"
 if [ ! -f "$project_dir/README.md" ];then
