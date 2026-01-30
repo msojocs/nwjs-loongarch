@@ -37,6 +37,7 @@ dirs=("src"
 "src/third_party/webrtc"
 "src/third_party/xnnpack/src"
 "src/tools/gyp"
+"src/third_party/angle"
 )
 for dir in ${dirs[@]};
 do

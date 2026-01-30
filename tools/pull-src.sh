@@ -82,7 +82,11 @@ else
   cd "$nwjs_dir/src/content/nw"
   git remote set-url origin "$nw_repo"
   git fetch --all
-  # git pull origin $nw_checkout_target
+  # 判断远程分支存在
+  if git show-ref --verify --quiet refs/remotes/origin/$nw_checkout_target; then
+    # 强制同步本地分支为远程状态，移除未push的提交
+    git reset --hard origin/$nw_checkout_target
+  fi
 fi
 git checkout $nw_checkout_target --force
 

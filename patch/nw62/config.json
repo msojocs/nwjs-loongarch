@@ -1,0 +1,42 @@
+[
+    {
+        "name": "loongarch64_support_src_for_nwjs",
+        "path": ""
+    },
+    {
+        "name": "loongarch64_support_nw_for_nwjs",
+        "path": "content/nw"
+    },
+    {
+        "name": "loongarch64_support_angle_for_nwjs",
+        "path": "third_party/angle"
+    },
+    {
+        "name": "loongarch64_support_breakpad_for_nwjs",
+        "path": "third_party/breakpad/breakpad/"
+    },
+    {
+        "name": "loongarch64_support_boringssl_for_nwjs",
+        "path": "third_party/boringssl/src/"
+    },
+    {
+        "name": "loongarch64_support_dawn_for_nwjs",
+        "path": "third_party/dawn/"
+    },
+    {
+        "name": "loongarch64_support_ffmpeg_for_nwjs",
+        "path": "third_party/ffmpeg/"
+    },
+    {
+        "name": "loongarch64_suppprt_lss_for_nwjs",
+        "path": "third_party/lss/"
+    },
+    {
+        "name": "loongarch64_support_node_for_nwjs",
+        "path": "third_party/node-nw/"
+    },
+    {
+        "name": "loongarch64_support_webrtc_for_nwjs",
+        "path": "third_party/webrtc/"
+    }
+]
