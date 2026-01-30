@@ -4,6 +4,10 @@
         "path": "third_party/boringssl/src/"
     },
     {
+        "name": "compiler",
+        "path": ""
+    },
+    {
         "name": "loongarch64_support_breakpad_for_nwjs",
         "path": "third_party/breakpad/breakpad/"
     },
@@ -16,8 +20,8 @@
         "path": "third_party/ffmpeg/"
     },
     {
-        "name": "loongarch64_suppprt_lss_for_nwjs",
-        "path": "third_party/lss/"
+        "name": "loongarch64_support_lss_for_nwjs",
+        "path": "third_party/lss"
     },
     {
         "name": "loongarch64_support_node_for_nwjs",

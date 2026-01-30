@@ -242,19 +242,6 @@ index 3ea432ab88747..f15b7fc25cf58 100644
      static const char msg[] = "Cannot upload crash dump: stat failed\n";
      WriteLog(msg, sizeof(msg) - 1);
      if (close_fd)
-diff --git components/os_crypt/features.gni components/os_crypt/features.gni
-index ec9c3da66afbb..249e6dd7f4af4 100644
---- components/os_crypt/features.gni
-+++ components/os_crypt/features.gni
-@@ -8,7 +8,7 @@ import("//build/config/ui.gni")
- declare_args() {
-   # Whether to use libgnome-keyring (deprecated by libsecret).
-   # See http://crbug.com/466975 and http://crbug.com/355223.
--  use_gnome_keyring = is_linux && use_glib
-+  use_gnome_keyring = is_linux && use_glib && current_cpu != "loong64"
- 
-   # Whether to make account and service names for the crypto key storage
-   # configurable at runtime for embedders.
 diff --git components/update_client/update_query_params.cc components/update_client/update_query_params.cc
 index 6abf11963c854..602db476dd204 100644
 --- components/update_client/update_query_params.cc

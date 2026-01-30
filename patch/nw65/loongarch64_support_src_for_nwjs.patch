@@ -72,7 +72,7 @@ index 2b09584757ad..9d8450a2a49a 100644
          cflags += [ "-mno-outline-atomics" ]
        }
 +    } else if (current_cpu == "loong64") {
-+      cflags += [ "-mcmodel=large" ]
++      cflags += [ "-mcmodel=medium" ]
 +      if (is_clang && !is_android && !is_nacl && !is_fuchsia) {
 +        cflags += [ "--target=loongarch64-linux-gnu" ]
 +        ldflags += [ "--target=loongarch64-linux-gnu" ]

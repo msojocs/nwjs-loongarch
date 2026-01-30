@@ -1,5 +1,9 @@
 [
     {
+        "name": "compiler",
+        "path": ""
+    },
+    {
         "name": "loongarch64_support_src_for_nwjs",
         "path": ""
     },
@@ -28,7 +32,7 @@
         "path": "third_party/ffmpeg/"
     },
     {
-        "name": "loongarch64_suppprt_lss_for_nwjs",
+        "name": "loongarch64_support_lss_for_nwjs",
         "path": "third_party/lss/"
     },
     {

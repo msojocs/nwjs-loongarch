@@ -42,7 +42,7 @@ mv "$output_dir/dist_nwjs/sdk/nw-"*.tar.gz "$dist_dir"
 notice "Start to merge SHASUMS256.txt"
 cd $dist_dir
 if [ -f "$output_dir/dist_nwjs/simple/SHASUMS256.txt" ];then
-  cat "$output_dir/dist_nwjs/sdk/"nw-headers-*.tar.gz.sha256.txt >> "$dist_dir/SHASUMS256.txt"
+  cat "$output_dir/dist_nwjs/sdk/SHASUMS256.txt" >> "$dist_dir/SHASUMS256.txt"
   echo "" >> "$dist_dir/SHASUMS256.txt"
 
   sha256sum nwjs-*-linux-loong64.tar.gz | awk '{print $1, $2}' >> "$dist_dir/SHASUMS256.txt"

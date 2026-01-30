@@ -23,7 +23,8 @@ const patchConfig = require(path.join(patchDir, 'config.json')).filter(e => !e.d
 for (const patchItem of patchConfig) {
   const patchPath = path.join(patchDir, `${patchItem.name}.patch`);
   if (!fs.existsSync(patchPath)) {
-    console.warn(`Patch file ${patchItem.name}.patch not found, skipping.`);
+    console.warn(`[X] Patch file ${patchItem.name}.patch not found, error.\n`);
+    process.exit(2);
     continue;
   }
   const currentDir = path.resolve(rootDir, 'source-code/nwjs/src', patchItem.path)
@@ -39,7 +40,7 @@ for (const patchItem of patchConfig) {
       execSync(`git clean -fd`, { stdio: 'inherit', cwd: currentDir });
       execSync(`git restore .`, { stdio: 'inherit', cwd: currentDir });
       execSync(`git apply -p0 ${patchPath}`, { stdio: 'inherit', cwd: currentDir });
-      console.log(`Successfully applied patch: ${patchItem.name}`);
+      console.log(`Successfully applied patch: ${patchItem.name}\n`);
     } catch (error) {
       console.error(`Failed to apply patch: ${patchItem.name}`);
       console.error(`git apply -p0 --reject ${patchPath}`);

@@ -45,5 +45,10 @@ ninja -C out/nw nwjc -j$max_thread
 ninja -C out/nw chromedriver -j$max_thread
 ninja -C out/nw minidump_stackwalk -j$max_thread
 # nw90不构建
-# notice "开始构建payload，可能会失败"
-# ninja -C out/nw payload
+# 使用ninja检查是否有payload构建目标
+if ninja -C out/nw -t targets | grep 'payload'; then
+  notice "开始构建payload"
+  ninja -C out/nw payload -j$max_thread
+else
+  notice "当前版本不支持payload构建，跳过此步骤"
+fi

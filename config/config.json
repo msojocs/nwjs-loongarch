@@ -1,5 +1,5 @@
 {
-    "buildTarget": "nw62",
+    "buildTarget": "nw65",
     "useMirror": true,
     "debugBuild": false,
     "buildConfig": {
@@ -65,10 +65,44 @@
                 "checkoutTarget": "nw62"
             },
             "nw": {
-                "genArg": "use_gold=false use_lld=false enable_swiftshader=false angle_enable_swiftshader=false enable_swiftshader_vulkan=false",
+                "genArg": "use_gold=false use_lld=false enable_swiftshader=false angle_enable_swiftshader=false enable_swiftshader_vulkan=false use_gnome_keyring=false dawn_use_swiftshader=false",
                 "repo": "https://github.com/nwjs/nw.js.git",
                 "mirror": "http://127.0.0.1:3000/nwjs/nw.js.git",
                 "checkoutTarget": "nw62"
+            }
+        },
+        "nw65": {
+            "llvm": {
+                "tag": "llvmorg-18.1.0",
+                "buildArg": "-DLLVM_ENABLE_PROJECTS=\"clang\" -DLLVM_DEFAULT_TARGET_TRIPLE=\"x86_64-linux-gnu;loongarch64-linux-gnu\"",
+                "rtBuildArg": "",
+                "repo": "https://github.com/llvm/llvm-project.git",
+                "mirror": "http://127.0.0.1:3000/llvm/llvm-project.git"
+            },
+            "binutils": {
+                "repo": "https://sourceware.org/git/binutils-gdb.git",
+                "mirror": "http://127.0.0.1:3000/msojocs/binutils-gdb.git"
+            },
+            "chromium": {
+                "repo": "https://github.com/nwjs/chromium.src.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/chromium.src.git",
+                "checkoutTarget": "nw65"
+            },
+            "v8": {
+                "repo": "https://github.com/nwjs/v8.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/v8.git",
+                "checkoutTarget": "nw65"
+            },
+            "node": {
+                "repo": "https://github.com/nwjs/node.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/node.git",
+                "checkoutTarget": "nw65"
+            },
+            "nw": {
+                "genArg": "use_gold=false use_lld=false enable_swiftshader=false angle_enable_swiftshader=false enable_swiftshader_vulkan=false use_gnome_keyring=false dawn_use_swiftshader=false",
+                "repo": "https://github.com/nwjs/nw.js.git",
+                "mirror": "http://127.0.0.1:3000/nwjs/nw.js.git",
+                "checkoutTarget": "nw65"
             }
         },
         "nw80": {
@@ -101,7 +135,7 @@
             "nw": {
                 "genArg": "use_gold=false use_lld=false",
                 "repo": "https://github.com/loongson/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/nw.js.git",
+                "mirror": "http://127.0.0.1:3000/loongson/nw.js.git",
                 "checkoutTarget": "nw80"
             }
         },
@@ -135,7 +169,7 @@
             "nw": {
                 "genArg": "",
                 "repo": "https://github.com/loongson/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/nw.js.git",
+                "mirror": "http://127.0.0.1:3000/loongson/nw.js.git",
                 "checkoutTarget": "nw88",
                 "gypMethod": "v2"
             }
@@ -170,7 +204,7 @@
             "nw": {
                 "genArg": "",
                 "repo": "https://github.com/loongson/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/nw.js.git",
+                "mirror": "http://127.0.0.1:3000/loongson/nw.js.git",
                 "checkoutTarget": "nw89",
                 "gypMethod": "v2"
             }
@@ -205,7 +239,7 @@
             "nw": {
                 "genArg": "",
                 "repo": "https://github.com/loongson/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/nw.js.git",
+                "mirror": "http://127.0.0.1:3000/loongson/nw.js.git",
                 "checkoutTarget": "nw90"
             }
         },
@@ -239,7 +273,7 @@
             "nw": {
                 "genArg": "",
                 "repo": "https://github.com/loongson/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/nw.js.git",
+                "mirror": "http://127.0.0.1:3000/loongson/nw.js.git",
                 "checkoutTarget": "nw91",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
                 "gypMethod": "v2"
@@ -275,7 +309,7 @@
             "nw": {
                 "genArg": "",
                 "repo": "https://github.com/loongson/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/nw.js.git",
+                "mirror": "http://127.0.0.1:3000/loongson/nw.js.git",
                 "checkoutTarget": "nw92",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
                 "gypMethod": "v2"
@@ -311,7 +345,7 @@
             "nw": {
                 "genArg": "",
                 "repo": "https://github.com/loongson/nw.js.git",
-                "mirror": "http://127.0.0.1:3000/msojocs/nw.js.git",
+                "mirror": "http://127.0.0.1:3000/loongson/nw.js.git",
                 "checkoutTarget": "nw93",
                 "gypArg": "icu_use_data_file_flag=1 host_arch=x64 nwjs_sdk=1 disable_nacl=0 msvs_version=2021 build_type=Release_x64",
                 "gypMethod": "v2"
