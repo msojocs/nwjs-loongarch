@@ -23,6 +23,7 @@ node "$root_dir/tools/patch-apply.js" "$nw_version"
 if [ ! -d "$src_dir/build/linux/debian_bullseye_loong64-sysroot" ];then
   cd "$src_dir/build/linux"
   ln -s "../../../../sysroot" "debian_bullseye_loong64-sysroot"
+  ln -s "../../../../sysroot" "debian_sid_loong64-sysroot"
 fi
 
 notice "Start to gen nw"

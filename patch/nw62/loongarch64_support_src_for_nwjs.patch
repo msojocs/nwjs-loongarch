@@ -171,9 +171,9 @@ index bd6c510ad689c..e4014f61e5cef 100644
          "Tarball": "debian_sid_mips64el_sysroot.tar.xz"
 +    },
 +    "sid_loong64": {
-+	"Sha1Sum": "9ddbcdb4be1b8e28a4e553928e2aeb479acdbe94",
-+	"SysrootDir": "debian_bullseye_loong64-sysroot",
-+	"Tarball": "debian_bullseye_loong64-sysroot.tar.xz"
++	    "Sha1Sum": "9ddbcdb4be1b8e28a4e553928e2aeb479acdbe94",
++	    "SysrootDir": "debian_bullseye_loong64-sysroot",
++	    "Tarball": "debian_bullseye_loong64-sysroot.tar.xz"
      }
  }
 diff --git chrome/BUILD.gn chrome/BUILD.gn
@@ -14003,3 +14003,17 @@ index 0a1cf7a1f5e16..928b2127d80d1 100644
      defines = [ "PFFFT_SIMD_DISABLE" ]
    }
  }
+diff --git build/config/compiler/BUILD.gn build/config/compiler/BUILD.gn
+index 7c74d724c707..e26bc0885436 100644
+--- build/config/compiler/BUILD.gn
++++ build/config/compiler/BUILD.gn
+@@ -1753,6 +1758,9 @@ config("default_warnings") {
+       # this as well. http://crbug.com/316352
+       "-Wno-unneeded-internal-declaration",
+       "-Wno-unused-function",
++      "-Wno-narrowing",
++      "-Wno-enum-constexpr-conversion",
++      "-Wno-c++11-narrowing",
+     ]
+ 
+     if (!is_nacl || is_nacl_saigo) {

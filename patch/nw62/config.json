@@ -1,9 +1,5 @@
 [
     {
-        "name": "compiler",
-        "path": ""
-    },
-    {
         "name": "loongarch64_support_src_for_nwjs",
         "path": ""
     },
