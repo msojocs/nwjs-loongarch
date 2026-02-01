@@ -6,7 +6,7 @@ tools_dir="$root_dir/tools"
 for arg in $@;
 do
   case "$arg" in
-    "force_start")
+    "-f")
       rm -rf "$root_dir/tmp/.step"
       ;;
   esac
